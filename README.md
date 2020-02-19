@@ -24,7 +24,7 @@ In my free time, my hobbies are rock climbing and contributing to the hacker com
 
 UwU (temporary name) is an online video-editing app where you can upload videos, decorate them with filters, stickers, drawings, and share them with your friends! Along with your own videos, you will be able to see other users' creations with their unique edits and share your thoughts by liking and commenting on them.
 
-## Description of key features for Beta Version
+## Key features for Beta Version
 
  - **User account creation:** Using OAuth
  - **Take video/picture from app:** Users can capture videos and pictures through their camera straight to the app
@@ -32,7 +32,7 @@ UwU (temporary name) is an online video-editing app where you can upload videos,
  - **Save drafts of edits:** Users should be able to save their drafts or current progress for later completion
  - **Adding music:** Each video will be allowed to have background audio added to it
 
-## Description of key features for Final Version
+## Key features for Final Version
 
  - Follow users, like/comment videos
  - **Geolocation:** Each video will have the geolocation of where it was uploaded at
@@ -42,7 +42,7 @@ UwU (temporary name) is an online video-editing app where you can upload videos,
  - **Livestream edit video (Biggest feature yet):** Users can collaborate on a video by editing it together in real-time
  - **Video Downloading/Sharing:** Users can save and share their creations to others on other platforms
 
-## Description of Technologies used
+## Technologies to be used
 
  - GraphQL
  - NodeJS
@@ -58,7 +58,7 @@ UwU (temporary name) is an online video-editing app where you can upload videos,
  - React
  - Google Maps / Radar.io
 
-## Description of top 5 technical challenges
+## Top 5 technical challenges
 
  - **Making a video editor:** The hardest technical challenge will be the video editor itself as it will require lots of components, like uploading a file, adding effect/picture, etc. We also have to consider how we might save these edits as we implement drafts into the system. We also have to be extremely smart with how we implement the editor itself, as it’s a fairly heavy feature.
 
