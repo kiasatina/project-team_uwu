@@ -1,0 +1,10 @@
+@import '../../utils/variables';
+@import '../../utils/mixins';
+
+body {
+    font-family: $PRIMARY_FONT;
+    background-color: $BODY_COLOR;
+    color: $TEXT_COLOR;
+    padding: 0;
+    margin: 0;
+}
