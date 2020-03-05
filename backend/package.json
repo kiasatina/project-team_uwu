@@ -7,8 +7,7 @@
     "start": "if test \"$NODE_ENV\" = \"production\" ; then npm run start:prod ; else npm run start:dev ; fi",
     "start:prod": "node",
     "start:dev": "nodemon -e js,graphql",
-    "lint": "prettier --write 'src/**/*.js'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "prettier --write 'src/**/*.js'"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +24,6 @@
     "graphql-import": "^1.0.0-beta.2",
     "graphql-tools": "^4.0.7",
     "graphql-upload": "^10.0.0",
-    "husky": "^4.2.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.3",
     "validator": "^12.2.0"
@@ -37,6 +35,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.2",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "husky": "^4.2.3"
   }
 }
