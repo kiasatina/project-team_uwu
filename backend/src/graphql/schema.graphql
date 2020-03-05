@@ -1,0 +1,48 @@
+scalar Upload
+
+"A static file which was uploaded at some point"
+type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+}
+
+"The user of the platform"
+type User {
+    _id: ID!
+    bio: String!
+    email: String!
+    username: String!
+    profile_image: File!
+    followers_count: Int!
+    followers(limit: Int = 10, page: Int = 0): [User]!
+    following_count: Int!
+    following(limit: Int = 10, page: Int = 0): [User]!
+    posts_count: Int!
+    posts(limit: Int = 10, page: Int = 0): [Post]!
+}
+
+"A post from some user"
+type Post {
+    _id: ID!
+}
+
+type Query {
+    "Fetches user information of current session user"
+    getMe: User!
+    "Fetches information about users or a specific user"
+    getUsers(_id: ID, username: String, limit: Int = 10, page: Int = 0): [User]!
+    "Testing stuff"
+    test: String!
+}
+
+type Mutation {
+    "Follow a user"
+    follow(_id: ID!): Boolean!
+    "Logins in user, returning a JWT token for authorization"
+    login(email: String!, password: String!): String!
+    "Register's user, returning a JWT token for authorization"
+    register(email: String!, username: String!, password: String!): String!
+    "Testing stuff"
+    test(file: Upload!): File!
+}
