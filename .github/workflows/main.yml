@@ -13,8 +13,8 @@ jobs:
        uses: appleboy/ssh-action@master
        with:
          host: ${{ secrets.HOST }}
-         username: ${{ secrets.HOST }}
-         password: ${{ secrets.HOST }}
+         username: ${{ secrets.USERNAME }}
+         password: ${{ secrets.PASSWORD }}
          script: |
            cd c09/backend
            git pull origin master
