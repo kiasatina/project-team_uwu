@@ -2,24 +2,41 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "if test \"$NODE_ENV\" = \"production\" ; then npm run start:prod ; else npm run start:dev ; fi",
     "start:prod": "node",
-    "start:dev": "nodemon",
+    "start:dev": "nodemon -e js,graphql",
+    "lint": "prettier --write 'src/**/*.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-datasource-mongodb": "^0.2.1",
-    "apollo-server-express": "^2.10.1",
     "body-parser": "^1.19.0",
+    "chalk-animation": "^1.6.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.6.0",
+    "graphql-depth-limit": "^1.1.0",
+    "graphql-fields": "^2.0.3",
+    "graphql-import": "^1.0.0-beta.2",
+    "graphql-tools": "^4.0.7",
+    "graphql-upload": "^10.0.0",
+    "husky": "^4.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.3",
+    "validator": "^12.2.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && git add ."
+    }
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1"
   }
 }
