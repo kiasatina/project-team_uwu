@@ -1,0 +1,22 @@
+name: Deploy to owolet
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+   name: Deploy server
+   runs-on: ubuntu-latest
+   steps:
+     - name: Connect, pull, and restart server
+       uses: appleboy/ssh-action@master
+       with:
+         host: ${{ secrets.HOST }}
+         username: ${{ secrets.HOST }}
+         password: ${{ secrets.HOST }}
+         script: |
+           cd c09/backend
+           git pull origin master
+           npm ci
+           pm2 restart 0
