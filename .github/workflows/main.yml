@@ -10,9 +10,9 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Connect, pull, and restart server
-       uses: appleboy/ssh-action@master
+       uses: garygrossgarten/github-action-ssh@v0.4.3
        with:
-         host: ${{ secrets.HOST }}
-         username: ${{ secrets.USERNAME }}
-         password: ${{ secrets.PASSWORD }}
-         script: sh deploy.sh
+        command: sh deploy.sh
+        host: ${{ secrets.HOST }}
+        username: garygrossgarten
+        password: ${{ secrets.PASSWORD }}
