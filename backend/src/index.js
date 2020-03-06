@@ -58,9 +58,15 @@ Promise.all([
 
     // If we reach this, we gucci
     app.listen(process.env.PORT, () => {
-        rainbow(
-            `Sewvew stawted on http://localhost:${process.env.PORT} owo\n`,
-            0.2,
-        ).render();
+        if (process.env.NODE_ENV === 'production') {
+            console.log(
+                `Sewvew stawted on http://localhost:${process.env.PORT} owo`,
+            );
+        } else {
+            rainbow(
+                `Sewvew stawted on http://localhost:${process.env.PORT} owo\n`,
+                0.2,
+            ).render();
+        }
     });
 });
