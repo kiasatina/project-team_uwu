@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = async (root, args) => {
     // Check password
-    if (password.length < 8) {
+    if (args.password.length < 8) {
         throw new Error(errors.PASSWORD_TOO_SHORT);
     }
 
