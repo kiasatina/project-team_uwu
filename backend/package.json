@@ -4,9 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "if test \"$NODE_ENV\" = \"production\" ; then npm run start:prod ; else npm run start:dev ; fi",
-    "start:prod": "node",
-    "start:dev": "nodemon -e js,graphql",
+    "start": "nodemon -e js,graphql",
     "lint": "prettier --write 'src/**/*.js'"
   },
   "keywords": [],
