@@ -10,9 +10,9 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Connect, pull, and restart server
-       uses: fifsky/ssh-action@master
+       uses: appleboy/ssh-action@master
        with:
-        command: sh deploy.sh
+        command: bash -i -c "sh deploy.sh"
         host: ${{ secrets.HOST }}
-        user: ${{ secrets.USERNAME }}
+        username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
