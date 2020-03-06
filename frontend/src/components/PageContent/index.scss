@@ -4,5 +4,5 @@
 .pagecontent {
   padding: $PADDING;
   background-color: $BACKGROUND_COLOR;
-  height: 100vh;
+  min-height: $MIN-HEIGHT;
 }
