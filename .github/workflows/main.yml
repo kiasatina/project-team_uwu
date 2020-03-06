@@ -12,7 +12,7 @@ jobs:
      - name: Connect, pull, and restart server
        uses: appleboy/ssh-action@master
        with:
-        command: bash -i -c "sh deploy.sh"
+        script: bash -i -c "sh deploy.sh"
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
