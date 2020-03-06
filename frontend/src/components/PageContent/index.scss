@@ -1,0 +1,8 @@
+@import "../../utils/variables";
+@import "../../utils/mixins";
+
+.pagecontent {
+  padding: $PADDING;
+  background-color: $BACKGROUND_COLOR;
+  height: 100vh;
+}

@@ -1,0 +1,8 @@
+@import "../../utils/variables";
+@import "../../utils/mixins";
+
+.sidenav {
+  padding: $PADDING;
+  background-color: $BACKGROUND_COLOR;
+  height: 100vh;
+}
