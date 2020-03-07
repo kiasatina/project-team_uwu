@@ -36,7 +36,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && git add ."
+      "pre-commit": "npm run lint && unset GIT_DIR && git add ."
     }
   },
   "devDependencies": {

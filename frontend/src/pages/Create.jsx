@@ -5,7 +5,7 @@ import { Grid } from "semantic-ui-react";
 export default () => {
   return (
     <PageLayout>
-      <Grid padded>
+      <Grid>
         <Grid.Row>
           <Grid.Column width={12}>
             <PageContent>Content</PageContent>

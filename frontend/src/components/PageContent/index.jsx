@@ -1,5 +1,6 @@
-import React from 'react';
+import React from "react";
+import "./index.scss";
 
 export const PageContent = ({ children }) => {
-    return <div>{children}</div>;
+  return <main className="pagecontent">{children}</main>;
 };

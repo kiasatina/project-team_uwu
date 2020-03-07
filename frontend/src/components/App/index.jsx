@@ -6,13 +6,13 @@ import 'semantic-ui-css/semantic.min.css';
 import './index.scss';
 
 export const App = () => {
-    return (
-        <Suspense fallback={'lol'}>
-            <Switch>
-                {routes.map((route, i) => (
-                    <Route key={i} {...route} />
-                ))}
-            </Switch>
-        </Suspense>
-    );
+  return (
+    <Suspense fallback={"lol"}>
+      <Switch>
+        {routes.map((route, i) => (
+          <Route key={i} {...route} />
+        ))}
+      </Switch>
+    </Suspense>
+  );
 };
