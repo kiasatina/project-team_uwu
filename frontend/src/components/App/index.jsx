@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import routes from '../../pages';
+
+import 'semantic-ui-css/semantic.min.css';
 import './index.scss';
 
 export const App = () => {

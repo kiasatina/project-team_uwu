@@ -1,0 +1,12 @@
+@import '../../utils/variables';
+@import '../../utils/mixins';
+
+.landing {
+    height: 100%;
+    @include flex(center);
+
+    &__form {
+        padding: 20px;
+        background-color: $BACKGROUND_COLOR;
+    }
+}
