@@ -2,7 +2,7 @@
 @import '../../utils/mixins';
 
 .sidenav {
-    padding-left: $PADDING/2 !important;
+    padding-left: 0 !important;
 
     &__content {
         padding: $PADDING;

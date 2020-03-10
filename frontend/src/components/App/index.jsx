@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import routes from '../../pages';
+import { PageLayout } from '../PageLayout';
+import pages from '../../pages/Dashboard';
+import routes from '../../pages/Landing';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'semantic-ui-css/semantic.min.css';
@@ -13,6 +15,13 @@ export const App = () => {
                 {routes.map((route, i) => (
                     <Route key={i} {...route} />
                 ))}
+                <PageLayout>
+                    <Suspense fallback={'lol'}>
+                        {pages.map((route, i) => (
+                            <Route key={i} {...route} />
+                        ))}
+                    </Suspense>
+                </PageLayout>
             </Switch>
         </Suspense>
     );

@@ -2,8 +2,6 @@
 @import '../../utils/mixins';
 
 .pagecontent {
-    padding-left: $PADDING/2 !important;
-
     &__content {
         padding: $PADDING;
         background-color: $BACKGROUND_COLOR;
