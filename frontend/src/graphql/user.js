@@ -23,3 +23,12 @@ export const REGISTER = `
         )
     }
 `;
+
+export const GET_ME = `
+    {
+        getMe {
+            _id
+            username
+        }
+    }
+`;

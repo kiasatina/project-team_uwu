@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Button, Icon } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import { fetchGraph, printError } from '../../utils';
 import { LandingPage } from '../../components';
-import { LOGIN } from '../../graphql/landing';
+import { LOGIN } from '../../graphql/user';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -44,6 +44,12 @@ export default () => {
             }
         },
     });
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            history.push('/home');
+        }
+    }, [history]);
 
     return (
         <LandingPage title='UwU Login Page'>

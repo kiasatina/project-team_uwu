@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Form, Icon } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { fetchGraph, printError } from '../../utils';
-import { REGISTER } from '../../graphql/landing';
+import { REGISTER } from '../../graphql/user';
 import { LandingPage } from '../../components';
 
 const validationSchema = Yup.object().shape({
@@ -58,6 +58,12 @@ export default () => {
               content: "Passwords don't match",
           })
         : undefined;
+    
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            history.push('/home');
+        }
+    }, [history]);
 
     return (
         <LandingPage title='UwU Registration Page'>

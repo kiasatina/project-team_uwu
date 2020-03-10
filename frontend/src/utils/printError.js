@@ -2,6 +2,7 @@ const errors = {
     INVALID_LOGIN_ERROR: 'Invalid login/password',
     USERNAME_EXISTS_ERROR: 'Username is already in use',
     EMAIL_EXISTS_ERROR: 'Email is already in use',
+    AUTHENTICATION_ERROR: 'Session expired. Please login again'
 };
 
 /**
