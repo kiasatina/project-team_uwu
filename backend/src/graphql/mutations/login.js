@@ -15,13 +15,14 @@ module.exports = async (root, args) => {
 
     // Check login
     const user = await User.findOne({ email: args.email });
-    const [password] = hashPassword(args.password, user.salt);
-    if (!user || password !== user.password) {
-        throw new Error(errors.INVALID_ERROR('LOGIN'));
+    if (user) {
+        const [password] = hashPassword(args.password, user.salt);
+        if (password === user.password) {
+            // Return JWT
+            return jwt.sign({ _id: user._id }, process.env.SECRET, {
+                expiresIn: parseInt(process.env.EXPIRES_IN),
+            });
+        }
     }
-
-    // Return JWT
-    return jwt.sign({ _id: user._id }, process.env.SECRET, {
-        expiresIn: parseInt(process.env.EXPIRES_IN),
-    });
+    throw new Error(errors.INVALID_ERROR('LOGIN'));
 };

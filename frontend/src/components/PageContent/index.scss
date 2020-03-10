@@ -1,8 +1,12 @@
-@import "../../utils/variables";
-@import "../../utils/mixins";
+@import '../../utils/variables';
+@import '../../utils/mixins';
 
 .pagecontent {
-  padding: $PADDING;
-  background-color: $BACKGROUND_COLOR;
-  min-height: $MIN-HEIGHT;
+    padding-left: $PADDING/2 !important;
+
+    &__content {
+        padding: $PADDING;
+        background-color: $BACKGROUND_COLOR;
+        height: 100%;
+    }
 }

@@ -1,5 +1,5 @@
-@import "../../utils/variables";
-@import "../../utils/mixins";
+@import '../../utils/variables';
+@import '../../utils/mixins';
 
 body {
     background-color: $BODY_COLOR;
@@ -10,4 +10,44 @@ body {
 
 #root {
     height: 100%;
+}
+
+// Toasty Styles
+
+.toasty {
+    margin-bottom: -1rem;
+    &__toast {
+        box-shadow: none;
+        padding: $PADDING;
+    }
+}
+
+.enter {
+    animation-name: enter;
+}
+@keyframes enter {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.exit {
+    animation-name: exit;
+}
+@keyframes exit {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
 }
