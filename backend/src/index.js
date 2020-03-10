@@ -1,3 +1,6 @@
+const {
+    default: playground,
+} = require('graphql-playground-middleware-express');
 const { graphqlUploadExpress } = require('graphql-upload');
 const { makeExecutableSchema } = require('graphql-tools');
 const { importSchema } = require('graphql-import');
@@ -8,6 +11,7 @@ const bodyParser = require('body-parser');
 const { promisify } = require('util');
 const mongoose = require('mongoose');
 const express = require('express');
+const cors = require('cors');
 const fs = require('fs');
 
 // Initialize environment
@@ -26,6 +30,9 @@ mongoose.connect(process.env.DATABASE, {
 });
 
 app.use(bodyParser.json());
+app.use(cors());
+
+app.get('/', playground({ endpoint: '/graphql' }));
 
 // Load required stuff for server like schema
 Promise.all([
@@ -52,7 +59,6 @@ Promise.all([
                 typeDefs,
             }),
             context: { user },
-            graphiql: true,
         })),
     );
 

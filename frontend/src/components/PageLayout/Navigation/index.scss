@@ -1,64 +1,57 @@
-@import "../../../utils/variables";
-@import "../../../utils/mixins";
+@import '../../../utils/variables';
+@import '../../../utils/mixins';
 
 .nav {
-  display: flex;
-  align-items: center;
-  background-color: $BACKGROUND_COLOR;
-  color: $TEXT_COLOR;
+    background-color: $BACKGROUND_COLOR;
+    color: $TEXT_COLOR;
+    padding: 0 $PADDING !important;
 
-  &__content {
-    display: flex;
-    padding: 0 $PADDING;
-    align-items: center;
-    width: 100%;
-    margin: auto;
-  }
-
-  &__logo {
-    width: 45px;
-    height: auto;
-    margin-right: $PADDING;
-  }
-
-  &__items {
-    display: flex;
-    align-items: center;
-    list-style-type: none;
-    margin: 0;
-    margin-right: auto;
-    padding: 0;
-  }
-
-  &__item {
-    font-weight: bold;
-  }
-
-  &__item-link {
-    @include transition(color border-bottom-color);
-    color: lighten($TEXT_COLOR, 30%);
-    text-decoration: none;
-    display: inline-block;
-    border-bottom: 3px solid transparent;
-    padding: $PADDING;
-
-    &:hover {
-      color: $TEXT_COLOR;
+    &__logo {
+        width: 45px;
+        height: auto;
+        margin: auto 0;
+        margin-right: $PADDING;
     }
 
-    &--active {
-      border-bottom-color: $PRIMARY_COLOR;
-      color: $TEXT_COLOR;
+    &__items {
+        display: flex;
+        align-items: center;
+        list-style-type: none;
+        margin: 0;
+        margin-right: auto;
+        padding: 0;
     }
-  }
 
-  &__profile {
-    padding-left: $PADDING;
-  }
+    &__item {
+        font-weight: bold;
+    }
 
-  &__profile-img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-  }
+    &__item-link {
+        @include transition(color border-bottom-color);
+        color: lighten($TEXT_COLOR, 30%);
+        text-decoration: none;
+        display: inline-block;
+        border-bottom: 3px solid transparent;
+        padding: $PADDING;
+
+        &:hover {
+            color: $TEXT_COLOR;
+        }
+
+        &--active {
+            border-bottom-color: $PRIMARY_COLOR;
+            color: $TEXT_COLOR;
+        }
+    }
+
+    &__profile {
+        margin: auto 0;
+        margin-left: $PADDING;
+    }
+
+    &__profile-img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+    }
 }

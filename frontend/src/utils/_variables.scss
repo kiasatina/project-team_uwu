@@ -1,6 +1,3 @@
-// Resources
-$PRIMARY_FONT: "Rubik", sans-serif;
-
 // Colors
 $BODY_COLOR: #e2e2e2;
 $BACKGROUND_COLOR: #ffffff;
@@ -8,9 +5,8 @@ $PRIMARY_COLOR: #0886ff;
 $TEXT_COLOR: #434343;
 
 // Dimensions
-$RADIUS: 8px;
-$PADDING: 24px;
-$MIN-HEIGHT: 85vh;
+$PADDING: 1.5rem;
+$LANDING_MAX_WIDTH: 35rem;
 
 // EASE
 $EASE-NORMAL: cubic-bezier(0.4, 0, 0.2, 1);
