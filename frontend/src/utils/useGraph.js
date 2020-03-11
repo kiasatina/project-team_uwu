@@ -10,6 +10,7 @@ const reducer = (state, action) => {
  * @typedef {Object} useGraphOptions
  * @property {Object} [initState = {}] - The initial state of fetch
  * @property {Object} [variables = {}] - The variables for fetch
+ * @property {Function} [onError = console.error] - Error handler
  */
 
 /**
@@ -28,7 +29,7 @@ const reducer = (state, action) => {
  * @returns {useGraphStuff} - Hook stuff
  */
 export const useGraph = (query, options = {}) => {
-    const { initState = {}, variables = {} } = options;
+    const { initState = {}, variables = {}, onError = console.error } = options;
 
     const [store, _dispatch] = useReducer(reducer, {
         data: initState,
@@ -51,7 +52,7 @@ export const useGraph = (query, options = {}) => {
                         });
                     }
                 } catch (err) {
-                    console.error(err.message);
+                    onError(err.message);
                 }
             }
         })();
@@ -59,7 +60,7 @@ export const useGraph = (query, options = {}) => {
         return () => {
             mounted = false;
         };
-    }, [query, store.variables]);
+    }, [query, onError, store.variables]);
 
     const refetch = useCallback(
         (initState = store.data, variables = store.variables) => {

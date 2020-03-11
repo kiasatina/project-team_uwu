@@ -25,7 +25,9 @@
     "graphql-tools": "^4.0.7",
     "graphql-upload": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
+    "mime-types": "^2.1.26",
     "mongoose": "^5.9.3",
+    "uuid": "^7.0.2",
     "validator": "^12.2.0"
   },
   "husky": {

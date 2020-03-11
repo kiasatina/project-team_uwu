@@ -25,6 +25,7 @@ const app = express();
 // Connect the mangos
 mongoose.connect(process.env.DATABASE, {
     useUnifiedTopology: true,
+    useFindAndModify: false,
     useNewUrlParser: true,
     useCreateIndex: true,
 });
@@ -33,6 +34,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/', playground({ endpoint: '/graphql' }));
+app.use('/assets', express.static(process.env.STATIC));
 
 // Load required stuff for server like schema
 Promise.all([

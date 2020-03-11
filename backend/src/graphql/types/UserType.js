@@ -1,4 +1,4 @@
-const { Follow } = require('../../models');
+const { Follow, Image } = require('../../models');
 
 module.exports = {
     followers_count: async root => {
@@ -44,5 +44,12 @@ module.exports = {
                 resolve(result.following || []);
             });
         });
+    },
+    profile_image: async root => {
+        const image = await Image.findById(root.profile_image);
+        if (image) {
+            image.src = `${process.env.BASENAME}/assets/${image.src}`;
+        }
+        return image;
     },
 };

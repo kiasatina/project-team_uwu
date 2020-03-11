@@ -2,9 +2,8 @@ scalar Upload
 
 "A static file which was uploaded at some point"
 type File {
-    filename: String!
-    mimetype: String!
-    encoding: String!
+    src: String!
+    type: String!
 }
 
 "The user of the platform"
@@ -13,7 +12,7 @@ type User {
     bio: String!
     email: String!
     username: String!
-    profile_image: File!
+    profile_image: File
     followers_count: Int!
     followers(limit: Int = 10, page: Int = 0): [User]!
     following_count: Int!
@@ -25,6 +24,14 @@ type User {
 "A post from some user"
 type Post {
     _id: ID!
+}
+
+"Payload for updating user profile"
+input ProfileInput {
+    profile_image: Upload
+    username: String
+    password: String
+    bio: String
 }
 
 type Query {
@@ -43,6 +50,8 @@ type Mutation {
     login(email: String!, password: String!): String!
     "Register's user, returning a JWT token for authorization"
     register(email: String!, username: String!, password: String!): String!
+    "Updates the profile information of user in session"
+    updateProfile(input: ProfileInput!): User!
     "Testing stuff"
     test(file: Upload!): File!
 }
