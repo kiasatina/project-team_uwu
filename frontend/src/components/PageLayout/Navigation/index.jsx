@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Loader } from 'semantic-ui-react';
+
+import { UserContext } from '../../../utils';
 import { logo } from '../../../assets';
 import './index.scss';
+
+const DEFAULT = 'https://media.tenor.com/images/2e134ea071498a68c777d5540b65fecd/tenor.gif';
 
 const routes = [
     {
@@ -26,7 +30,9 @@ const hydrateRoute = (route, params) =>
     route.replace(/:[^/]*/g, s => params[s.slice(1)] || '');
 
 export default () => {
+    const { user, loading } = useContext(UserContext);
     const params = useParams();
+
     return (
         <Grid.Row as='nav' className='nav'>
             <img src={logo} className='nav__logo' alt='uwu' />
@@ -43,11 +49,15 @@ export default () => {
                 ))}
             </ul>
             <div className='nav__profile'>
-                <img
-                    src='https://media.tenor.com/images/2e134ea071498a68c777d5540b65fecd/tenor.gif'
-                    alt='you'
-                    className='nav__profile-img'
-                />
+                {
+                    loading ? <Loader active/> : (
+                        <img
+                            src={ user?.profile_image?.src || DEFAULT }
+                            alt='you'
+                            className='nav__profile-img'
+                        />
+                    )
+                }
             </div>
         </Grid.Row>
     );

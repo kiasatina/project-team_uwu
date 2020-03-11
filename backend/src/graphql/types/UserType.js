@@ -46,6 +46,10 @@ module.exports = {
         });
     },
     profile_image: async root => {
-        return await Image.findById(root.profile_image);
+        const image = await Image.findById(root.profile_image);
+        if (image) {
+            image.src = `${process.env.BASENAME}/assets/${image.src}`;
+        }
+        return image;
     },
 };

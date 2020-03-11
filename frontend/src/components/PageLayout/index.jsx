@@ -22,7 +22,7 @@ export const PageLayout = ({ children }) => {
         <UserContext.Provider value={{ user: data.getMe, loading, dispatch }}>
             <Grid className='pagelayout' padded>
                 <Navigation />
-                <Grid.Row className='pagelayout__content'>{children}</Grid.Row>
+                <Grid.Row className='pagelayout__content'>{ children }</Grid.Row>
             </Grid>
         </UserContext.Provider>
     );

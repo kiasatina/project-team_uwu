@@ -29,6 +29,9 @@ export const GET_ME = `
         getMe {
             _id
             username
+            profile_image {
+                src
+            }
         }
     }
 `;

@@ -47,11 +47,15 @@
     &__profile {
         margin: auto 0;
         margin-left: $PADDING;
+        @include flex(center);
+        position: relative;
+        width: 45px;
+        height: 45px;
     }
 
     &__profile-img {
-        width: 45px;
-        height: 45px;
+        width: 100%;
+        height: 100%;
         border-radius: 50%;
     }
 }
