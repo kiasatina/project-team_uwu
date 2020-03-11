@@ -25,6 +25,7 @@ const app = express();
 // Connect the mangos
 mongoose.connect(process.env.DATABASE, {
     useUnifiedTopology: true,
+    useFindAndModify: false,
     useNewUrlParser: true,
     useCreateIndex: true,
 });

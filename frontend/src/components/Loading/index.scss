@@ -1,0 +1,18 @@
+@import '../../utils/variables';
+@import '../../utils/mixins';
+
+.loading {
+    @include flex(center);
+    width: 100%;
+
+    &__text {
+        font-size: 1.6rem !important;
+        animation: flicker 1.5s ease-in-out 0s infinite;
+        @keyframes flicker {
+            0% { opacity: 0.3 }
+            30% { opacity: 0.5 }
+            70% { opacity: 0.5 }
+            100% { opacity: 0.3 }
+        }
+    }
+}
