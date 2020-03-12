@@ -1,4 +1,5 @@
 export * from './App';
+export * from './Editor';
 export * from './LandingPage';
 export * from './Loading';
 export * from './PageContent';

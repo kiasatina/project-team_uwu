@@ -16,4 +16,9 @@ export default [
         exact: true,
         path: '/faq',
     },
+    {
+        component: React.lazy(() => import('./Stream')),
+        exact: true,
+        path: '/stream',
+    },
 ];

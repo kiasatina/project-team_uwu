@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Grid } from 'semantic-ui-react';
 import { toast } from 'react-toastify';
 
 import { UserContext, useGraph, printError } from '../../utils';
@@ -20,10 +19,8 @@ export const PageLayout = ({ children }) => {
 
     return (
         <UserContext.Provider value={{ user: data.getMe, loading, dispatch }}>
-            <Grid className='pagelayout' padded>
-                <Navigation />
-                <Grid.Row className='pagelayout__content'>{ children }</Grid.Row>
-            </Grid>
+            <Navigation />
+            <div className='pagelayout'>{ children }</div>
         </UserContext.Provider>
     );
 };

@@ -1,10 +1,12 @@
 import React from 'react';
-import { PageContent, Sidenav } from '../../components';
+import { PageContent, Sidenav, Editor } from '../../components';
 
 export default () => {
     return (
         <>
-            <PageContent>Content</PageContent>
+            <PageContent>
+                <Editor/>
+            </PageContent>
             <Sidenav>Sidenav</Sidenav>
         </>
     );

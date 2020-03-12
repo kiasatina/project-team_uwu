@@ -2,9 +2,8 @@
 @import '../../utils/mixins';
 
 .pagecontent {
-    &__content {
-        padding: $PADDING;
-        background-color: $BACKGROUND_COLOR;
-        height: 100%;
-    }
+    @include scroll;
+    box-sizing: border-box;
+    padding: $PADDING;
+    flex-grow: 1;
 }

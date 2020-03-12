@@ -41,7 +41,11 @@ schema.statics.upload = async function(file) {
 schema.statics.reupload = async function(_id, file) {
     // Remove old file
     const old = await this.findById(_id, 'src');
-    await fs.promises.unlink(PATH(old.src));
+    try {
+        await fs.promises.unlink(PATH(old.src));
+    } catch (err) {
+        console.warn(err.message);
+    }
 
     // Update with new file
     const { createReadStream, mimetype } = await file;
@@ -52,8 +56,13 @@ schema.statics.reupload = async function(_id, file) {
 
 schema.statics.remove = async function(_id) {
     const old = await this.findById(_id, 'src');
+    try {
+        await fs.promises.unlink(PATH(old.src));
+    } catch (err) {
+        console.warn(err.message);
+    }
+
     await this.deleteOne({ _id });
-    await fs.promises.unlink(PATH(old.src));
 };
 
 module.exports = mongoose.model('Image', schema);

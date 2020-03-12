@@ -16,7 +16,7 @@ module.exports = withSession(async (root, { input }, ctx) => {
 
     if (profile_image) {
         if (user.profile_image) {
-            await Image.replace(user.profile_image, profile_image);
+            await Image.reupload(user.profile_image, profile_image);
         } else {
             const { _id } = await Image.upload(profile_image);
             args.profile_image = _id;
