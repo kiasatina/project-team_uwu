@@ -75,17 +75,18 @@ export default () => {
                         error={displayError('password', formik)}
                     />
                 </Form.Field>
-                <div>
+                <div className='landingPage__buttons'>
                     <Button
                         color='teal'
                         type='submit'
                         disabled={!formik.dirty || !formik.isValid}
                         loading={formik.isSubmitting}
+                        fluid
                     >
                         <Icon name='sign-in' />
                         Login
                     </Button>
-                    <Button color='teal' as={Link} to='/register' basic>
+                    <Button color='teal' as={Link} to='/register' fluid basic>
                         New user?
                     </Button>
                 </div>

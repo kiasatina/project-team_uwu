@@ -1,11 +1,13 @@
-import React from 'react';
-import { Grid } from 'semantic-ui-react';
+import React, { forwardRef } from 'react';
 import './index.scss';
 
-export const PageContent = ({ children }) => {
+export const PageContent = forwardRef(({
+    className = '',
+    children,
+}, ref) => {
     return (
-        <Grid.Column className='pagecontent' width={12}>
-            <main className='pagecontent__content'>{children}</main>
-        </Grid.Column>
+        <main ref={ref} className={`pagecontent ${ className }`}>
+            {children}
+        </main>
     );
-};
+});

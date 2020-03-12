@@ -109,17 +109,18 @@ export default () => {
                         error={comparePassword}
                     />
                 </Form.Field>
-                <div>
+                <div className='landingPage__buttons'>
                     <Button
                         color='teal'
                         type='submit'
                         disabled={!formik.dirty || !formik.isValid}
                         loading={formik.isSubmitting}
+                        fluid
                     >
                         <Icon name='sign-in' />
                         Register
                     </Button>
-                    <Button color='teal' as={Link} to='/' basic>
+                    <Button color='teal' as={Link} to='/' fluid basic>
                         Back to login
                     </Button>
                 </div>

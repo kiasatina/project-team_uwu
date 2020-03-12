@@ -2,11 +2,10 @@
 @import '../../utils/mixins';
 
 .sidenav {
-    padding-left: 0 !important;
-
-    &__content {
-        padding: $PADDING;
-        background-color: $BACKGROUND_COLOR;
-        height: 100%;
-    }
+    @include scroll;
+    flex-shrink: 0;
+    width: $SIDENAV-WIDTH;
+    background-color: $BACKGROUND-COLOR;
+    box-sizing: border-box;
+    box-shadow: $SHADOW;
 }

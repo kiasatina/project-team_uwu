@@ -2,11 +2,7 @@
 @import '../../utils/mixins';
 
 .pagelayout {
-    height: 100%;
-    flex-direction: column !important;
-
-    & &__content {
-        padding: $PADDING $PADDING/3;
-        flex-grow: 1;
-    }
+    @include flex;
+    padding: 0 !important;
+    flex-grow: 1;
 }

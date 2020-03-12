@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Grid, Loader } from 'semantic-ui-react';
+import { Loader } from 'semantic-ui-react';
 
 import { UserContext } from '../../../utils';
 import { logo } from '../../../assets';
@@ -20,6 +20,11 @@ const routes = [
         to: '/create',
     },
     {
+        children: 'Stream',
+        exact: true,
+        to: '/stream',
+    },
+    {
         children: 'FAQ',
         exact: true,
         to: '/faq',
@@ -34,7 +39,7 @@ export default () => {
     const params = useParams();
 
     return (
-        <Grid.Row as='nav' className='nav'>
+        <nav className='nav'>
             <img src={logo} className='nav__logo' alt='uwu' />
             <ul className='nav__items'>
                 {routes.map(({ to, ...route }) => (
@@ -59,6 +64,6 @@ export default () => {
                     )
                 }
             </div>
-        </Grid.Row>
+        </nav>
     );
 };

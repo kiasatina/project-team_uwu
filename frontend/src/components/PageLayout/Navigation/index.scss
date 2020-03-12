@@ -2,7 +2,10 @@
 @import '../../../utils/mixins';
 
 .nav {
+    @include flex;
     background-color: $BACKGROUND_COLOR;
+    box-shadow: $SHADOW;
+    z-index: 10;
     color: $TEXT_COLOR;
     padding: 0 $PADDING !important;
 

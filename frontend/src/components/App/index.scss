@@ -9,7 +9,9 @@ body {
 }
 
 #root {
-    height: 100%;
+    @include flex(column);
+    max-height: 100vh;
+    height: 100vh;
 }
 
 // Toasty Styles

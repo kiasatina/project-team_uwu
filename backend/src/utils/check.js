@@ -32,7 +32,7 @@ module.exports = {
         }
 
         if (user === null) {
-            throw new Error(errors.AUTHENTICATION_ERROR);
+            throw new Error(errors.INVALID_ERROR('LOGIN'));
         }
 
         if (user) {
