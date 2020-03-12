@@ -49,7 +49,7 @@
 
     &__profile {
         margin: auto 0;
-        margin-left: $PADDING;
+        margin-left: ($PADDING * 3);
         @include flex(center);
         position: relative;
         width: 45px;
@@ -60,5 +60,34 @@
         width: 100%;
         height: 100%;
         border-radius: 50%;
+    }
+
+    &__dropdown {
+        // position: absolute;
+        background-color: $BACKGROUND_COLOR;
+        box-shadow: $SHADOW;
+        list-style-type: none;
+        padding: 0;
+        margin: auto 0;
+    }
+
+    &__dropdown-item-link {
+        @include transition(color);
+        display: inline-block;
+        color: lighten($TEXT_COLOR, 10%);
+        padding: ($PADDING / 1.5) $PADDING;
+        padding-right: ($PADDING * 2.5);
+
+        &:hover {
+            color: $TEXT_COLOR;
+        }
+    }
+
+    .ui.dropdown {
+        margin: auto 0;
+
+        .menu {
+            margin-top: $PADDING;
+        }
     }
 }

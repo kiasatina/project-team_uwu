@@ -21,4 +21,9 @@ export default [
         exact: true,
         path: '/stream',
     },
+    {
+        component: React.lazy(() => import('./Profile')),
+        exact: true,
+        path: '/profile',
+    },
 ];
