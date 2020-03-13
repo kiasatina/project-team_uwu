@@ -35,3 +35,17 @@ export const GET_ME = `
         }
     }
 `;
+
+export const GET_MY_PROFILE = `
+    {
+        getMe {
+            _id,
+            bio,
+            email,
+            username,
+            profile_image {
+                src
+            }
+        }
+    }
+`;

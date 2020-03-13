@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Loader, Dropdown } from 'semantic-ui-react';
+import { Dropdown, Loader } from 'semantic-ui-react';
 import { logo } from '../../../assets';
 import { UserContext } from '../../../utils';
 import './index.scss';
@@ -50,7 +50,6 @@ const dropdownRoutes = [
 export default () => {
     const { user, loading } = useContext(UserContext);
     const params = useParams();
-    const [dropdown, setDropdown] = useState(false);
 
     return (
         <nav className='nav'>
@@ -69,7 +68,6 @@ export default () => {
             </ul>
 
             <Dropdown
-                flex
                 trigger={
                     <div className='nav__profile'>
                         {loading ? (
