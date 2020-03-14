@@ -65,14 +65,6 @@ type Post {
     createdAt: DateTime!
 }
 
-"Payload for updating user profile"
-input ProfileInput {
-    profile_image: Upload
-    username: String
-    password: String
-    bio: String
-}
-
 type Query {
     "Fetches information about the followers of a user"
     getFollowers(following: ID, limit: Int = 10, page: Int = 0): [User]!
@@ -97,7 +89,12 @@ type Mutation {
     "Register's user, returning a JWT token for authorization"
     register(email: String!, username: String!, password: String!): String!
     "Updates the profile information of user in session"
-    updateProfile(input: ProfileInput!): User!
+    updateProfile(
+        profile_image: Upload
+        username: String
+        password: String
+        bio: String
+    ): User!
     "Testing stuff"
     test(file: Upload!): File!
 }
