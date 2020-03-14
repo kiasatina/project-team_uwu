@@ -24,8 +24,8 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Load routes
-app.get('/', playground({ endpoint: '/graphql' }));
 app.use('/assets', express.static(process.env.STATIC));
+app.get('/', playground({ endpoint: '/graphql' }));
 
 const MESSAGE = `GraphQL Sewvew: http://localhost:${process.env.PORT} owo
 Socket Sewvew: http://localhost:${process.env.SOCKET} uwu\n`;

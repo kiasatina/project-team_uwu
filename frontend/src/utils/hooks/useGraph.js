@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useCallback } from 'react';
-import { fetchGraph } from './fetchGraph';
+import { fetchGraph } from '../fetchGraph';
 
 const reducer = (state, action) => {
     return { ...state, ...action };

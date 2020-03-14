@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mime = require('mime-types');
 const { v4 } = require('uuid');
+const sharp = require('sharp');
 const fs = require('fs');
 
 const PATH = src => `${process.env.STATIC}/${src}`;
