@@ -7,22 +7,6 @@
     margin: auto;
     padding: ($PADDING * 2);
 
-    &__text {
-        @include flex(column, center, left);
-        padding: $PADDING;
-        margin-right: auto;
-    }
-
-    &__text-username {
-        font-size: 1.6rem;
-        font-weight: bold;
-    }
-
-    &__text-email {
-        margin-bottom: ($PADDING / 2);
-        color: lighten($TEXT-COLOR, 30%);
-    }
-
     &__form {
         width: 100%;
     }
@@ -52,8 +36,9 @@
     }
 
     &__img {
-        margin: auto 0;
         @include flex(center);
+        flex-shrink: 0;
+        margin: auto 0;
         width: 150px;
         height: 150px;
     }
@@ -62,5 +47,28 @@
         width: 100%;
         height: 100%;
         border-radius: 50%;
+    }
+
+    &__text {
+        @include flex(column, center, left);
+        flex-grow: 1;
+        padding: $PADDING;
+        margin-right: auto;
+    }
+
+    &__text-username {
+        font-size: 1.6rem;
+        font-weight: bold;
+    }
+
+    &__text-email {
+        margin-bottom: ($PADDING / 2);
+        color: lighten($TEXT-COLOR, 30%);
+    }
+
+    &__text-bio {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
     }
 }

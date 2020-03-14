@@ -27,8 +27,10 @@ export const REGISTER = `
 export const GET_ME = `
     {
         getMe {
-            _id
-            username
+            _id,
+            bio,
+            email,
+            username,
             profile_image {
                 src
             }
@@ -52,10 +54,16 @@ export const GET_MY_PROFILE = `
 
 export const UPDATE_PROFILE = `
     mutation updateProfile(
-        $input: ProfileInput!
+        $profile_image: Upload,
+        $username: String,
+        $password: String,
+        $bio: String
     ) {
         updateProfile(
-            input: $input
+            profile_image: $profile_image,
+            username: $username,
+            password: $password,
+            bio: $bio
         ) { 
             _id,
             bio,

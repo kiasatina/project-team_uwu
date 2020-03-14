@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button, Form, Icon } from 'semantic-ui-react';
 import * as Yup from 'yup';
@@ -32,6 +32,7 @@ const displayError = (label, formik) => {
 export const UserProfile = () => {
     const [user, setUser] = useState();
     const [edit, setEdit] = useState(false);
+    const ref = useRef();
 
     useEffect(() => {
         (async () => {
@@ -42,17 +43,11 @@ export const UserProfile = () => {
         return () => {};
     }, []);
 
-    const formik = useFormik({
+    const { setFieldValue, ...formik } = useFormik({
         initialValues: { ...user, password: '', confirm_password: '' },
         validationSchema,
         enableReinitialize: true,
-        async onSubmit({
-            _id,
-            confirm_password,
-            email,
-            profile_image,
-            ...values
-        }) {
+        async onSubmit({ _id, email, confirm_password, ...values }) {
             try {
                 let newValues = {};
                 Object.entries(values).forEach(([key, value]) => {
@@ -63,9 +58,7 @@ export const UserProfile = () => {
                         newValues[key] = value;
                     }
                 });
-                let res = await fetchGraph(UPDATE_PROFILE, {
-                    input: newValues,
-                });
+                let res = await fetchGraph(UPDATE_PROFILE, newValues);
                 setUser(res.updateProfile);
                 setEdit(false);
                 formik.resetForm();
@@ -74,6 +67,15 @@ export const UserProfile = () => {
             }
         },
     });
+
+    const upload = useCallback(
+        ({ currentTarget }) => {
+            const file = currentTarget.files[0];
+            setFieldValue('profile_image', file);
+            ref.current.src = URL.createObjectURL(file);
+        },
+        [setFieldValue],
+    );
 
     const comparePassword = formik.values?.confirm_password
         ? displayError('confirm_password', formik) ||
@@ -89,7 +91,8 @@ export const UserProfile = () => {
                 <Form onSubmit={formik.handleSubmit}>
                     <Form.Field className='userprofile__form-img'>
                         <img
-                            src={user.profile_image?.src || DEFAULT}
+                            ref={ref}
+                            src={user?.profile_image?.src || DEFAULT}
                             alt='you'
                             className='userprofile__form-img-src'
                         />
@@ -107,13 +110,7 @@ export const UserProfile = () => {
                             name='profile_image'
                             id='profile_image'
                             type='file'
-                            onChange={e => {
-                                formik.dirty = false;
-                                formik.setFieldValue(
-                                    'profile_image',
-                                    e.target.files[0],
-                                );
-                            }}
+                            onChange={upload}
                             hidden
                         />
                     </Form.Field>
@@ -195,7 +192,7 @@ export const UserProfile = () => {
                     {user?.username}
                 </div>
                 <div className='userprofile__text-email'>{user?.email}</div>
-                <div>{user?.bio}</div>
+                <div className='userprofile__text-bio'>{user?.bio}</div>
             </div>
             <Icon
                 onClick={() => {
