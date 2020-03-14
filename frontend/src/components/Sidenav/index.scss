@@ -8,4 +8,8 @@
     background-color: $BACKGROUND-COLOR;
     box-sizing: border-box;
     box-shadow: $SHADOW;
+
+    &--padded {
+        padding: $PADDING;
+    }
 }

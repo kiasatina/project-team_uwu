@@ -1,55 +1,33 @@
-const { Follow, Image } = require('../../models');
+const { Follow, Post } = require('../../models');
+const {
+    fileResolver,
+    followersResolver,
+    followingsResolver,
+} = require('../resolvers');
 
 module.exports = {
     followers_count: async root => {
         return await Follow.count({ following: root._id });
     },
-    followers: (root, { limit, page }) => {
-        return new Promise(resolve => {
-            Follow.aggregate([
-                { $match: { following: root._id } },
-                { $skip: page * limit },
-                { $limit: limit },
-                {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'follower',
-                        foreignField: '_id',
-                        as: 'followers',
-                    },
-                },
-            ]).exec((err, [result = {}]) => {
-                resolve(result.followers || []);
-            });
+    followers: (root, args) => {
+        return followersResolver({
+            following: root._id,
+            ...args,
         });
     },
     following_count: async root => {
         return await Follow.count({ follower: root._id });
     },
-    following: (root, { limit, page }) => {
-        return new Promise(resolve => {
-            Follow.aggregate([
-                { $match: { follower: root._id } },
-                { $skip: page * limit },
-                { $limit: limit },
-                {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'following',
-                        foreignField: '_id',
-                        as: 'following',
-                    },
-                },
-            ]).exec((err, [result = {}]) => {
-                resolve(result.following || []);
-            });
+    following: (root, args) => {
+        return followingResolver({
+            follower: root._id,
+            ...args,
         });
     },
-    profile_image: async root => {
-        const image = await Image.findById(root.profile_image);
-        if (image) {
-            image.src = `${process.env.BASENAME}/assets/${image.src}`;
-        }
-        return image;
+    profile_image: root => fileResolver(root.profile_image),
+    posts: async (root, { limit, page }, ctx) => {
+        return await Post.find({ user: ctx.user })
+            .limit(limit)
+            .skip(page * limit);
     },
 };

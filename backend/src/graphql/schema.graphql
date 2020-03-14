@@ -1,4 +1,11 @@
+scalar DateTime
 scalar Upload
+
+enum PostLayerEnum {
+    FILTER
+    TEXT
+    STICKER
+}
 
 "A static file which was uploaded at some point"
 type File {
@@ -19,11 +26,43 @@ type User {
     following(limit: Int = 10, page: Int = 0): [User]!
     posts_count: Int!
     posts(limit: Int = 10, page: Int = 0): [Post]!
+    createdAt: DateTime!
+}
+
+"The geolocation information of a post"
+type PostLocation {
+    lat: Float!
+    long: Float!
+    location: String!
+}
+
+"The positioning of a layer in a post"
+type PostLayerPosition {
+    x: Float!
+    y: Float!
+}
+
+"The filter/decoration layer of a post"
+type PostLayer {
+    type: PostLayerEnum!
+    filter: String
+    asset: File
+    position: PostLayerPosition
+    text: String
 }
 
 "A post from some user"
 type Post {
     _id: ID!
+    user: User!
+    asset: File!
+    title: String!
+    description: String!
+    draft: Boolean!
+    location: PostLocation
+    audio: File
+    layers: [PostLayer]!
+    createdAt: DateTime!
 }
 
 "Payload for updating user profile"
@@ -35,8 +74,14 @@ input ProfileInput {
 }
 
 type Query {
+    "Fetches information about the followers of a user"
+    getFollowers(following: ID, limit: Int = 10, page: Int = 0): [User]!
+    "Fetches information about users a user follows"
+    getFollowings(follower: ID, limit: Int = 10, page: Int = 0): [User]!
     "Fetches user information of current session user"
     getMe: User!
+    "Fetches nformation about a post, or list from a user"
+    getPosts(_id: ID, user: ID, limit: Int = 10, page: Int = 0): [Post]!
     "Fetches information about users or a specific user"
     getUsers(_id: ID, username: String, limit: Int = 10, page: Int = 0): [User]!
     "Testing stuff"
@@ -44,6 +89,7 @@ type Query {
 }
 
 type Mutation {
+    createPost(asset: Upload!, title: String!, description: String!): Post!
     "Follow a user"
     follow(_id: ID!): Boolean!
     "Logins in user, returning a JWT token for authorization"

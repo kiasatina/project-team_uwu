@@ -1,9 +1,17 @@
 const validator = require('validator');
 const hashPassword = require('./hashPassword');
-const errors = require('./errors');
 const { User } = require('../models');
+const errors = require('./errors');
 
 module.exports = {
+    async file(value, accept) {
+        const { mimetype } = await value;
+        if (accept && !mimetype.startsWith(accept)) {
+            throw new Error(errors.INVALID_ERROR('FILE'));
+        }
+
+        return true;
+    },
     async username(value = '', create) {
         if (!validator.isAlphanumeric(value) || validator.isEmpty(value)) {
             throw new Error(errors.INVALID_ERROR('USERNAME'));

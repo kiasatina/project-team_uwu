@@ -6,8 +6,14 @@ export default () => {
     const { user, loading } = useContext(UserContext);
     return (
         <Loading loading={ loading }>
-            <PageContent>Welcome { user?.username }</PageContent>
-            <Sidenav>Sidenav</Sidenav>
+            <PageContent label='Home'>
+                <div style={{height: '200vh'}}></div>
+                Welcome { user?.username }
+            </PageContent>
+            <Sidenav>
+                Sidenav
+                <div style={{height: '200vh'}}></div>
+            </Sidenav>
         </Loading>
     );
 };

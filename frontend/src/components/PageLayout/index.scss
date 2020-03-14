@@ -3,6 +3,6 @@
 
 .pagelayout {
     @include flex;
-    padding: 0 !important;
     flex-grow: 1;
+    height: 1px;
 }
