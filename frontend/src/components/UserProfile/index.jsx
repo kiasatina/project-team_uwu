@@ -1,24 +1,23 @@
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Icon, Form, Button } from 'semantic-ui-react';
+import { Button, Form, Icon } from 'semantic-ui-react';
 import * as Yup from 'yup';
-import { GET_MY_PROFILE } from '../../graphql/user';
+import { GET_MY_PROFILE, UPDATE_PROFILE } from '../../graphql/user';
 import { fetchGraph, printError } from '../../utils';
 import './index.scss';
-import { Link } from 'react-router-dom';
 
 const DEFAULT =
     'https://media.tenor.com/images/2e134ea071498a68c777d5540b65fecd/tenor.gif';
 
 const validationSchema = Yup.object().shape({
     username: Yup.string(),
-    email: Yup.string().email('Invalid email'),
-    confirm_password: Yup.string().min(
+    bio: Yup.string(),
+    password: Yup.string().min(
         8,
         'Password must be at least 8 characters long',
     ),
-    password: Yup.string().min(
+    confirm_password: Yup.string().min(
         8,
         'Password must be at least 8 characters long',
     ),
@@ -31,7 +30,7 @@ const displayError = (label, formik) => {
 };
 
 export const UserProfile = () => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState();
     const [edit, setEdit] = useState(false);
 
     useEffect(() => {
@@ -44,12 +43,32 @@ export const UserProfile = () => {
     }, []);
 
     const formik = useFormik({
-        initialValues: user || {},
+        initialValues: { ...user, password: '', confirm_password: '' },
         validationSchema,
         enableReinitialize: true,
-        async onSubmit({ confirm_password, ...values }) {
+        async onSubmit({
+            _id,
+            confirm_password,
+            email,
+            profile_image,
+            ...values
+        }) {
             try {
+                let newValues = {};
+                Object.entries(values).forEach(([key, value]) => {
+                    if (
+                        user[key] !== value &&
+                        !(key === 'password' && value === '')
+                    ) {
+                        newValues[key] = value;
+                    }
+                });
+                let res = await fetchGraph(UPDATE_PROFILE, {
+                    input: newValues,
+                });
+                setUser(res.updateProfile);
                 setEdit(false);
+                formik.resetForm();
             } catch (err) {
                 toast.error(printError(err.message));
             }
@@ -66,7 +85,38 @@ export const UserProfile = () => {
     return edit ? (
         <div className='userprofile'>
             <div className='userprofile__form'>
+                <div className='userprofile__form-header'>Edit Profile</div>
                 <Form onSubmit={formik.handleSubmit}>
+                    <Form.Field className='userprofile__form-img'>
+                        <img
+                            src={user.profile_image?.src || DEFAULT}
+                            alt='you'
+                            className='userprofile__form-img-src'
+                        />
+                        <Button
+                            as='label'
+                            htmlFor='profile_image'
+                            icon
+                            labelPosition='left'
+                            type='button'
+                        >
+                            <Icon name='upload' />
+                            Upload
+                        </Button>
+                        <input
+                            name='profile_image'
+                            id='profile_image'
+                            type='file'
+                            onChange={e => {
+                                formik.dirty = false;
+                                formik.setFieldValue(
+                                    'profile_image',
+                                    e.target.files[0],
+                                );
+                            }}
+                            hidden
+                        />
+                    </Form.Field>
                     <Form.Field>
                         <label htmlFor='username'>Username</label>
                         <Form.Input
@@ -77,13 +127,12 @@ export const UserProfile = () => {
                         />
                     </Form.Field>
                     <Form.Field>
-                        <label htmlFor='email'>Email Address</label>
-                        <Form.Input
-                            name='email'
-                            placeholder='Email Address'
+                        <label htmlFor='bio'>Bio</label>
+                        <Form.TextArea
+                            name='bio'
+                            placeholder='Bio'
                             onChange={formik.handleChange}
-                            value={formik.values.email}
-                            error={displayError('email', formik)}
+                            value={formik.values.bio}
                         />
                     </Form.Field>
                     <Form.Field>
@@ -110,6 +159,16 @@ export const UserProfile = () => {
                     </Form.Field>
                     <div className='userprofile__form-buttons'>
                         <Button
+                            fluid
+                            color='teal'
+                            type='submit'
+                            disabled={!formik.dirty || !formik.isValid}
+                            loading={formik.isSubmitting}
+                        >
+                            Save
+                        </Button>
+                        <Button
+                            fluid
                             color='teal'
                             basic
                             onClick={() => {
@@ -117,14 +176,6 @@ export const UserProfile = () => {
                             }}
                         >
                             Cancel
-                        </Button>
-                        <Button
-                            color='teal'
-                            type='submit'
-                            disabled={!formik.dirty || !formik.isValid}
-                            loading={formik.isSubmitting}
-                        >
-                            Save
                         </Button>
                     </div>
                 </Form>

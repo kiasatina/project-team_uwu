@@ -49,3 +49,21 @@ export const GET_MY_PROFILE = `
         }
     }
 `;
+
+export const UPDATE_PROFILE = `
+    mutation updateProfile(
+        $input: ProfileInput!
+    ) {
+        updateProfile(
+            input: $input
+        ) { 
+            _id,
+            bio,
+            email,
+            username,
+            profile_image {
+                src
+            }
+         }
+    }
+`;
