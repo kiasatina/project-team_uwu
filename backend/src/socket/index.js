@@ -1,4 +1,3 @@
-const { rainbow } = require('chalk-animation');
 const socketIo = require('socket.io');
 const http = require('http');
 
@@ -8,7 +7,6 @@ module.exports = app => {
 
     io.on('connection', socket => {
         console.log('a user connected');
-        console.log(socket);
     });
 
     return new Promise((resolve, reject) => {

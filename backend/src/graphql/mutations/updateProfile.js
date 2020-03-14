@@ -15,14 +15,13 @@ module.exports = withSession(async (root, { input }, ctx) => {
     }
 
     if (profile_image) {
+        await check.file(profile_image, 'image');
         if (user.profile_image) {
             await Image.reupload(user.profile_image, profile_image);
         } else {
             const { _id } = await Image.upload(profile_image);
             args.profile_image = _id;
         }
-
-        // Deleting image
     } else if (profile_image === null && user.profile_image) {
         await Image.remove(user.profile_image);
         args.profile_image = null;

@@ -4,9 +4,12 @@ import './index.scss';
 export const Sidenav = ({
     className = '',
     children,
+    padded,
 }) => {
     return (
-        <nav className={`sidenav ${ className }`}>
+        <nav
+            className={`sidenav${ padded ? ' sidenav--padded' : '' } ${ className }`}
+        >
             { children }
         </nav>
     );

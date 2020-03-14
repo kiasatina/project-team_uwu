@@ -6,4 +6,16 @@
     box-sizing: border-box;
     padding: $PADDING;
     flex-grow: 1;
+
+    &--labelled {
+        padding-top: 0;
+    }
+
+    & &__header {
+        padding: $PADDING 0;
+        background-color: $BODY-COLOR;
+        position: sticky;
+        margin: 0;
+        top: 0;
+    }
 }

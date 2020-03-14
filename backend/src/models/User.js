@@ -10,6 +10,7 @@ const schema = new mongoose.Schema(
             type: String,
             unique: true,
             required: true,
+            lowercase: true,
         },
         validated: {
             type: Boolean,
