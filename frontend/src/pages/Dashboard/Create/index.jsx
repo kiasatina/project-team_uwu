@@ -27,9 +27,7 @@ export default () => {
     });
 
     const onSubmit = async values => {
-        values.asset.lastModifiedDate = new Date();
-        values.asset.name = 'uwu';
-        await fetchGraph(CREATE_POST, values);
+        await fetchGraph(CREATE_POST, { ...values, asset });
     };
 
     useEffect(() => {
