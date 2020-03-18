@@ -1,17 +1,15 @@
 import React from 'react';
-import { Header } from 'semantic-ui-react';
+import { Heading } from '@chakra-ui/core';
 import './index.scss';
 
-export const Loading = ({
-    className = '',
-    children,
-    loading,
-}) => {
+export const Loading = ({ className = '', children, loading }) => {
     return loading ? (
-        <div className={`loading ${ className }`}>
-            <Header className='loading__text' as='h1'>
+        <div className={`loading ${className}`}>
+            <Heading className='loading__text' as='h1'>
                 Loading...
-            </Header>
+            </Heading>
         </div>
-    ) : children;
+    ) : (
+        children
+    );
 };

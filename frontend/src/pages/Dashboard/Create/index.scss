@@ -2,17 +2,6 @@
 @import '../../../utils/mixins';
 
 .create {
-    &__form {
-        margin-top: $PADDING;
-    }
-
-    &__buttons {
-        margin-top: $PADDING/2;
-        & button {
-            position: relative;
-        }
-    }
-
     &__upload {
         @include position(absolute, auto, 0);
         cursor: pointer;

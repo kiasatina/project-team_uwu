@@ -2,12 +2,12 @@
 @import '../../../utils/mixins';
 
 .nav {
-    @include flex;
+    @include flex(flex-start, center);
     background-color: $BACKGROUND_COLOR;
     box-shadow: $SHADOW;
     z-index: 10;
     color: $TEXT_COLOR;
-    padding: 0 $PADDING !important;
+    padding: 0 $PADDING;
 
     &__logo {
         width: 45px;
@@ -44,50 +44,6 @@
         &--active {
             border-bottom-color: $PRIMARY_COLOR;
             color: $TEXT_COLOR;
-        }
-    }
-
-    &__profile {
-        margin: auto 0;
-        margin-left: ($PADDING * 3);
-        @include flex(center);
-        position: relative;
-        width: 45px;
-        height: 45px;
-    }
-
-    &__profile-img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-    }
-
-    &__dropdown {
-        // position: absolute;
-        background-color: $BACKGROUND_COLOR;
-        box-shadow: $SHADOW;
-        list-style-type: none;
-        padding: 0;
-        margin: auto 0;
-    }
-
-    &__dropdown-item-link {
-        @include transition(color);
-        display: inline-block;
-        color: lighten($TEXT_COLOR, 10%);
-        padding: ($PADDING / 1.5) $PADDING;
-        padding-right: ($PADDING * 2.5);
-
-        &:hover {
-            color: $TEXT_COLOR;
-        }
-    }
-
-    .ui.dropdown {
-        margin: auto 0;
-
-        .menu {
-            margin-top: $PADDING;
         }
     }
 }

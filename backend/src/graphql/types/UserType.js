@@ -7,7 +7,7 @@ const {
 
 module.exports = {
     followers_count: async root => {
-        return await Follow.count({ following: root._id });
+        return await Follow.countDocuments({ following: root._id });
     },
     followers: (root, args) => {
         return followersResolver({
@@ -16,15 +16,18 @@ module.exports = {
         });
     },
     following_count: async root => {
-        return await Follow.count({ follower: root._id });
+        return await Follow.countDocuments({ follower: root._id });
     },
     following: (root, args) => {
-        return followingResolver({
+        return followingsResolver({
             follower: root._id,
             ...args,
         });
     },
     profile_image: root => fileResolver(root.profile_image),
+    posts_count: async root => {
+        return await Post.countDocuments({ user: root._id });
+    },
     posts: async (root, { limit, page }, ctx) => {
         return await Post.find({ user: ctx.user })
             .limit(limit)

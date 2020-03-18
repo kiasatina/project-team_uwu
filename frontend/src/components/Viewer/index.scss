@@ -15,4 +15,16 @@
         height: 100%;
         border-radius: $RADIUS;
     }
+
+    &__dimmer {
+        @include transition(opacity, PAGE_SPEED);
+        @include flex(center);
+        @include position(absolute);
+        background-color: $BODY-COLOR;
+        opacity: o;
+
+        &--show {
+            opacity: 1;
+        }
+    }
 }
