@@ -1,12 +1,17 @@
 import React, { useContext } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Dropdown, Loader } from 'semantic-ui-react';
+import {
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    Box,
+    Avatar,
+} from '@chakra-ui/core';
+import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { logo } from '../../../assets';
 import { UserContext } from '../../../utils';
 import './index.scss';
-
-const DEFAULT =
-    'https://media.tenor.com/images/2e134ea071498a68c777d5540b65fecd/tenor.gif';
 
 const routes = [
     {
@@ -36,19 +41,21 @@ const hydrateRoute = (route, params) =>
 
 const dropdownRoutes = [
     {
-        children: 'Profile',
-        exact: true,
+        text: 'My Profile',
         to: '/profile',
+        exact: true,
+        icon: FaUser,
     },
     {
-        children: 'Logout',
-        exact: true,
+        text: 'Logout',
         to: '/logout',
+        exact: true,
+        icon: FaSignOutAlt,
     },
 ];
 
 export default () => {
-    const { user, loading } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const params = useParams();
 
     return (
@@ -66,38 +73,28 @@ export default () => {
                     </li>
                 ))}
             </ul>
-
-            <Dropdown
-                trigger={
-                    <div className='nav__profile'>
-                        {loading ? (
-                            <Loader active />
-                        ) : (
-                            <img
-                                src={user?.profile_image?.src || DEFAULT}
-                                alt='you'
-                                className='nav__profile-img'
-                            />
-                        )}
-                    </div>
-                }
-                direction='right'
-                icon={null}
-            >
-                <Dropdown.Menu>
-                    <ul className='nav__dropdown'>
-                        {dropdownRoutes.map(({ to, ...route }) => (
-                            <li key={to}>
-                                <NavLink
-                                    className='nav__dropdown-item-link'
-                                    to={hydrateRoute(to, params)}
-                                    {...route}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </Dropdown.Menu>
-            </Dropdown>
+            <Menu>
+                <MenuButton>
+                    <Avatar
+                        src={user?.profile_image?.src}
+                        as={Avatar}
+                        alt='you'
+                    />
+                </MenuButton>
+                <MenuList placement='bottom-end'>
+                    {dropdownRoutes.map(({ to, text, icon, ...route }) => (
+                        <MenuItem
+                            to={hydrateRoute(to, params)}
+                            as={NavLink}
+                            key={to}
+                            {...route}
+                        >
+                            <Box as={icon} mr='2' size='12px' />
+                            {text}
+                        </MenuItem>
+                    ))}
+                </MenuList>
+            </Menu>
         </nav>
     );
 };

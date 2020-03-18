@@ -11,7 +11,15 @@
         padding-top: 0;
     }
 
-    & &__header {
+    &__content {
+        max-width: $CONTENT-MAX-WIDTH;
+        margin: 0 auto;
+        &--full {
+            max-width: unset;
+        }
+    }
+
+    &__header {
         padding: $PADDING 0;
         background-color: $BODY-COLOR;
         position: sticky;

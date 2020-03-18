@@ -1,6 +1,6 @@
 // Colors
 $BODY-COLOR: #e2e2e2;
-$SHADOW: 0 0 8px 4px rgba(0,0,0,0.05);
+$SHADOW: 0 0 8px 4px rgba(0, 0, 0, 0.05);
 $BACKGROUND-COLOR: #ffffff;
 $PRIMARY-COLOR: #0886ff;
 $TEXT-COLOR: #434343;
@@ -8,8 +8,9 @@ $TEXT-COLOR: #434343;
 // Dimensions
 $PADDING: 1.5rem;
 $LANDING-MAX-WIDTH: 460px;
-$RADIUS: 8px;
+$RADIUS: 3px;
 $SIDENAV-WIDTH: 360px;
+$CONTENT-MAX-WIDTH: 1000px;
 
 // EASE
 $EASE-NORMAL: cubic-bezier(0.4, 0, 0.2, 1);

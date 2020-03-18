@@ -1,6 +1,7 @@
 scalar DateTime
 scalar Upload
 
+"Types of layer effects for videos"
 enum PostLayerEnum {
     FILTER
     TEXT
@@ -92,6 +93,8 @@ type Mutation {
     updateProfile(
         profile_image: Upload
         username: String
+        "Required only if password is provided"
+        new_password: String
         password: String
         bio: String
     ): User!

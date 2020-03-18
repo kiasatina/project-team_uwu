@@ -27,10 +27,13 @@ export const REGISTER = `
 export const GET_ME = `
     {
         getMe {
-            _id,
-            bio,
-            email,
-            username,
+            _id
+            bio
+            email
+            username
+            followers_count
+            following_count
+            posts_count
             profile_image {
                 src
             }
@@ -54,24 +57,32 @@ export const GET_MY_PROFILE = `
 
 export const UPDATE_PROFILE = `
     mutation updateProfile(
-        $profile_image: Upload,
         $username: String,
         $password: String,
+        $new_password: String,
         $bio: String
     ) {
         updateProfile(
-            profile_image: $profile_image,
             username: $username,
+            new_password: $new_password,
             password: $password,
             bio: $bio
         ) { 
-            _id,
-            bio,
-            email,
-            username,
+            _id
+        }
+    }
+`;
+
+export const UPDATE_PICTURE = `
+    mutation updatePicture(
+        $profile_image: Upload!
+    ) {
+        updateProfile(
+            profile_image: $profile_image
+        ) { 
             profile_image {
                 src
             }
-         }
+        }
     }
 `;

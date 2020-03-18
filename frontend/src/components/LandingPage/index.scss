@@ -25,10 +25,4 @@
         background-color: $BACKGROUND_COLOR;
         max-width: 100%;
     }
-
-    & &__buttons {
-        & button {
-            margin-bottom: $PADDING/3;
-        }
-    }
 }

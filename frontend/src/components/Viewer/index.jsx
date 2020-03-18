@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Dimmer, Loader } from 'semantic-ui-react';
+import { Spinner } from '@chakra-ui/core';
 import './index.scss';
 
 export const Viewer = ({ video }) => {
-    const [ loading, setLoading ] = useState(true);
+    const [loading, setLoading] = useState(true);
     const isFile = typeof video === 'string';
     const ref = useRef();
 
@@ -13,14 +13,14 @@ export const Viewer = ({ video }) => {
         return () => {
             setLoading(true);
             URL.revokeObjectURL(video);
-        }
-    }, [ isFile, video ]);
+        };
+    }, [isFile, video]);
 
     return (
         <div className='viewer'>
-            <Dimmer active={ loading }>
-                <Loader/>
-            </Dimmer>
+            <div className={`viewer__dimmer ${ loading ? ' viewer__dimmer--show' : '' }`}>
+                <Spinner size='xl'/>
+            </div>
             <video
                 onLoadedData={() => setLoading(false)}
                 className='viewer__video'
@@ -31,5 +31,5 @@ export const Viewer = ({ video }) => {
                 loop
             />
         </div>
-    )
-}
+    );
+};

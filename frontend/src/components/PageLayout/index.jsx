@@ -9,18 +9,22 @@ import './index.scss';
 
 export const PageLayout = ({ children }) => {
     const history = useHistory();
-    const onError = useCallback(err => {
-        toast.error(printError(err));
-        localStorage.removeItem('token');
-        history.push('/');
-    }, [ history ]);
+    const onError = useCallback(
+        err => {
+            toast.error(printError(err));
+            localStorage.removeItem('token');
+            history.push('/');
+        },
+        [history],
+    );
 
-    const { data, loading, dispatch } = useGraph(GET_ME, { onError });
+    const { data, loading, dispatch: d } = useGraph(GET_ME, { onError });
+    const dispatch = useCallback(data => d({ getMe: { ...data } }), [ d ]);
 
     return (
         <UserContext.Provider value={{ user: data.getMe, loading, dispatch }}>
             <Navigation />
-            <div className='pagelayout'>{ children }</div>
+            <div className='pagelayout'>{children}</div>
         </UserContext.Provider>
     );
 };

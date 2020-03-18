@@ -3,7 +3,11 @@ const { User, Image } = require('../../models');
 
 //{ username, password, bio, profile_image }
 module.exports = withSession(
-    async (root, { profile_image, username, password, bio }, ctx) => {
+    async (
+        root,
+        { profile_image, username, password, new_password, bio },
+        ctx,
+    ) => {
         let args = {};
         const user = await User.findById(ctx.user, 'profile_image');
 
@@ -12,9 +16,10 @@ module.exports = withSession(
             args.username = username;
         }
 
-        if (password !== undefined) {
-            await check.password(password);
-            args.password = username;
+        if (new_password !== undefined) {
+            await check.password(password, user);
+            await check.password(new_password);
+            args.password = new_password;
         }
 
         if (bio !== undefined) {

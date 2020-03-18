@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useMounted } from './useMounted';
 
+// Singleton for video stream from camera (Bless modules)
 let _stream;
-const getStream = async () => (
+const getStream = async () =>
     _stream ||
-    await navigator.mediaDevices.getUserMedia({
+    (await navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
             width: 720,
             height: 720,
             facingMode: 'user',
         },
-    })
-);
+    }));
 
 /**
  * useRecorder return object
@@ -23,7 +23,7 @@ const getStream = async () => (
 
 /**
  * Hook for media recorder stuff
- * @param {Number} [duration = 4000] - Duration of recording 
+ * @param {Number} [duration = 4000] - Duration of recording
  * @returns {useRecorderResult} - The hook stuff
  */
 export const useRecorder = (duration = 4000) => {
@@ -38,27 +38,30 @@ export const useRecorder = (duration = 4000) => {
         return recorder.current;
     }, []);
 
-    const record = useCallback((_duration = duration) => {
-        return new Promise(async resolve => {
-            const _recorder = await getRecorder();
-            _recorder.start();
-            _recorder.ondataavailable = ({ data }) => {
-                resolve(data);
-            }
-        
-            timer.current = window.setTimeout(() => {
-                _recorder.stop();
-            }, _duration);
-        });
-    }, [ getRecorder, duration ]);
+    const record = useCallback(
+        (_duration = duration) => {
+            return new Promise(async resolve => {
+                const _recorder = await getRecorder();
+                _recorder.start();
+                _recorder.ondataavailable = ({ data }) => {
+                    resolve(data);
+                };
+
+                timer.current = window.setTimeout(() => {
+                    _recorder.stop();
+                }, _duration);
+            });
+        },
+        [getRecorder, duration],
+    );
 
     // Initialize video and cleanup on unmount
     useEffect(() => {
         getRecorder();
         return () => {
             window.clearTimeout(timer.current);
-        }
-    }, [ mounted, getRecorder ]);
+        };
+    }, [mounted, getRecorder]);
 
     return { getRecorder, record };
-}
+};

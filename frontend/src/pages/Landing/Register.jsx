@@ -1,64 +1,44 @@
 import React, { useEffect } from 'react';
-import { Button, Form, Icon } from 'semantic-ui-react';
+import { useForm } from 'react-hook-form';
+import {
+    FormControl,
+    FormLabel,
+    Input,
+    FormErrorMessage,
+    Button,
+    Flex,
+} from '@chakra-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 
 import { fetchGraph, printError } from '../../utils';
 import { REGISTER } from '../../graphql/user';
 import { LandingPage } from '../../components';
 
-const validationSchema = Yup.object().shape({
-    username: Yup.string().required(),
-    email: Yup.string()
-        .email('Invalid email')
-        .required(),
-    confirm_password: Yup.string()
-        .min(8, 'Password must be at least 8 characters long')
-        .required(),
-    password: Yup.string()
-        .min(8, 'Password must be at least 8 characters long')
-        .required(),
-});
-
-const displayError = (label, formik) => {
-    if (formik.values[label] && formik.errors[label]) {
-        return { content: formik.errors[label] };
-    }
-};
-
-const initialValues = {
-    email: '',
-    password: '',
-    username: '',
-    confirm_password: '',
-};
-
 export default () => {
     const history = useHistory();
-    const formik = useFormik({
-        initialValues,
-        validationSchema,
-        async onSubmit({ confirm_password, ...values }) {
-            try {
-                const data = await fetchGraph(REGISTER, values);
-                localStorage.setItem('token', data.register);
-                toast.success('User has been created!');
-                history.push('/home');
-            } catch (err) {
-                toast.error(printError(err.message));
-            }
-        },
+    const {
+        register,
+        handleSubmit,
+        formState,
+        triggerValidation,
+        getValues,
+        errors,
+    } = useForm({
+        mode: 'onChange',
     });
+    const onSubmit = async ({ confirm_password, ...values }) => {
+        console.log(values);
+        try {
+            const data = await fetchGraph(REGISTER, values);
+            localStorage.setItem('token', data.register);
+            toast.success('User has been created!');
+            history.push('/home');
+        } catch (err) {
+            toast.error(printError(err.message));
+        }
+    };
 
-    const comparePassword = formik.values.confirm_password
-        ? displayError('confirm_password', formik) ||
-          (formik.values.password !== formik.values.confirm_password && {
-              content: "Passwords don't match",
-          })
-        : undefined;
-    
     useEffect(() => {
         if (localStorage.getItem('token')) {
             history.push('/home');
@@ -67,64 +47,98 @@ export default () => {
 
     return (
         <LandingPage title='UwU Registration Page'>
-            <Form onSubmit={formik.handleSubmit}>
-                <Form.Field required>
-                    <label htmlFor='email'>Username</label>
-                    <Form.Input
-                        name='username'
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <FormControl mb='2' isInvalid={errors.username} isRequired>
+                    <FormLabel htmlFor='username'>Username</FormLabel>
+                    <Input
+                        ref={register({
+                            require: 'Please provide a username',
+                        })}
                         placeholder='Username'
-                        onChange={formik.handleChange}
-                        value={formik.values.username}
+                        name='username'
                     />
-                </Form.Field>
-                <Form.Field required>
-                    <label htmlFor='email'>Email Address</label>
-                    <Form.Input
-                        name='email'
+                    <FormErrorMessage>
+                        {errors.username?.message}
+                    </FormErrorMessage>
+                </FormControl>
+                <FormControl mb='2' isInvalid={errors.email} isRequired>
+                    <FormLabel htmlFor='email'>Email Address</FormLabel>
+                    <Input
+                        ref={register({
+                            required: 'Please provide an email',
+                            pattern: {
+                                message: 'Please provide a valid email',
+                                value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                            },
+                        })}
                         placeholder='Email Address'
-                        onChange={formik.handleChange}
-                        value={formik.values.email}
-                        error={displayError('email', formik)}
+                        name='email'
+                        type='email'
                     />
-                </Form.Field>
-                <Form.Field required>
-                    <label htmlFor='password'>Password</label>
-                    <Form.Input
-                        name='password'
+                    <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+                </FormControl>
+                <FormControl mb='2' isInvalid={errors.password} isRequired>
+                    <FormLabel htmlFor='password'>Password</FormLabel>
+                    <Input
+                        ref={register({
+                            required: 'Please provide a password',
+                            minLength: {
+                                message:
+                                    'Password must be atleast 8 characters long',
+                                value: 8,
+                            },
+                            validate() {
+                                triggerValidation('confirm_password');
+                            },
+                        })}
                         placeholder='Password'
+                        name='password'
                         type='password'
-                        onChange={formik.handleChange}
-                        value={formik.values.password}
-                        error={displayError('password', formik)}
                     />
-                </Form.Field>
-                <Form.Field required>
-                    <label htmlFor='password'>Confirm Password</label>
-                    <Form.Input
+                    <FormErrorMessage>
+                        {errors.password?.message}
+                    </FormErrorMessage>
+                </FormControl>
+                <FormControl
+                    mb='2'
+                    isInvalid={errors.confirm_password}
+                    isRequired
+                >
+                    <FormLabel htmlFor='confirm_password'>
+                        Confirm Password
+                    </FormLabel>
+                    <Input
+                        ref={register({
+                            validate(val) {
+                                const { password } = getValues();
+                                return (
+                                    val === password ||
+                                    'Password does not match'
+                                );
+                            },
+                        })}
+                        placeholder='Password'
                         name='confirm_password'
-                        placeholder='Confirm Password'
                         type='password'
-                        onChange={formik.handleChange}
-                        value={formik.values.confirm_password}
-                        error={comparePassword}
                     />
-                </Form.Field>
-                <div className='landingPage__buttons'>
+                    <FormErrorMessage>
+                        {errors.confirm_password?.message}
+                    </FormErrorMessage>
+                </FormControl>
+                <Flex direction='column' mt='6'>
                     <Button
-                        color='teal'
+                        loading={formState.isSubmitting}
+                        disabled={!formState.isValid}
                         type='submit'
-                        disabled={!formik.dirty || !formik.isValid}
-                        loading={formik.isSubmitting}
-                        fluid
+                        mb='2'
                     >
-                        <Icon name='sign-in' />
                         Register
                     </Button>
-                    <Button color='teal' as={Link} to='/' fluid basic>
-                        Back to login
+                    <Button as={Link} to='/' variant='outline'>
+                        Back to Login
                     </Button>
-                </div>
-            </Form>
+                </Flex>
+            </form>
         </LandingPage>
     );
 };

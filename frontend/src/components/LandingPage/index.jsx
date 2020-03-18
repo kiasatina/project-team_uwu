@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from 'semantic-ui-react';
+import { Heading } from '@chakra-ui/core';
 
 import { logo } from '../../assets';
 import './index.scss';
@@ -10,14 +10,14 @@ export const LandingPage = ({ children, title }) => {
             <section className='landingPage__content'>
                 <div className='landingPage__heading'>
                     <img className='landingPage__logo' src={logo} alt='uwu' />
-                    <Header
+                    <Heading
                         color='teal'
                         className='landingPage__title'
-                        size='medium'
+                        size='lg'
                         as='h1'
                     >
                         {title}
-                    </Header>
+                    </Heading>
                 </div>
                 {children}
             </section>

@@ -8,11 +8,7 @@ export default () => {
     }, []);
     return (
         <>
-            <PageContent
-                label='Live Streams'
-            >
-                Content
-            </PageContent>
+            <PageContent label='Live Streams'>Content</PageContent>
         </>
     );
 };

@@ -1,38 +1,36 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Form, Header, Button } from 'semantic-ui-react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import {
+    FormControl,
+    FormLabel,
+    Textarea,
+    Input,
+    FormErrorMessage,
+    Heading,
+    Text,
+    Flex,
+    Button,
+} from '@chakra-ui/core';
 
 import { PageContent, Sidenav, Viewer } from '../../../components';
 import { useRecorder, fetchGraph } from '../../../utils';
 import { CREATE_POST } from '../../../graphql/post';
 import './index.scss';
 
-const validationSchema = Yup.object().shape({
-    description: Yup.string().required(),
-    title: Yup.string().required(),
-    asset: Yup.string().required(),
-});
-
-const initialValues = {
-    asset: undefined,
-    title: '',
-    description: '',
-};
-
 export default () => {
     const { getRecorder, record } = useRecorder();
-    const [ recording, setRecording ] = useState();
-    const [ video, setVideo ] = useState();
-    const { setFieldValue, ...formik } = useFormik({
-        initialValues,
-        validationSchema,
-        async onSubmit(values) {
-            values.asset.lastModifiedDate = new Date();
-            values.asset.name = 'uwu';
-            await fetchGraph(CREATE_POST, values);
-        },
+    const [recording, setRecording] = useState();
+    const [video, setVideo] = useState();
+    const [asset, setAsset] = useState();
+    const { register, formState, errors, handleSubmit } = useForm({
+        mode: 'onChange',
     });
+
+    const onSubmit = async values => {
+        values.asset.lastModifiedDate = new Date();
+        values.asset.name = 'uwu';
+        await fetchGraph(CREATE_POST, values);
+    };
 
     useEffect(() => {
         if (!video || recording) {
@@ -42,7 +40,7 @@ export default () => {
                 setVideo(recorder.stream);
             })();
         }
-    }, [ video, recording, getRecorder ]);
+    }, [video, recording, getRecorder]);
 
     const getRecording = useCallback(async () => {
         // Record and set to view
@@ -51,78 +49,89 @@ export default () => {
         const _video = URL.createObjectURL(file);
 
         // Update state
-        setFieldValue('asset', file);
+        setAsset(file);
         setRecording(false);
         setVideo(_video);
-    }, [ setFieldValue, record ]);
+    }, [record]);
 
     const upload = useCallback(({ currentTarget }) => {
         const file = currentTarget.files[0];
+        if (!file) return;
+
         const _video = URL.createObjectURL(file);
 
         // Update state
-        setFieldValue('asset', file);
+        setAsset(file);
         setVideo(_video);
-    }, [ setFieldValue ]);
+    }, []);
 
     return (
         <>
-            <PageContent label='Create a Post'>
-                YEEE
-            </PageContent>
+            <PageContent label='Create a Post'>YEEE</PageContent>
             <Sidenav padded>
-                <Header as='h2' size='medium'>
+                <Heading as='h2' size='md'>
                     Create a Draft Post
-                    <Header.Subheader>
-                        Get started by uploading a video,
-                        and giving it some quality content.
-                    </Header.Subheader>
-                </Header>
-                <Viewer video={ video }/>
-                <div className='create__buttons'>
-                    <Button
-                        onClick={ getRecording }
-                        loading={ recording }
-                        fluid
-                    >
+                </Heading>
+                <Text mb='4'>
+                    Get started by uploading a video and giving it some quality
+                    content.
+                </Text>
+                <Viewer video={video} />
+                <Flex mt='2' mb='5' direction='column'>
+                    <Button onClick={getRecording} loading={recording}>
                         Record
                     </Button>
-                    <Button basic fluid>
+                    <Button mt='1' variant='outline'>
                         <input
+                            onChange={upload}
                             className='create__upload'
-                            onChange={ upload }
                             accept='video/*'
                             type='file'
                         />
                         Upload Video
                     </Button>
-                </div>
-                <Form className='create__form' onSubmit={ formik.handleSubmit }>
-                    <Form.Input
-                        label='Title of Post'
-                        name='title'
-                        placeholder='e.g. UwU on your OwO'
-                        onChange={formik.handleChange}
-                        value={formik.values.title}
-                        required
-                    />
-                    <Form.TextArea
-                        label='Description'
-                        name='description'
-                        placeholder='e.g. Best UwU in the world OwO'
-                        onChange={formik.handleChange}
-                        value={formik.values.description}
-                        required
-                    />
-                    <Button
-                        disabled={ !formik.dirty || !formik.isValid }
-                        loading={formik.isSubmitting}
-                        type='submit'
-                        fluid
+                </Flex>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <FormControl mb='2' isInvalid={errors.title} isRequired>
+                        <FormLabel htmlFor='title'>Title of Post</FormLabel>
+                        <Input
+                            ref={register({
+                                required: 'Please provide a title',
+                            })}
+                            placeholder='e.g. UwU on your OwO'
+                            name='title'
+                        />
+                        <FormErrorMessage>
+                            {errors.title?.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                    <FormControl
+                        mb='2'
+                        isInvalid={errors.description}
+                        isRequired
                     >
-                        Create Post
-                    </Button>
-                </Form>
+                        <FormLabel htmlFor='description'>Description</FormLabel>
+                        <Textarea
+                            ref={register({
+                                required: 'Please provide a description',
+                            })}
+                            placeholder='e.g. Best UwU in the world OwO'
+                            name='description'
+                        />
+                        <FormErrorMessage>
+                            {errors.description?.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                    <Flex direction='column' alignItems='stretch'>
+                        <Button
+                            loading={formState.isSubmitting}
+                            disabled={!formState.isValid || !asset}
+                            type='submit'
+                        >
+                            Create Post
+                        </Button>
+                    </Flex>
+                </form>
             </Sidenav>
         </>
     );
