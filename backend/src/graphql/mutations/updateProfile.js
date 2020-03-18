@@ -1,4 +1,4 @@
-const { withSession, check } = require('../../utils');
+const { withSession, check, hashPassword } = require('../../utils');
 const { User, Image } = require('../../models');
 
 //{ username, password, bio, profile_image }
@@ -9,8 +9,11 @@ module.exports = withSession(
         ctx,
     ) => {
         let args = {};
-        const user = await User.findById(ctx.user, 'profile_image');
-
+        const user = await User.findById(ctx.user, [
+            'profile_image',
+            'salt',
+            'password',
+        ]);
         if (username !== undefined) {
             await check.username(username, true);
             args.username = username;
@@ -19,7 +22,7 @@ module.exports = withSession(
         if (new_password !== undefined) {
             await check.password(password, user);
             await check.password(new_password);
-            args.password = new_password;
+            args.password = hashPassword(new_password, user.salt)[0];
         }
 
         if (bio !== undefined) {

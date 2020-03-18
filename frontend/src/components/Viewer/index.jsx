@@ -18,8 +18,12 @@ export const Viewer = ({ video }) => {
 
     return (
         <div className='viewer'>
-            <div className={`viewer__dimmer ${ loading ? ' viewer__dimmer--show' : '' }`}>
-                <Spinner size='xl'/>
+            <div
+                className={`viewer__dimmer ${
+                    loading ? ' viewer__dimmer--show' : ''
+                }`}
+            >
+                <Spinner size='xl' />
             </div>
             <video
                 onLoadedData={() => setLoading(false)}

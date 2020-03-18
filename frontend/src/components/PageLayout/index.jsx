@@ -19,7 +19,7 @@ export const PageLayout = ({ children }) => {
     );
 
     const { data, loading, dispatch: d } = useGraph(GET_ME, { onError });
-    const dispatch = useCallback(data => d({ getMe: { ...data } }), [ d ]);
+    const dispatch = useCallback(data => d({ getMe: { ...data } }), [d]);
 
     return (
         <UserContext.Provider value={{ user: data.getMe, loading, dispatch }}>

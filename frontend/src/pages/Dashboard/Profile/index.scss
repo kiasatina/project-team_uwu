@@ -13,7 +13,7 @@
         @include transition(opacity);
         @include position(absolute);
         @include flex(column, center);
-        background-color: rgba(0,0,0,0.5);
+        background-color: rgba(0, 0, 0, 0.5);
         font-size: 0.9rem;
         color: white;
         width: 100%;

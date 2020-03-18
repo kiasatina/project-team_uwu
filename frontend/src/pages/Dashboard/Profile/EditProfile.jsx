@@ -20,7 +20,16 @@ import { UPDATE_PROFILE } from '../../../graphql/user';
 
 export const EditProfile = ({ isOpen, onClose }) => {
     const { user, dispatch } = useContext(UserContext);
-    const { register, handleSubmit, errors, getValues, formState, reset, setValue, triggerValidation } = useForm({
+    const {
+        register,
+        handleSubmit,
+        errors,
+        getValues,
+        formState,
+        reset,
+        setValue,
+        triggerValidation,
+    } = useForm({
         mode: 'onChange',
     });
 
@@ -53,13 +62,17 @@ export const EditProfile = ({ isOpen, onClose }) => {
                 <ModalHeader>Edit Profile</ModalHeader>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <ModalBody>
-                        <FormControl mb='2' isInvalid={errors.username} isRequired>
+                        <FormControl
+                            mb='2'
+                            isInvalid={errors.username}
+                            isRequired
+                        >
                             <FormLabel htmlFor='username'>Username</FormLabel>
                             <Input
                                 ref={register({
                                     required: 'Please provide an username',
                                 })}
-                                defaultValue={ user.username }
+                                defaultValue={user.username}
                                 placeholder='Username'
                                 name='username'
                             />
@@ -71,22 +84,49 @@ export const EditProfile = ({ isOpen, onClose }) => {
                             <FormLabel htmlFor='bio'>Bio</FormLabel>
                             <Textarea
                                 ref={register}
-                                defaultValue={ user.bio }
+                                defaultValue={user.bio}
                                 placeholder='UwU on your owo'
                                 name='bio'
                             />
+                        </FormControl>
+                        <FormControl mb='2' isInvalid={errors.new_password}>
+                            <FormLabel htmlFor='password'>
+                                New Password
+                            </FormLabel>
+                            <Input
+                                ref={register({
+                                    validate() {
+                                        triggerValidation('password');
+                                    },
+                                    minLength: {
+                                        message:
+                                            'Password must be at least 8 characters long',
+                                        value: 8,
+                                    },
+                                })}
+                                placeholder='Hunter62'
+                                name='new_password'
+                                type='password'
+                            />
+                            <FormErrorMessage>
+                                {errors.new_password?.message}
+                            </FormErrorMessage>
                         </FormControl>
                         <FormControl
                             mb='2'
                             isInvalid={errors.password}
                             isRequired={getValues().new_password}
                         >
-                            <FormLabel htmlFor='password'>Current Password</FormLabel>
+                            <FormLabel htmlFor='password'>
+                                Current Password
+                            </FormLabel>
                             <Input
                                 ref={register({
                                     validate(val) {
                                         if (getValues().new_password) {
-                                            return !val ? 'Please enter your old password' : undefined;
+                                            return !val
+                                                ? 'Please enter your old password'
+                                                : undefined;
                                         }
                                         setValue('password', '');
                                     },
@@ -100,35 +140,14 @@ export const EditProfile = ({ isOpen, onClose }) => {
                                 {errors.password?.message}
                             </FormErrorMessage>
                         </FormControl>
-                        <FormControl mb='2' isInvalid={errors.new_password}>
-                            <FormLabel htmlFor='password'>New Password</FormLabel>
-                            <Input
-                                ref={register({
-                                    validate() {
-                                        triggerValidation('password');
-                                    },
-                                    minLength: {
-                                        message:
-                                            'Password must be atleast 8 characters long',
-                                        value: 8,
-                                    },
-                                })}
-                                placeholder='Hunter62'
-                                name='new_password'
-                                type='password'
-                            />
-                            <FormErrorMessage>
-                                {errors.new_password?.message}
-                            </FormErrorMessage>
-                        </FormControl>
                     </ModalBody>
 
                     <ModalFooter>
                         <Button
                             mr='3'
                             type='submit'
-                            disabled={ !formState.isValid || !formState.dirty }
-                            loading={ formState.isSubmitting }
+                            disabled={!formState.isValid || !formState.dirty}
+                            loading={formState.isSubmitting}
                         >
                             Save Changes
                         </Button>

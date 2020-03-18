@@ -6,7 +6,7 @@ import { UPDATE_PICTURE } from '../../../graphql/user';
 
 export const UploadImage = () => {
     const { user, dispatch } = useContext(UserContext);
-    const [ loading, setLoading ] = useState();
+    const [loading, setLoading] = useState();
     const upload = async ({ currentTarget }) => {
         setLoading(true);
         const profile_image = currentTarget.files[0];
@@ -26,8 +26,12 @@ export const UploadImage = () => {
                 src={user.profile_image?.src}
                 size='2xl'
             />
-            <Box className={`profile__upload-cover ${ loading ? ' profile__upload-cover--loading' : '' }`}>
-                <Box as={ FaUpload } size='20px' mb='1'/>
+            <Box
+                className={`profile__upload-cover ${
+                    loading ? ' profile__upload-cover--loading' : ''
+                }`}
+            >
+                <Box as={FaUpload} size='20px' mb='1' />
                 Upload
             </Box>
             <input
@@ -36,12 +40,14 @@ export const UploadImage = () => {
                 accept='image/*'
                 onChange={upload}
             />
-            { loading && <Spinner
-                size=''
-                thickness='3px'
-                color='teal.300'
-                className='profile__upload-spinner'
-            /> }
+            {loading && (
+                <Spinner
+                    size=''
+                    thickness='3px'
+                    color='teal.300'
+                    className='profile__upload-spinner'
+                />
+            )}
         </Box>
     );
 };

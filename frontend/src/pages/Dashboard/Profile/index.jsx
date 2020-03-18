@@ -22,7 +22,7 @@ export default () => {
         <Loading loading={loading}>
             <PageContent>
                 <Flex p='6' backgroundColor='white' rounded='md'>
-                    <UploadImage/>
+                    <UploadImage />
                     <Flex mr='auto' direction='column' justifyContent='center'>
                         <Heading size='xl'>{user.username}</Heading>
                         {user.bio && <Text>{user.bio}</Text>}
