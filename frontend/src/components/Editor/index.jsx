@@ -4,14 +4,19 @@ import './index.scss';
 
 export const Editor = ({ draft, onExit }) => {
     const [playing, setIsPlaying] = useState(true);
-    const [context, setContext] = useState();
     const video = useRef();
     const canvas = useRef();
+    let width, height;
+    let timer;
+
+    useEffect(() => {
+        return () => clearTimeout(timer);
+    });
+
     const onPlay = () => {
         playing ? video.current.pause() : video.current.play();
         setIsPlaying(!playing);
     };
-    let width, height;
 
     const onVideoLoad = () => {
         width = video.current?.videoWidth;
@@ -36,7 +41,7 @@ export const Editor = ({ draft, onExit }) => {
             canvas.current.width,
             canvas.current.height,
         );
-        setTimeout(() => {
+        timer = setTimeout(() => {
             onVideoPlay();
         }, 0);
     };
