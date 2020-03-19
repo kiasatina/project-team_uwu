@@ -1,0 +1,30 @@
+@import '../../utils/variables';
+@import '../../utils/mixins';
+
+.editor {
+    margin-bottom: 100px;
+
+    &__video-holder {
+        max-width: $VIDEO-MAX-WIDTH;
+    }
+
+    &__video {
+        display: none;
+    }
+
+    &__footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        float: right;
+    }
+
+    &__footer-button {
+        margin-right: $PADDING / 2;
+
+        &:first-child {
+            margin-left: auto;
+        }
+    }
+}

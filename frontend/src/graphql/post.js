@@ -11,6 +11,7 @@ export const CREATE_POST = `
         ) {
             _id
             title
+            description
             asset {
                 src
                 type
@@ -33,16 +34,16 @@ export const GET_POSTS = `
             limit: $limit,
             page: $page 
         ) {
-            _id,
+            _id
             user {
                 username
-            },
+            }
             asset {
                 src
-            },
-            title,
-            description,
-            draft,
+            }
+            title
+            description
+            draft
             createdAt
         }
     }
