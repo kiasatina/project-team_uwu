@@ -74,7 +74,13 @@ type Query {
     "Fetches user information of current session user"
     getMe: User!
     "Fetches nformation about a post, or list from a user"
-    getPosts(_id: ID, user: ID, limit: Int = 10, page: Int = 0): [Post]!
+    getPosts(
+        _id: ID
+        user: ID
+        draft: Boolean
+        limit: Int = 10
+        page: Int = 0
+    ): [Post]!
     "Fetches information about users or a specific user"
     getUsers(_id: ID, username: String, limit: Int = 10, page: Int = 0): [User]!
     "Testing stuff"
