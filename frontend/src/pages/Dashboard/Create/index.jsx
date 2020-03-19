@@ -1,23 +1,28 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import {
-    FormControl,
-    FormLabel,
-    Textarea,
-    Input,
-    FormErrorMessage,
-    Heading,
-    Text,
-    Flex,
+    Box,
     Button,
+    Flex,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
+    Heading,
+    Input,
+    Text,
+    Textarea,
 } from '@chakra-ui/core';
-
-import { PageContent, Sidenav, Viewer } from '../../../components';
-import { useRecorder, fetchGraph } from '../../../utils';
-import { CREATE_POST } from '../../../graphql/post';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaEdit } from 'react-icons/fa';
+import { Editor, PageContent, Sidenav, Viewer } from '../../../components';
+import { CREATE_POST, GET_POSTS } from '../../../graphql/post';
+import { fetchGraph, UserContext, useRecorder } from '../../../utils';
 import './index.scss';
 
 export default () => {
+    const { user } = useContext(UserContext);
+    const [drafts, setDrafts] = useState();
+    const [currDraft, setCurrDraft] = useState();
+
     const { getRecorder, record } = useRecorder();
     const [recording, setRecording] = useState();
     const [video, setVideo] = useState();
@@ -38,7 +43,14 @@ export default () => {
                 setVideo(recorder.stream);
             })();
         }
-    }, [video, recording, getRecorder]);
+        (async () => {
+            const res = await fetchGraph(GET_POSTS, {
+                user: user?._id,
+                draft: true,
+            });
+            setDrafts(res.getPosts);
+        })();
+    }, [video, recording, getRecorder, user]);
 
     const getRecording = useCallback(async () => {
         // Record and set to view
@@ -65,7 +77,62 @@ export default () => {
 
     return (
         <>
-            <PageContent label='Create a Post'>YEEE</PageContent>
+            <PageContent label='Create a Post'>
+                {!currDraft ? (
+                    <Flex direction='row' wrap='wrap'>
+                        {drafts?.map(draft => (
+                            <Box
+                                key={draft._id}
+                                minW='xs'
+                                mt='2'
+                                mr='4'
+                                rounded='md'
+                                backgroundColor='white'
+                            >
+                                <Box
+                                    className='draft__thumbnail-wrapper'
+                                    maxW='xs'
+                                >
+                                    <video
+                                        src={draft.asset.src}
+                                        alt={draft.title}
+                                    />
+                                    <Box
+                                        onClick={() => {
+                                            setCurrDraft(draft);
+                                        }}
+                                        className='draft__thumbnail-cover'
+                                    >
+                                        <Box as={FaEdit} size='20px' mb='1' />
+                                        Edit
+                                    </Box>
+                                </Box>
+                                <Text
+                                    mx='4'
+                                    mt='4'
+                                    fontWeight='semibold'
+                                    as='h3'
+                                    isTruncated
+                                >
+                                    {draft.title}
+                                </Text>
+                                <Text
+                                    color='gray.500'
+                                    fontSize='xs'
+                                    textTransform='uppercase'
+                                    mx='4'
+                                >
+                                    Created on:{' '}
+                                    {new Date(draft.createdAt).toDateString()}
+                                </Text>
+                                <Text m='4'>{draft.description}</Text>
+                            </Box>
+                        ))}
+                    </Flex>
+                ) : (
+                    <Editor draft={currDraft}></Editor>
+                )}
+            </PageContent>
             <Sidenav padded>
                 <Heading as='h2' size='md'>
                     Create a Draft Post
@@ -77,7 +144,7 @@ export default () => {
                 <Viewer video={video} />
                 <Flex mt='2' mb='5' direction='column'>
                     <Button onClick={getRecording} loading={recording}>
-                        Record
+                        {recording ? 'Recording...' : 'Record'}
                     </Button>
                     <Button mt='1' variant='outline'>
                         <input
@@ -120,9 +187,9 @@ export default () => {
                             {errors.description?.message}
                         </FormErrorMessage>
                     </FormControl>
-                    <Flex direction='column' alignItems='stretch'>
+                    <Flex mb='5' direction='column' alignItems='stretch'>
                         <Button
-                            loading={formState.isSubmitting}
+                            loading={formState.isSubmitting.toString()}
                             disabled={!formState.isValid || !asset}
                             type='submit'
                         >

@@ -19,3 +19,31 @@ export const CREATE_POST = `
         }
     }
 `;
+
+export const GET_POSTS = `
+    query getPosts(
+        $user: ID,
+        $draft: Boolean,
+        $limit: Int,
+        $page: Int 
+    ) {
+        getPosts(
+            user: $user,
+            draft: $draft,
+            limit: $limit,
+            page: $page 
+        ) {
+            _id,
+            user {
+                username
+            },
+            asset {
+                src
+            },
+            title,
+            description,
+            draft,
+            createdAt
+        }
+    }
+`;
