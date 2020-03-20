@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input } from '@chakra-ui/core';
+import { Box, Button, Flex, Input, IconButton } from '@chakra-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { UPDATE_POST } from '../../../graphql/post';
@@ -11,13 +11,14 @@ export const Editor = ({ draft, onExit }) => {
     const [height, setHeight] = useState();
     const [timer, setTimer] = useState();
     const [layers, setLayers] = useState(draft.layers);
+    const [selectedLayer, setSelectedLayer] = useState(-1);
     const video = useRef();
     const canvas = useRef();
     const textInput = useRef();
 
     useEffect(() => {
         return () => clearTimeout(timer);
-    });
+    }, [selectedLayer, timer]);
 
     async function saveAndPublish(publish) {
         try {
@@ -104,6 +105,29 @@ export const Editor = ({ draft, onExit }) => {
         onVideoPlay(newLayers);
     };
 
+    function moveLayer(direction) {
+        let layer = { ...layers[selectedLayer] };
+        switch (direction) {
+            case 'left':
+                layer.position.x -= 0.01;
+                break;
+            case 'right':
+                layer.position.x += 0.01;
+                break;
+            case 'up':
+                layer.position.y -= 0.01;
+                break;
+            case 'down':
+                layer.position.y += 0.01;
+                break;
+            default:
+                return;
+        }
+        let newLayers = Object.assign([], layers, { [selectedLayer]: layer });
+        setLayers(newLayers);
+        onVideoPlay(newLayers);
+    }
+
     /**
      * Code from https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Manipulating_video_using_canvas
      */
@@ -140,7 +164,7 @@ export const Editor = ({ draft, onExit }) => {
                     <canvas
                         ref={canvas}
                         className='editor__video-holder__canvas'
-                    ></canvas>
+                    />
                     <video
                         className='editor__video'
                         src={draft.asset.src}
@@ -160,6 +184,62 @@ export const Editor = ({ draft, onExit }) => {
                     <Input ref={textInput} placeholder='Enter your text' />
                     <Button onClick={addTextLayer}>Add</Button>
                 </Flex>
+                <Flex direction='row' mt='4'>
+                    {layers.map((layer, index) => (
+                        <Box
+                            key={index}
+                            onClick={() => {
+                                setSelectedLayer(index);
+                                onVideoPlay(layers);
+                            }}
+                            className='editor__layer'
+                            maxW='xs'
+                            borderWidth='1px'
+                            rounded='md'
+                            p='4'
+                            m='1'
+                        >
+                            <Box
+                                fontWeight='semibold'
+                                letterSpacing='wide'
+                                fontSize='xs'
+                            >
+                                {layer.type}
+                            </Box>
+                            {layer.text ? layer.text : ''}
+                        </Box>
+                    ))}
+                </Flex>
+                {selectedLayer !== -1 ? (
+                    <Flex direction='row'>
+                        <IconButton
+                            onClick={() => {
+                                moveLayer('left');
+                            }}
+                            icon='chevron-left'
+                        />
+                        <IconButton
+                            onClick={() => {
+                                moveLayer('right');
+                            }}
+                            icon='chevron-right'
+                        />
+                        <IconButton
+                            onClick={() => {
+                                moveLayer('up');
+                            }}
+                            icon='chevron-up'
+                        />
+                        <IconButton
+                            onClick={() => {
+                                moveLayer('down');
+                            }}
+                            icon='chevron-down'
+                        />
+                    </Flex>
+                ) : (
+                    ''
+                )}
             </Flex>
             <Flex
                 px='4'

@@ -46,6 +46,10 @@
         display: none;
     }
 
+    &__layer {
+        cursor: pointer;
+    }
+
     &__footer {
         position: fixed;
         left: 0;
