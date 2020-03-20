@@ -13,9 +13,10 @@ import {
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaEdit } from 'react-icons/fa';
-import { Editor, PageContent, Sidenav, Viewer } from '../../../components';
+import { PageContent, Sidenav, Viewer } from '../../../components';
 import { CREATE_POST, GET_POSTS } from '../../../graphql/post';
 import { fetchGraph, UserContext, useRecorder } from '../../../utils';
+import { Editor } from './Editor';
 import './index.scss';
 
 export default () => {
