@@ -52,6 +52,21 @@ type PostLayer {
     text: String
 }
 
+"PostLayerPosition but for inputs"
+input PostLayerPositionInput {
+    x: Float!
+    y: Float!
+}
+
+"PostLayer but for inputs"
+input PostLayerInput {
+    type: PostLayerEnum!
+    filter: String
+    asset: Upload
+    position: PostLayerPositionInput
+    text: String
+}
+
 "A post from some user"
 type Post {
     _id: ID!
@@ -88,7 +103,10 @@ type Query {
 }
 
 type Mutation {
+    "Creates a new post"
     createPost(asset: Upload!, title: String!, description: String!): Post!
+    "Updates a post"
+    updatePost(_id: ID!, draft: Boolean, layers: [PostLayerInput]): Post!
     "Follow a user"
     follow(_id: ID!): Boolean!
     "Logins in user, returning a JWT token for authorization"

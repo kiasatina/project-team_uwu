@@ -40,10 +40,47 @@ export const GET_POSTS = `
             }
             asset {
                 src
+                type
             }
             title
             description
             draft
+            layers {
+                type
+                filter
+                asset {
+                    src
+                    type
+                }
+                position {
+                    x
+                    y
+                }
+                text
+            }
+            createdAt
+        }
+    }
+`;
+
+export const UPDATE_POST = `
+    mutation updatePost(
+        $_id: ID!,
+        $draft: Boolean,
+        $layers: [PostLayerInput]
+    ) {
+        updatePost(
+            _id: $_id,
+            draft: $draft,
+            layers: $layers
+        ) {
+            _id
+            title
+            description
+            asset {
+                src
+                type
+            }
             createdAt
         }
     }

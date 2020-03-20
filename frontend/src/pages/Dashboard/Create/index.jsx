@@ -13,9 +13,15 @@ import {
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaEdit } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import { PageContent, Sidenav, Viewer } from '../../../components';
 import { CREATE_POST, GET_POSTS } from '../../../graphql/post';
-import { fetchGraph, UserContext, useRecorder } from '../../../utils';
+import {
+    fetchGraph,
+    printError,
+    UserContext,
+    useRecorder,
+} from '../../../utils';
 import { Editor } from './Editor';
 import './index.scss';
 
@@ -33,9 +39,7 @@ export default () => {
     });
 
     const onSubmit = async values => {
-        let res = await fetchGraph(CREATE_POST, { ...values, asset });
-        console.log(res);
-        // setDrafts({ res.createPost, ...drafts });
+        await fetchGraph(CREATE_POST, { ...values, asset });
     };
 
     const onExit = () => {
@@ -51,13 +55,18 @@ export default () => {
             })();
         }
         (async () => {
-            const res = await fetchGraph(GET_POSTS, {
-                user: user?._id,
-                draft: true,
-            });
-            setDrafts(res.getPosts);
+            try {
+                const res = await fetchGraph(GET_POSTS, {
+                    user: user?._id,
+                    draft: true,
+                });
+                setDrafts(res.getPosts);
+            } catch (err) {
+                toast.error(printError(err.message));
+                console.error(err);
+            }
         })();
-    }, [video, recording, getRecorder, user]);
+    }, [video, recording, getRecorder, user, currDraft]);
 
     const getRecording = useCallback(async () => {
         // Record and set to view

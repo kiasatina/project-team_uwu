@@ -1,5 +1,6 @@
 module.exports = {
     createPost: require('./createPost'),
+    updatePost: require('./updatePost'),
     follow: require('./follow'),
     login: require('./login'),
     register: require('./register'),

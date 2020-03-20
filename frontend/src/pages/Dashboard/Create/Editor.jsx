@@ -1,5 +1,8 @@
-import { Button, Flex, Box, Input } from '@chakra-ui/core';
-import React, { useState, useRef, useEffect } from 'react';
+import { Box, Button, Flex, Input } from '@chakra-ui/core';
+import React, { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
+import { UPDATE_POST } from '../../../graphql/post';
+import { fetchGraph, printError } from '../../../utils';
 import './index.scss';
 
 export const Editor = ({ draft, onExit }) => {
@@ -7,7 +10,7 @@ export const Editor = ({ draft, onExit }) => {
     const [width, setWidth] = useState();
     const [height, setHeight] = useState();
     const [timer, setTimer] = useState();
-    const [layers, setLayers] = useState([]);
+    const [layers, setLayers] = useState(draft.layers);
     const video = useRef();
     const canvas = useRef();
     const textInput = useRef();
@@ -15,6 +18,25 @@ export const Editor = ({ draft, onExit }) => {
     useEffect(() => {
         return () => clearTimeout(timer);
     });
+
+    async function saveAndPublish(publish) {
+        try {
+            console.log({
+                ...draft,
+                layers: layers,
+                draft: publish ? false : true,
+            });
+            await fetchGraph(UPDATE_POST, {
+                ...draft,
+                layers: layers,
+                draft: publish ? false : true,
+            });
+            onExit();
+        } catch (err) {
+            toast.error(printError(err.message));
+            console.error(err);
+        }
+    }
 
     const onPlay = () => {
         playing ? video.current.pause() : video.current.play();
@@ -53,8 +75,8 @@ export const Editor = ({ draft, onExit }) => {
                 context.textAlign = 'center';
                 context.fillText(
                     layer.text,
-                    layer.position.x,
-                    layer.position.y,
+                    layer.position.x * canvas.current.width,
+                    layer.position.y * canvas.current.height,
                 );
             }
         });
@@ -72,43 +94,14 @@ export const Editor = ({ draft, onExit }) => {
             type: 'TEXT',
             text: text,
             position: {
-                x: canvas.current.width / 2,
-                y: canvas.current.height / 2,
+                x: 0.5,
+                y: 0.5,
             },
         };
         textInput.current.value = '';
         let newLayers = [...layers, layer];
         setLayers(newLayers);
         onVideoPlay(newLayers);
-    };
-
-    const onAddText = text => {
-        if (!playing) {
-            return;
-        }
-        let context = canvas.current.getContext('2d');
-        context.drawImage(
-            video.current,
-            0,
-            0,
-            width,
-            height,
-            0,
-            0,
-            canvas.current.width,
-            canvas.current.height,
-        );
-        context.font = '40px Comic Sans Ms';
-        context.fillText(
-            text,
-            canvas.current.width / 2,
-            canvas.current.height / 2,
-        );
-        setTimer(
-            setTimeout(() => {
-                onAddText(text);
-            }, 5),
-        );
     };
 
     /**
@@ -183,8 +176,21 @@ export const Editor = ({ draft, onExit }) => {
                 >
                     Cancel
                 </Button>
-                <Button className='editor__footer-button'>Save</Button>
-                <Button className='editor__footer-button' variantColor='blue'>
+                <Button
+                    className='editor__footer-button'
+                    onClick={() => {
+                        saveAndPublish(false);
+                    }}
+                >
+                    Save
+                </Button>
+                <Button
+                    className='editor__footer-button'
+                    onClick={() => {
+                        saveAndPublish(true);
+                    }}
+                    variantColor='blue'
+                >
                     Publish
                 </Button>
             </Flex>
