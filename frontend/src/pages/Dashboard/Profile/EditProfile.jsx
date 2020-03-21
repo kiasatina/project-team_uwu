@@ -42,6 +42,8 @@ export const EditProfile = ({ isOpen, onClose }) => {
                     return acc;
                 }, {}),
             );
+            
+            toast.success('Profile updated');
             dispatch({
                 ...user,
                 username: values.username,
@@ -147,7 +149,7 @@ export const EditProfile = ({ isOpen, onClose }) => {
                             mr='3'
                             type='submit'
                             disabled={!formState.isValid || !formState.dirty}
-                            loading={formState.isSubmitting}
+                            isLoading={formState.isSubmitting}
                         >
                             Save Changes
                         </Button>

@@ -1,35 +1,44 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import {
     FormControl,
     FormLabel,
     Textarea,
     Input,
     FormErrorMessage,
-    Heading,
-    Text,
     Flex,
     Button,
 } from '@chakra-ui/core';
 
+import { useRecorder, fetchGraph, printError } from '../../../utils';
 import { PageContent, Sidenav, Viewer } from '../../../components';
-import { useRecorder, fetchGraph } from '../../../utils';
 import { CREATE_POST } from '../../../graphql/post';
 import './index.scss';
 
 export default () => {
+    const { register, formState, errors, handleSubmit, reset } = useForm({
+        mode: 'onChange',
+    });
     const { getRecorder, record } = useRecorder();
     const [recording, setRecording] = useState();
     const [video, setVideo] = useState();
     const [asset, setAsset] = useState();
-    const { register, formState, errors, handleSubmit } = useForm({
-        mode: 'onChange',
-    });
 
     const onSubmit = async values => {
-        values.asset.lastModifiedDate = new Date();
-        values.asset.name = 'uwu';
-        await fetchGraph(CREATE_POST, values);
+        try {
+            await fetchGraph(CREATE_POST, {
+                ...values,
+                asset,
+            });
+            toast.success('Post created');
+        } catch (err) {
+            toast.error(printError(err.message));
+            console.error(err);
+        }
+
+        setAsset(undefined);
+        reset();
     };
 
     useEffect(() => {
@@ -68,17 +77,18 @@ export default () => {
     return (
         <>
             <PageContent label='Create a Post'>YEEE</PageContent>
-            <Sidenav padded>
-                <Heading as='h2' size='md'>
-                    Create a Draft Post
-                </Heading>
-                <Text mb='4'>
-                    Get started by uploading a video and giving it some quality
-                    content.
-                </Text>
+            <Sidenav
+                label='Create a Draft Post'
+                text='Get started by uploading a video and giving it some quality content.'
+                padded
+            >
                 <Viewer video={video} />
                 <Flex mt='2' mb='5' direction='column'>
-                    <Button onClick={getRecording} loading={recording}>
+                    <Button
+                        loadingText='Recording...'
+                        onClick={getRecording}
+                        isLoading={recording}
+                    >
                         Record
                     </Button>
                     <Button mt='1' variant='outline'>

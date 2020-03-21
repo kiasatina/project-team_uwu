@@ -30,6 +30,18 @@ type User {
     createdAt: DateTime!
 }
 
+"The livestream of the platform (TTL of 1 hour)"
+type Livestream {
+    _id: ID!
+    user: User!
+    live: Boolean!
+    title: String!
+    viewers: Int!
+    updatedAt: DateTime!
+    createdAt: DateTime!
+
+}
+
 "The geolocation information of a post"
 type PostLocation {
     lat: Float!
@@ -70,7 +82,16 @@ type Query {
     "Fetches information about the followers of a user"
     getFollowers(following: ID, limit: Int = 10, page: Int = 0): [User]!
     "Fetches information about users a user follows"
-    getFollowings(follower: ID, limit: Int = 10, page: Int = 0): [User]!
+    getFollowing(follower: ID, limit: Int = 10, page: Int = 0): [User]!
+    "Fetches information about livestreams"
+    getLivestreams(
+        _id: ID
+        user: ID
+        live: Boolean
+        updatedAt: DateTime
+        limit: Int = 10
+        page: Int = 0
+    ): [Livestream]!
     "Fetches user information of current session user"
     getMe: User!
     "Fetches nformation about a post, or list from a user"
@@ -82,9 +103,14 @@ type Query {
 }
 
 type Mutation {
+    "Start a livestream session"
+    createLivestream(title: String!): Livestream!
+    "Create a post"
     createPost(asset: Upload!, title: String!, description: String!): Post!
     "Follow a user"
     follow(_id: ID!): Boolean!
+    "Unfollow a user"
+    unfollow(_id: ID!): Boolean!
     "Logins in user, returning a JWT token for authorization"
     login(email: String!, password: String!): String!
     "Register's user, returning a JWT token for authorization"

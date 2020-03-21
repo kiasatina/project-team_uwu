@@ -26,7 +26,6 @@ const routes = [
     },
     {
         children: 'Stream',
-        exact: true,
         to: '/stream',
     },
     {
@@ -77,8 +76,7 @@ export default () => {
                 <MenuButton>
                     <Avatar
                         src={user?.profile_image?.src}
-                        as={Avatar}
-                        alt='you'
+                        name={user?.username}
                     />
                 </MenuButton>
                 <MenuList placement='bottom-end'>

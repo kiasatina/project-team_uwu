@@ -8,8 +8,8 @@ const getStream = async () =>
     (await navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
-            width: 720,
-            height: 720,
+            width: 256,
+            height: 256,
             facingMode: 'user',
         },
     }));

@@ -2,5 +2,6 @@ module.exports = {
     AUTHENTICATION_ERROR: 'AUTHENTICATION_ERROR',
     EXISTS_ERROR: ctx => `${ctx}_EXISTS_ERROR`,
     INVALID_ERROR: ctx => `INVALID_${ctx}_ERROR`,
+    MISSING_ERROR: ctx => `MISSING_${ctx}_ERROR`,
     PASSWORD_TOO_SHORT: 'PASSWORD_TOO_SHORT',
 };

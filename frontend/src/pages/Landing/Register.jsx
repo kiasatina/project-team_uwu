@@ -127,7 +127,7 @@ export default () => {
                 </FormControl>
                 <Flex direction='column' mt='6'>
                     <Button
-                        loading={formState.isSubmitting}
+                        isLoading={formState.isSubmitting}
                         disabled={!formState.isValid}
                         type='submit'
                         mb='2'

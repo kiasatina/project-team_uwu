@@ -17,7 +17,7 @@ import { LOGIN } from '../../graphql/user';
 
 export default () => {
     const history = useHistory();
-    const { register, handleSubmit, errors } = useForm({
+    const { register, handleSubmit, formState, errors } = useForm({
         mode: 'onChange',
     });
     const onSubmit = async values => {
@@ -76,7 +76,12 @@ export default () => {
                     </FormErrorMessage>
                 </FormControl>
                 <Flex direction='column' mt='6'>
-                    <Button type='submit' mb='2'>
+                    <Button
+                        isLoading={ formState.isSubmitting }
+                        disabled={!formState.isValid}
+                        type='submit'
+                        mb='2'
+                    >
                         Login
                     </Button>
                     <Button as={Link} to='/register' variant='outline'>

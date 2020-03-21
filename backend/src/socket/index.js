@@ -1,42 +1,43 @@
 const socketIo = require('socket.io');
-const jwt = require('jsonwebtoken');
 const http = require('http');
 
-const { errors } = require('../utils');
+const streamerEvents = require('./streamerEvents');
+const authentication = require('./auth');
+const rooms = {};
 
 module.exports = app => {
     const server = http.createServer(app);
     const io = socketIo(server);
 
     // Do auth
-    io.use(({ handshake }, next) => {
-        try {
-            const { _id } = jwt.verify(
-                handshake.query.token,
-                process.env.SECRET,
-            );
+    authentication(io);
 
-            if (handshake.query.room) {
-                socket.room = handshake.query.room;
-                socket.user = _id;
-                return next();
-            }
-        } catch {
-            // Nothing to see here
+    // Handle connection
+    io.on('connection', socket => {
+        const { room, streamer } = socket;
+
+        // Initialize room as needed
+        if (!rooms[room])
+            rooms[room] = {
+                host: undefined,
+                viewers: [],
+                layers: {},
+            };
+
+        // Populate fields
+        if (streamer) {
+            rooms[room].host = socket.id;
+        } else {
+            rooms[room].layers[socket.id] = {};
+            rooms[room].viewers.add(socket.id);
         }
 
-        next(new Error(errors.AUTHENTICATION_ERROR));
-    });
+        // Load in handlers
+        const events = streamer ? streamerEvents : watcherEvents;
+        events(socket, rooms);
 
-    io.on('connection', socket => {
-        const config = {
-            streaming: false,
-            room: '',
-        };
-
-        socket.on('stream', data => {
-            socket.broadcast.emit('stream', data);
-        });
+        // Join room
+        socket.join(room);
     });
 
     return new Promise((resolve, reject) => {

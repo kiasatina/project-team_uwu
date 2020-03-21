@@ -7,6 +7,10 @@ const schema = new mongoose.Schema(
             required: true,
             ref: 'User',
         },
+        live: {
+            type: Boolean,
+            default: true,
+        },
         title: {
             type: String,
             required: true,
@@ -19,6 +23,13 @@ const schema = new mongoose.Schema(
     { timestamps: true },
 );
 
-schema.index({ user: 1 }, { unique: true });
+// Remove after 1 hour of no more streaming
+schema.index(
+    { updatedAt: 1 },
+    {
+        expires: 6400,
+        partialFilterExpression: { live: false },
+    },
+);
 
 module.exports = mongoose.model('Livestream', schema);
