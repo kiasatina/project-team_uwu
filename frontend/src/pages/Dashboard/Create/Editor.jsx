@@ -1,7 +1,19 @@
-import { Box, Button, Flex, Input } from '@chakra-ui/core';
+import {
+    Accordion,
+    AccordionHeader,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
+    Box,
+    Button,
+    Flex,
+    Image,
+    Input,
+} from '@chakra-ui/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
 import { toast } from 'react-toastify';
+import { stickers } from '../../../assets';
 import { TextLayer, Video } from '../../../components';
 import { UPDATE_POST } from '../../../graphql/post';
 import { fetchGraph, printError } from '../../../utils';
@@ -14,10 +26,12 @@ export const Editor = ({ draft, onExit }) => {
     const [size, setSize] = useState({ width: 0, height: 0 });
     const [layers, setLayers] = useState(draft.layers);
     const textInput = useRef();
+    const videoLayerRef = useRef();
 
     const videoElement = useMemo(() => {
         const video = document.createElement('video');
         video.src = draft.asset.src;
+        video.pause();
         return video;
     }, [draft]);
 
@@ -49,6 +63,11 @@ export const Editor = ({ draft, onExit }) => {
         }
     }
 
+    const grayscale = () => {
+        const canvas = videoLayerRef.current.getCanvas()._canvas;
+        canvas.className = 'grayscale';
+    };
+
     const addTextLayer = () => {
         let text = textInput.current.value;
         let layer = {
@@ -60,8 +79,7 @@ export const Editor = ({ draft, onExit }) => {
             },
         };
         textInput.current.value = '';
-        let newLayers = [...layers, layer];
-        setLayers(newLayers);
+        setLayers([...layers, layer]);
     };
 
     function moveLayer(layerElement, index) {
@@ -83,7 +101,7 @@ export const Editor = ({ draft, onExit }) => {
             >
                 <Box className='editor__video-holder'>
                     <Stage width={size.width} height={size.height}>
-                        <Layer>
+                        <Layer ref={videoLayerRef}>
                             <Video
                                 src={draft.asset.src}
                                 size={size}
@@ -115,10 +133,68 @@ export const Editor = ({ draft, onExit }) => {
                 >
                     {playing ? 'Pause' : 'Play'}
                 </Button>
-                <Flex direction='row' mt='4'>
-                    <Input ref={textInput} placeholder='Enter your text' />
-                    <Button onClick={addTextLayer}>Add</Button>
-                </Flex>
+
+                <Box w='80%' p={4}>
+                    <Accordion allowToggle>
+                        <AccordionItem>
+                            <AccordionHeader>
+                                <Box flex='1' textAlign='left'>
+                                    Text
+                                </Box>
+                                <AccordionIcon />
+                            </AccordionHeader>
+                            <AccordionPanel p={4}>
+                                <Flex direction='row'>
+                                    <Input
+                                        ref={textInput}
+                                        placeholder='Enter your text'
+                                        mr={2}
+                                    />
+                                    <Button onClick={addTextLayer}>Add</Button>
+                                </Flex>
+                            </AccordionPanel>
+                        </AccordionItem>
+
+                        <AccordionItem>
+                            <AccordionHeader>
+                                <Box flex='1' textAlign='left'>
+                                    Stickers
+                                </Box>
+                                <AccordionIcon />
+                            </AccordionHeader>
+                            <AccordionPanel p={4}>
+                                <Flex
+                                    direction='row'
+                                    wrap='wrap'
+                                    justify='space-around'
+                                >
+                                    {stickers.map((sticker, index) => {
+                                        return (
+                                            <Image
+                                                m='2'
+                                                size='50px'
+                                                key={index}
+                                                src={sticker}
+                                            />
+                                        );
+                                    })}
+                                </Flex>
+                            </AccordionPanel>
+                        </AccordionItem>
+
+                        <AccordionItem>
+                            <AccordionHeader>
+                                <Box flex='1' textAlign='left'>
+                                    Filters
+                                </Box>
+                                <AccordionIcon />
+                            </AccordionHeader>
+                            <AccordionPanel p={4}>
+                                <Button onClick={grayscale}>Grayscale</Button>
+                            </AccordionPanel>
+                        </AccordionItem>
+                    </Accordion>
+                </Box>
             </Flex>
             <Flex
                 px='4'

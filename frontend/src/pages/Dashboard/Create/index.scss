@@ -42,10 +42,6 @@
         max-width: $VIDEO-MAX-WIDTH;
     }
 
-    // &__video {
-    //     display: none;
-    // }
-
     &__layer {
         cursor: pointer;
     }
@@ -65,4 +61,8 @@
             margin-left: auto;
         }
     }
+}
+
+.grayscale {
+    filter: grayscale(1);
 }

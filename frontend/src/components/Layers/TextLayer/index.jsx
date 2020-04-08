@@ -14,7 +14,7 @@ export const TextLayer = ({ layer, size, onDragStart, onDragEnd }) => {
             fontStyle='bold'
             fontFamily='Muli'
             shadowColor='black'
-            shadowBlur='10'
+            shadowBlur={10}
             x={layer.position.x * size.width}
             y={layer.position.y * size.height}
             draggable
