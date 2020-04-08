@@ -182,6 +182,7 @@ export const Editor = ({ draft, onExit }) => {
                                         setIsDragging(true);
                                     }}
                                     onDragEnd={e => {
+                                        setIsDragging(false);
                                         moveLayer(e.target, index);
                                     }}
                                 ></VideoLayer>
