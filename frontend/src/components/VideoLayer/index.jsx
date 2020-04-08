@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text } from 'react-konva';
-import { stickers } from '../../assets';
 
 export const VideoLayer = ({ layer, size, onDragStart, onDragEnd }) => {
     const [sticker, setSticker] = useState();
