@@ -28,6 +28,15 @@ export const Editor = ({ draft, onExit }) => {
     const textInput = useRef();
     const videoLayerRef = useRef();
 
+    const filters = [
+        'Grayscale',
+        'Sepia',
+        'Saturate',
+        'Invert',
+        'Brightness',
+        'Blur',
+    ];
+
     const videoElement = useMemo(() => {
         const video = document.createElement('video');
         video.src = draft.asset.src;
@@ -37,6 +46,7 @@ export const Editor = ({ draft, onExit }) => {
 
     useEffect(() => {
         const onload = () => {
+            processFilter();
             setSize({
                 width: 500,
                 height:
@@ -63,10 +73,51 @@ export const Editor = ({ draft, onExit }) => {
         }
     }
 
-    const grayscale = () => {
+    function filterVideo(filter) {
         const canvas = videoLayerRef.current.getCanvas()._canvas;
-        canvas.className = 'grayscale';
-    };
+        canvas.style.filter = filter + `(${getFilterNum(filter)})`;
+        let newLayers = layers.filter(layer => layer.type !== 'FILTER');
+        let layer = {
+            type: 'FILTER',
+            filter: filter,
+            position: {
+                x: 0,
+                y: 0,
+            },
+        };
+        setLayers([...newLayers, layer]);
+    }
+
+    function getFilterNum(filter) {
+        let num;
+        switch (filter.toLowerCase()) {
+            case 'saturate':
+                num = '5';
+                break;
+            case 'brightness':
+                num = '2';
+                break;
+            case 'blur':
+                num = '5px';
+                break;
+            default:
+                num = '1';
+                break;
+        }
+        return num;
+    }
+
+    function processFilter() {
+        layers
+            .filter(l => l.type === 'FILTER')
+            .map((layer, index) => {
+                const canvas = videoLayerRef.current?.getCanvas()._canvas;
+                if (canvas) {
+                    canvas.style.filter =
+                        layer.filter + `(${getFilterNum(layer.filter)})`;
+                }
+            });
+    }
 
     const addTextLayer = () => {
         let text = textInput.current.value;
@@ -109,19 +160,21 @@ export const Editor = ({ draft, onExit }) => {
                             ></Video>
                         </Layer>
                         <Layer>
-                            {layers.map((layer, index) => (
-                                <TextLayer
-                                    key={index}
-                                    layer={layer}
-                                    size={size}
-                                    onDragStart={() => {
-                                        setIsDragging(true);
-                                    }}
-                                    onDragEnd={e => {
-                                        moveLayer(e.target, index);
-                                    }}
-                                ></TextLayer>
-                            ))}
+                            {layers
+                                .filter(l => l.type !== 'FILTER')
+                                .map((layer, index) => (
+                                    <TextLayer
+                                        key={index}
+                                        layer={layer}
+                                        size={size}
+                                        onDragStart={() => {
+                                            setIsDragging(true);
+                                        }}
+                                        onDragEnd={e => {
+                                            moveLayer(e.target, index);
+                                        }}
+                                    ></TextLayer>
+                                ))}
                         </Layer>
                     </Stage>
                 </Box>
@@ -190,7 +243,22 @@ export const Editor = ({ draft, onExit }) => {
                                 <AccordionIcon />
                             </AccordionHeader>
                             <AccordionPanel p={4}>
-                                <Button onClick={grayscale}>Grayscale</Button>
+                                <Flex
+                                    direction='row'
+                                    wrap='wrap'
+                                    justify='space-around'
+                                >
+                                    {filters.map((filter, index) => (
+                                        <Button
+                                            key={index}
+                                            onClick={() => {
+                                                filterVideo(filter);
+                                            }}
+                                        >
+                                            {filter}
+                                        </Button>
+                                    ))}
+                                </Flex>
                             </AccordionPanel>
                         </AccordionItem>
                     </Accordion>
