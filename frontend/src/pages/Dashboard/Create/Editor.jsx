@@ -14,7 +14,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
 import { toast } from 'react-toastify';
 import { stickers } from '../../../assets';
-import { TextLayer, Video } from '../../../components';
+import { Video, VideoLayer } from '../../../components';
 import { UPDATE_POST } from '../../../graphql/post';
 import { fetchGraph, printError } from '../../../utils';
 import './index.scss';
@@ -46,7 +46,6 @@ export const Editor = ({ draft, onExit }) => {
 
     useEffect(() => {
         const onload = () => {
-            processFilter();
             setSize({
                 width: 500,
                 height:
@@ -58,6 +57,18 @@ export const Editor = ({ draft, onExit }) => {
             videoElement.removeEventListener('loadedmetadata', onload);
         };
     }, [videoElement]);
+
+    useEffect(() => {
+        draft.layers
+            .filter(l => l.type === 'FILTER')
+            .forEach(layer => {
+                const canvas = videoLayerRef.current?.getCanvas()._canvas;
+                if (canvas) {
+                    canvas.style.filter =
+                        layer.filter + `(${getFilterNum(layer.filter)})`;
+                }
+            });
+    }, [draft]);
 
     async function saveAndPublish(publish) {
         try {
@@ -107,18 +118,6 @@ export const Editor = ({ draft, onExit }) => {
         return num;
     }
 
-    function processFilter() {
-        layers
-            .filter(l => l.type === 'FILTER')
-            .map((layer, index) => {
-                const canvas = videoLayerRef.current?.getCanvas()._canvas;
-                if (canvas) {
-                    canvas.style.filter =
-                        layer.filter + `(${getFilterNum(layer.filter)})`;
-                }
-            });
-    }
-
     const addTextLayer = () => {
         let text = textInput.current.value;
         let layer = {
@@ -160,21 +159,19 @@ export const Editor = ({ draft, onExit }) => {
                             ></Video>
                         </Layer>
                         <Layer>
-                            {layers
-                                .filter(l => l.type !== 'FILTER')
-                                .map((layer, index) => (
-                                    <TextLayer
-                                        key={index}
-                                        layer={layer}
-                                        size={size}
-                                        onDragStart={() => {
-                                            setIsDragging(true);
-                                        }}
-                                        onDragEnd={e => {
-                                            moveLayer(e.target, index);
-                                        }}
-                                    ></TextLayer>
-                                ))}
+                            {layers.map((layer, index) => (
+                                <VideoLayer
+                                    key={index}
+                                    layer={layer}
+                                    size={size}
+                                    onDragStart={() => {
+                                        setIsDragging(true);
+                                    }}
+                                    onDragEnd={e => {
+                                        moveLayer(e.target, index);
+                                    }}
+                                ></VideoLayer>
+                            ))}
                         </Layer>
                     </Stage>
                 </Box>
