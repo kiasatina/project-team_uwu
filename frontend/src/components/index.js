@@ -6,3 +6,4 @@ export * from './PageLayout';
 export * from './Sidenav';
 export * from './Viewer';
 export * from './Video';
+export * from './Layers/TextLayer';

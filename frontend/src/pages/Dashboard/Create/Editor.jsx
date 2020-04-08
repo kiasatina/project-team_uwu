@@ -1,8 +1,8 @@
 import { Box, Button, Flex, Input } from '@chakra-ui/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Layer, Stage, Text } from 'react-konva';
+import { Layer, Stage } from 'react-konva';
 import { toast } from 'react-toastify';
-import { Video } from '../../../components';
+import { TextLayer, Video } from '../../../components';
 import { UPDATE_POST } from '../../../graphql/post';
 import { fetchGraph, printError } from '../../../utils';
 import './index.scss';
@@ -92,21 +92,17 @@ export const Editor = ({ draft, onExit }) => {
                         </Layer>
                         <Layer>
                             {layers.map((layer, index) => (
-                                <Text
+                                <TextLayer
                                     key={index}
-                                    text={layer.text}
-                                    fontSize={24}
-                                    fontStyle='bold'
-                                    x={layer.position.x * size.width}
-                                    y={layer.position.y * size.height}
-                                    draggable
+                                    layer={layer}
+                                    size={size}
                                     onDragStart={() => {
                                         setIsDragging(true);
                                     }}
                                     onDragEnd={e => {
                                         moveLayer(e.target, index);
                                     }}
-                                ></Text>
+                                ></TextLayer>
                             ))}
                         </Layer>
                     </Stage>
