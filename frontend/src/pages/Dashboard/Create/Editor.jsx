@@ -74,7 +74,7 @@ export const Editor = ({ draft, onExit }) => {
         try {
             await fetchGraph(UPDATE_POST, {
                 ...draft,
-                layers: layers,
+                layers: layers.filter(l => l.type !== 'STICKER'), // temporary until upload is a thing
                 draft: publish ? false : true,
             });
             onExit();
@@ -131,6 +131,20 @@ export const Editor = ({ draft, onExit }) => {
         textInput.current.value = '';
         setLayers([...layers, layer]);
     };
+
+    function addStickerLayer(index) {
+        let layer = {
+            type: 'STICKER',
+            asset: {
+                src: stickers[index],
+            },
+            position: {
+                x: 0.5,
+                y: 0.5,
+            },
+        };
+        setLayers([...layers, layer]);
+    }
 
     function moveLayer(layerElement, index) {
         let newLayers = [...layers];
@@ -225,6 +239,10 @@ export const Editor = ({ draft, onExit }) => {
                                                 size='50px'
                                                 key={index}
                                                 src={sticker}
+                                                className='clickable'
+                                                onClick={() => {
+                                                    addStickerLayer(index);
+                                                }}
                                             />
                                         );
                                     })}

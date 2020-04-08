@@ -11,7 +11,7 @@ export const VideoLayer = ({ layer, size, onDragStart, onDragEnd }) => {
         };
         const newSticker = new window.Image();
         if (layer.type === 'STICKER') {
-            newSticker.src = stickers[0];
+            newSticker.src = layer.asset.src;
         }
         newSticker.addEventListener('load', onload);
 
@@ -26,8 +26,8 @@ export const VideoLayer = ({ layer, size, onDragStart, onDragEnd }) => {
                 image={sticker}
                 x={layer.position.x * size.width}
                 y={layer.position.y * size.height}
-                width={50}
-                height={50}
+                width={100}
+                height={100}
                 draggable
                 onDragStart={onDragStart}
                 onDragEnd={onDragEnd}
