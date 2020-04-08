@@ -66,7 +66,7 @@ export default () => {
                 console.error(err);
             }
         })();
-    }, [video, recording, getRecorder, user, currDraft]);
+    }, [video, recording, getRecorder, user, drafts, currDraft]);
 
     const getRecording = useCallback(async () => {
         // Record and set to view
