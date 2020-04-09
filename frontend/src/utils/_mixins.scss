@@ -97,8 +97,10 @@
 }
 
 // Add custom scrollbar
-@mixin scroll() {
-    overflow: auto;
+@mixin scroll($overflow: true) {
+    @if($overflow) {
+        overflow: auto;
+    }
     &::-webkit-scrollbar {
         width: 7px;
         height: 7px;

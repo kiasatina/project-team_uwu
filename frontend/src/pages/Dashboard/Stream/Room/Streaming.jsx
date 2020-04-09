@@ -3,7 +3,7 @@ import Peer from 'simple-peer';
 import { PageContent, Sidenav, Viewer } from '../../../../components';
 import { getStream, socketEvents } from '../../../../utils';
 
-export default ({ socket, data }) => {
+export default ({ socket, data, info }) => {
     const [ stream, setStream ] = useState();
     useEffect(() => {
         (async () => {
@@ -39,6 +39,8 @@ export default ({ socket, data }) => {
             setStream(stream);
         })();
     }, [ socket ]);
+
+    console.log(info);
 
     return (
         <>

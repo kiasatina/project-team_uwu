@@ -4,7 +4,7 @@ const http = require('http');
 const streamerEvents = require('./streamerEvents');
 const ViewerEvents = require('./ViewerEvents');
 const authentication = require('./auth');
-const { GET_ROLE } = require('./events');
+const { GET_INFO } = require('./events');
 const rooms = {};
 
 module.exports = app => {
@@ -16,13 +16,14 @@ module.exports = app => {
 
     // Handle connection
     io.on('connection', socket => {
-        const { room, streamer } = socket;
+        const { room, user, streamer } = socket;
         socket.join(room);
 
         // Initialize room as needed
         if (!rooms[room]) {
             rooms[room] = {
                 host: undefined,
+                sockets: {},
                 viewers: {},
                 layers: {},
             };
@@ -32,12 +33,17 @@ module.exports = app => {
         if (streamer) {
             rooms[room].host = socket;
         } else {
-            rooms[room].viewers[socket.id] = socket;
+            rooms[room].viewers[socket.id] = user._id;
+            rooms[room].sockets[socket.id] = socket;
             rooms[room].layers[socket.id] = {};
         }
 
-        socket.on(GET_ROLE, ack => {
-            ack(socket.streamer ? 'STREAMER' : 'VIEWER');
+        socket.on(GET_INFO, ack => {
+            ack({
+                role: socket.streamer ? 'STREAMER' : 'VIEWER',
+                viewers: rooms[room].viewers,
+                layers: rooms[room].layers,
+            });
         });
 
         // Load in handlers

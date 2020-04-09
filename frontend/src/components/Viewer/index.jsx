@@ -17,7 +17,7 @@ export const Viewer = ({ video }) => {
     }, [isFile, video]);
 
     return (
-        <div className='viewer'>
+        <div className='viewer' onClick={() => ref.current.play()}>
             <div
                 className={`viewer__dimmer ${
                     loading ? ' viewer__dimmer--show' : ''
