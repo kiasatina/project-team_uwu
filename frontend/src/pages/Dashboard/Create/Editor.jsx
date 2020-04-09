@@ -37,6 +37,7 @@ export const Editor = ({ draft, onExit }) => {
         'Blur',
     ];
 
+    // Need this to get the size of the video and set Stage dimensions accordingly
     const videoElement = useMemo(() => {
         const video = document.createElement('video');
         video.src = draft.asset.src;
@@ -57,6 +58,7 @@ export const Editor = ({ draft, onExit }) => {
         };
     }, [videoElement]);
 
+    // Add filter to video if initial layers had one in them
     useEffect(() => {
         draft.layers
             .filter(l => l.type === 'FILTER')
@@ -69,9 +71,10 @@ export const Editor = ({ draft, onExit }) => {
 
     async function saveAndPublish(publish) {
         try {
+            // No sticker layers until uploading is a thing
             await fetchGraph(UPDATE_POST, {
                 ...draft,
-                layers: layers.filter(l => l.type !== 'STICKER'), // temporary until upload is a thing
+                layers: layers.filter(l => l.type !== 'STICKER'),
                 draft: publish ? false : true,
             });
             onExit();
@@ -86,6 +89,7 @@ export const Editor = ({ draft, onExit }) => {
         setIsPlaying(!playing);
     };
 
+    // Uses default CSS filters for the filters (one only)
     function filterVideo(filter) {
         videoRef.current.style.filter = filter + `(${getFilterNum(filter)})`;
         let newLayers = layers.filter(layer => layer.type !== 'FILTER');
@@ -100,6 +104,7 @@ export const Editor = ({ draft, onExit }) => {
         setLayers([...newLayers, layer]);
     }
 
+    // Gives back appropriate scale for the specified
     function getFilterNum(filter) {
         let num;
         switch (filter.toLowerCase()) {
@@ -147,6 +152,7 @@ export const Editor = ({ draft, onExit }) => {
         setLayers([...layers, layer]);
     }
 
+    // For the onDragEnd event
     function moveLayer(layerElement, index) {
         let newLayers = [...layers];
         newLayers[index].position.x = layerElement.x() / size.width;
@@ -171,6 +177,7 @@ export const Editor = ({ draft, onExit }) => {
                         autoPlay={true}
                         ref={videoRef}
                     ></video>
+
                     <Stage
                         width={size.width}
                         height={size.height}
@@ -194,6 +201,7 @@ export const Editor = ({ draft, onExit }) => {
                         </Layer>
                     </Stage>
                 </Box>
+
                 <Button onClick={onPlay} mt='3'>
                     {playing ? 'Pause' : 'Play'}
                 </Button>
@@ -239,7 +247,7 @@ export const Editor = ({ draft, onExit }) => {
                                                 size='50px'
                                                 key={index}
                                                 src={sticker}
-                                                className='clickable'
+                                                className='sticker'
                                                 onClick={() => {
                                                     addStickerLayer(index);
                                                 }}
@@ -279,6 +287,7 @@ export const Editor = ({ draft, onExit }) => {
                     </Accordion>
                 </Box>
             </Flex>
+
             <Flex
                 px='4'
                 py='4'

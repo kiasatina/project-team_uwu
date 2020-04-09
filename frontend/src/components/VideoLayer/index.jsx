@@ -4,19 +4,20 @@ import { Image, Text } from 'react-konva';
 export const VideoLayer = ({ layer, size, onDragStart, onDragEnd }) => {
     const [sticker, setSticker] = useState();
 
+    // Relevant only if the layer is a sticker
     useEffect(() => {
-        const onload = () => {
-            setSticker(newSticker);
-        };
-        const newSticker = new window.Image();
         if (layer.type === 'STICKER') {
+            const onload = () => {
+                setSticker(newSticker);
+            };
+            const newSticker = new window.Image();
             newSticker.src = layer.asset.src;
-        }
-        newSticker.addEventListener('load', onload);
+            newSticker.addEventListener('load', onload);
 
-        return () => {
-            newSticker.removeEventListener('load', onload);
-        };
+            return () => {
+                newSticker.removeEventListener('load', onload);
+            };
+        }
     }, [layer]);
 
     if (layer.type === 'STICKER') {
@@ -36,9 +37,9 @@ export const VideoLayer = ({ layer, size, onDragStart, onDragEnd }) => {
         return (
             <Text
                 text={layer.text}
-                fill='white'
                 align='center'
                 verticalAlign='middle'
+                fill='white'
                 fontSize={24}
                 fontStyle='bold'
                 fontFamily='Muli'

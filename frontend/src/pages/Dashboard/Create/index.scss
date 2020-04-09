@@ -43,9 +43,7 @@
         max-width: $VIDEO-MAX-WIDTH;
 
         &__layers {
-            position: absolute;
-            top: 0;
-            left: 0;
+            @include position(absolute);
         }
     }
 
@@ -70,6 +68,6 @@
     }
 }
 
-.clickable {
+.sticker {
     cursor: pointer;
 }
