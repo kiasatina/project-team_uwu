@@ -1,18 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useMounted } from './useMounted';
-
-// Singleton for video stream from camera (Bless modules)
-let _stream;
-const getStream = async () =>
-    _stream ||
-    (await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: {
-            width: 256,
-            height: 256,
-            facingMode: 'user',
-        },
-    }));
+import { getStream } from '../getStream';
 
 /**
  * useRecorder return object

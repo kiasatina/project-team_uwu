@@ -8,7 +8,7 @@ import StreamItem from './StreamItem';
 import Create from './Create';
 
 export default () => {
-    const { data, loading, dispatch } = useGraph(FETCH_STREAMS, {
+    const { data, loading } = useGraph(FETCH_STREAMS, {
         pipe: ['getLivestreams'],
         initState: [],
         variables: {

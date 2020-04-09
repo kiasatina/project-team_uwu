@@ -28,7 +28,6 @@ export default () => {
         mode: 'onChange',
     });
     const onSubmit = async ({ confirm_password, ...values }) => {
-        console.log(values);
         try {
             const data = await fetchGraph(REGISTER, values);
             localStorage.setItem('token', data.register);

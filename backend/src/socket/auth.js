@@ -3,9 +3,9 @@ const { Livestream } = require('../models');
 const { errors } = require('../utils');
 
 module.exports = io => {
-    io.use(async ({ handshake }, next) => {
+    io.use(async (socket, next) => {
         // If missing any, bad authorization
-        const { token, room } = handshake.query;
+        const { token, room } = socket.handshake.query;
         if (!token) {
             return next(new Error(errors.MISSING_ERROR('TOKEN')));
         }
@@ -30,7 +30,7 @@ module.exports = io => {
             );
 
             // Store info
-            socket.streamer = room === stream._id;
+            socket.streamer = stream && room === stream._id.toString();
             socket.room = room;
 
             // Update viewer count
@@ -41,8 +41,9 @@ module.exports = io => {
                 );
             }
             next();
-        } catch {
+        } catch (err) {
             next(new Error(errors.AUTHENTICATION_ERROR));
+            console.log(err);
         }
     });
 };

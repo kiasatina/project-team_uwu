@@ -2,7 +2,9 @@ const socketIo = require('socket.io');
 const http = require('http');
 
 const streamerEvents = require('./streamerEvents');
+const ViewerEvents = require('./ViewerEvents');
 const authentication = require('./auth');
+const { GET_ROLE } = require('./events');
 const rooms = {};
 
 module.exports = app => {
@@ -15,29 +17,32 @@ module.exports = app => {
     // Handle connection
     io.on('connection', socket => {
         const { room, streamer } = socket;
+        socket.join(room);
 
         // Initialize room as needed
-        if (!rooms[room])
+        if (!rooms[room]) {
             rooms[room] = {
                 host: undefined,
-                viewers: [],
+                viewers: {},
                 layers: {},
             };
+        }
 
         // Populate fields
         if (streamer) {
-            rooms[room].host = socket.id;
+            rooms[room].host = socket;
         } else {
+            rooms[room].viewers[socket.id] = socket;
             rooms[room].layers[socket.id] = {};
-            rooms[room].viewers.add(socket.id);
         }
 
-        // Load in handlers
-        const events = streamer ? streamerEvents : watcherEvents;
-        events(socket, rooms);
+        socket.on(GET_ROLE, ack => {
+            ack(socket.streamer ? 'STREAMER' : 'VIEWER');
+        });
 
-        // Join room
-        socket.join(room);
+        // Load in handlers
+        const handlers = streamer ? streamerEvents : ViewerEvents;
+        handlers(socket, rooms);
     });
 
     return new Promise((resolve, reject) => {
