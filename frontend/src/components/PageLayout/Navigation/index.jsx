@@ -34,6 +34,11 @@ const routes = [
         exact: true,
         to: '/faq',
     },
+    {
+        children: 'Credits',
+        exact: true,
+        to: '/credits',
+    },
 ];
 
 const hydrateRoute = (route, params) =>
