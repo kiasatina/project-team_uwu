@@ -14,7 +14,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Layer, Stage } from 'react-konva';
 import { toast } from 'react-toastify';
 import { stickers } from '../../../assets';
-import { Video, VideoLayer } from '../../../components';
+import { VideoLayer } from '../../../components';
 import { UPDATE_POST } from '../../../graphql/post';
 import { fetchGraph, printError } from '../../../utils';
 import './index.scss';
@@ -26,7 +26,7 @@ export const Editor = ({ draft, onExit }) => {
     const [size, setSize] = useState({ width: 0, height: 0 });
     const [layers, setLayers] = useState(draft.layers);
     const textInput = useRef();
-    const videoLayerRef = useRef();
+    const videoRef = useRef();
 
     const filters = [
         'Grayscale',
@@ -40,7 +40,6 @@ export const Editor = ({ draft, onExit }) => {
     const videoElement = useMemo(() => {
         const video = document.createElement('video');
         video.src = draft.asset.src;
-        video.pause();
         return video;
     }, [draft]);
 
@@ -62,12 +61,10 @@ export const Editor = ({ draft, onExit }) => {
         draft.layers
             .filter(l => l.type === 'FILTER')
             .forEach(layer => {
-                const canvas = videoLayerRef.current?.getCanvas()._canvas;
-                if (canvas) {
-                    canvas.style.filter =
-                        layer.filter + `(${getFilterNum(layer.filter)})`;
-                }
+                videoRef.current.style.filter =
+                    layer.filter + `(${getFilterNum(layer.filter)})`;
             });
+        return () => {};
     }, [draft]);
 
     async function saveAndPublish(publish) {
@@ -84,9 +81,13 @@ export const Editor = ({ draft, onExit }) => {
         }
     }
 
+    const onPlay = () => {
+        playing ? videoRef.current.pause() : videoRef.current.play();
+        setIsPlaying(!playing);
+    };
+
     function filterVideo(filter) {
-        const canvas = videoLayerRef.current.getCanvas()._canvas;
-        canvas.style.filter = filter + `(${getFilterNum(filter)})`;
+        videoRef.current.style.filter = filter + `(${getFilterNum(filter)})`;
         let newLayers = layers.filter(layer => layer.type !== 'FILTER');
         let layer = {
             type: 'FILTER',
@@ -164,14 +165,17 @@ export const Editor = ({ draft, onExit }) => {
                 rounded='md'
             >
                 <Box className='editor__video-holder'>
-                    <Stage width={size.width} height={size.height}>
-                        <Layer ref={videoLayerRef}>
-                            <Video
-                                src={draft.asset.src}
-                                size={size}
-                                playing={playing}
-                            ></Video>
-                        </Layer>
+                    <video
+                        src={draft.asset.src}
+                        loop={true}
+                        autoPlay={true}
+                        ref={videoRef}
+                    ></video>
+                    <Stage
+                        width={size.width}
+                        height={size.height}
+                        className='editor__video-holder__layers'
+                    >
                         <Layer>
                             {layers.map((layer, index) => (
                                 <VideoLayer
@@ -190,12 +194,7 @@ export const Editor = ({ draft, onExit }) => {
                         </Layer>
                     </Stage>
                 </Box>
-                <Button
-                    onClick={() => {
-                        setIsPlaying(!playing);
-                    }}
-                    mt='3'
-                >
+                <Button onClick={onPlay} mt='3'>
                     {playing ? 'Pause' : 'Play'}
                 </Button>
 

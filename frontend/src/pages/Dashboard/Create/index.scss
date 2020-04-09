@@ -39,7 +39,14 @@
     margin-bottom: 100px;
 
     &__video-holder {
+        position: relative;
         max-width: $VIDEO-MAX-WIDTH;
+
+        &__layers {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
     }
 
     &__layer {
