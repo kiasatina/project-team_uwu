@@ -1,6 +1,10 @@
 const processVar = (...args) => {
     const [value, files, root, map] = args;
 
+    if (value === null) {
+        return null;
+    }
+
     // File, then setup to match GraphQL Multipart spec
     if (value instanceof Blob) {
         map.push([root]);

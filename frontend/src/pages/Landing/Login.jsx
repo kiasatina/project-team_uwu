@@ -63,7 +63,7 @@ export default () => {
                             required: 'Please provide a password',
                             minLength: {
                                 message:
-                                    'Password must be atleast 8 characters long',
+                                    'Password must be at least 8 characters long',
                                 value: 8,
                             },
                         })}

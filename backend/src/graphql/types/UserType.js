@@ -26,7 +26,7 @@ module.exports = {
     },
     profile_image: root => fileResolver(root.profile_image),
     posts_count: async root => {
-        return await Post.countDocuments({ user: root._id });
+        return await Post.countDocuments({ user: root._id, draft: false });
     },
     posts: async (root, { limit, page }, ctx) => {
         return await Post.find({ user: ctx.user })
