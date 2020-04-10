@@ -28,7 +28,6 @@ export default () => {
         mode: 'onChange',
     });
     const onSubmit = async ({ confirm_password, ...values }) => {
-        console.log(values);
         try {
             const data = await fetchGraph(REGISTER, values);
             localStorage.setItem('token', data.register);
@@ -127,7 +126,7 @@ export default () => {
                 </FormControl>
                 <Flex direction='column' mt='6'>
                     <Button
-                        loading={formState.isSubmitting}
+                        isLoading={formState.isSubmitting}
                         disabled={!formState.isValid}
                         type='submit'
                         mb='2'

@@ -34,12 +34,21 @@ export default () => {
     const [recording, setRecording] = useState();
     const [video, setVideo] = useState();
     const [asset, setAsset] = useState();
-    const { register, formState, errors, handleSubmit } = useForm({
-        mode: 'onChange',
-    });
 
     const onSubmit = async values => {
-        await fetchGraph(CREATE_POST, { ...values, asset });
+        try {
+            await fetchGraph(CREATE_POST, {
+                ...values,
+                asset,
+            });
+            toast.success('Post created');
+        } catch (err) {
+            toast.error(printError(err.message));
+            console.error(err);
+        }
+
+        setAsset(undefined);
+        reset();
     };
 
     const onExit = () => {

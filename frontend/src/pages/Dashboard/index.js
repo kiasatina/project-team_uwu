@@ -19,7 +19,7 @@ export default [
     {
         component: React.lazy(() => import('./Stream')),
         exact: true,
-        path: '/stream',
+        path: '/stream/:streamId?',
     },
     {
         component: React.lazy(() => import('./Profile')),

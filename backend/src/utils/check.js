@@ -4,6 +4,13 @@ const { User } = require('../models');
 const errors = require('./errors');
 
 module.exports = {
+    async id(value) {
+        if (!validator.isMongoId(value)) {
+            throw new Error(errors.INVALID_ERROR('ID'));
+        }
+
+        return true;
+    },
     async file(value, accept) {
         const { mimetype } = await value;
         if (accept && !mimetype.startsWith(accept)) {

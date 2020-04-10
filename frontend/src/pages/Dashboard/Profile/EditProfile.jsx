@@ -42,6 +42,8 @@ export const EditProfile = ({ isOpen, onClose }) => {
                     return acc;
                 }, {}),
             );
+            
+            toast.success('Profile updated');
             dispatch({
                 ...user,
                 username: values.username,
@@ -58,104 +60,102 @@ export const EditProfile = ({ isOpen, onClose }) => {
     return (
         <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent borderRadius='md'>
+            <ModalContent as='form' onSubmit={handleSubmit(onSubmit)} borderRadius='md'>
                 <ModalHeader>Edit Profile</ModalHeader>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <ModalBody>
-                        <FormControl
-                            mb='2'
-                            isInvalid={errors.username}
-                            isRequired
-                        >
-                            <FormLabel htmlFor='username'>Username</FormLabel>
-                            <Input
-                                ref={register({
-                                    required: 'Please provide an username',
-                                })}
-                                defaultValue={user.username}
-                                placeholder='Username'
-                                name='username'
-                            />
-                            <FormErrorMessage>
-                                {errors.username?.message}
-                            </FormErrorMessage>
-                        </FormControl>
-                        <FormControl mb='2'>
-                            <FormLabel htmlFor='bio'>Bio</FormLabel>
-                            <Textarea
-                                ref={register}
-                                defaultValue={user.bio}
-                                placeholder='UwU on your owo'
-                                name='bio'
-                            />
-                        </FormControl>
-                        <FormControl mb='2' isInvalid={errors.new_password}>
-                            <FormLabel htmlFor='password'>
-                                New Password
-                            </FormLabel>
-                            <Input
-                                ref={register({
-                                    validate() {
-                                        triggerValidation('password');
-                                    },
-                                    minLength: {
-                                        message:
-                                            'Password must be at least 8 characters long',
-                                        value: 8,
-                                    },
-                                })}
-                                placeholder='Hunter62'
-                                name='new_password'
-                                type='password'
-                            />
-                            <FormErrorMessage>
-                                {errors.new_password?.message}
-                            </FormErrorMessage>
-                        </FormControl>
-                        <FormControl
-                            mb='2'
-                            isInvalid={errors.password}
-                            isRequired={getValues().new_password}
-                        >
-                            <FormLabel htmlFor='password'>
-                                Current Password
-                            </FormLabel>
-                            <Input
-                                ref={register({
-                                    validate(val) {
-                                        if (getValues().new_password) {
-                                            return !val
-                                                ? 'Please enter your old password'
-                                                : undefined;
-                                        }
-                                        setValue('password', '');
-                                    },
-                                })}
-                                disabled={!getValues().new_password}
-                                placeholder='Hunter61'
-                                name='password'
-                                type='password'
-                            />
-                            <FormErrorMessage>
-                                {errors.password?.message}
-                            </FormErrorMessage>
-                        </FormControl>
-                    </ModalBody>
+                <ModalBody>
+                    <FormControl
+                        mb='2'
+                        isInvalid={errors.username}
+                        isRequired
+                    >
+                        <FormLabel htmlFor='username'>Username</FormLabel>
+                        <Input
+                            ref={register({
+                                required: 'Please provide an username',
+                            })}
+                            defaultValue={user.username}
+                            placeholder='Username'
+                            name='username'
+                        />
+                        <FormErrorMessage>
+                            {errors.username?.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                    <FormControl mb='2'>
+                        <FormLabel htmlFor='bio'>Bio</FormLabel>
+                        <Textarea
+                            ref={register}
+                            defaultValue={user.bio}
+                            placeholder='UwU on your owo'
+                            name='bio'
+                        />
+                    </FormControl>
+                    <FormControl mb='2' isInvalid={errors.new_password}>
+                        <FormLabel htmlFor='password'>
+                            New Password
+                        </FormLabel>
+                        <Input
+                            ref={register({
+                                validate() {
+                                    triggerValidation('password');
+                                },
+                                minLength: {
+                                    message:
+                                        'Password must be at least 8 characters long',
+                                    value: 8,
+                                },
+                            })}
+                            placeholder='Hunter62'
+                            name='new_password'
+                            type='password'
+                        />
+                        <FormErrorMessage>
+                            {errors.new_password?.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                    <FormControl
+                        mb='2'
+                        isInvalid={errors.password}
+                        isRequired={getValues().new_password}
+                    >
+                        <FormLabel htmlFor='password'>
+                            Current Password
+                        </FormLabel>
+                        <Input
+                            ref={register({
+                                validate(val) {
+                                    if (getValues().new_password) {
+                                        return !val
+                                            ? 'Please enter your old password'
+                                            : undefined;
+                                    }
+                                    setValue('password', '');
+                                },
+                            })}
+                            disabled={!getValues().new_password}
+                            placeholder='Hunter61'
+                            name='password'
+                            type='password'
+                        />
+                        <FormErrorMessage>
+                            {errors.password?.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                </ModalBody>
 
-                    <ModalFooter>
-                        <Button
-                            mr='3'
-                            type='submit'
-                            disabled={!formState.isValid || !formState.dirty}
-                            loading={formState.isSubmitting}
-                        >
-                            Save Changes
-                        </Button>
-                        <Button variant='outline' onClick={onClose}>
-                            Cancel
-                        </Button>
-                    </ModalFooter>
-                </form>
+                <ModalFooter>
+                    <Button
+                        mr='3'
+                        type='submit'
+                        disabled={!formState.isValid || !formState.dirty}
+                        isLoading={formState.isSubmitting}
+                    >
+                        Save Changes
+                    </Button>
+                    <Button variant='outline' onClick={onClose}>
+                        Cancel
+                    </Button>
+                </ModalFooter>
             </ModalContent>
         </Modal>
     );

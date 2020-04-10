@@ -10,6 +10,7 @@ const reducer = (state, action) => {
  * @typedef {Object} useGraphOptions
  * @property {Object} [initState = {}] - The initial state of fetch
  * @property {Object} [variables = {}] - The variables for fetch
+ * @property {Array} [pipe = []] - Unwraps data after fetch
  * @property {Function} [onError = console.error] - Error handler
  */
 
@@ -29,12 +30,18 @@ const reducer = (state, action) => {
  * @returns {useGraphStuff} - Hook stuff
  */
 export const useGraph = (query, options = {}) => {
-    const { initState = {}, variables = {}, onError = console.error } = options;
+    const {
+        onError = console.error,
+        initState = {},
+        variables = {},
+        pipe = [],
+    } = options;
 
     const [store, _dispatch] = useReducer(reducer, {
+        variables: { ...variables },
+        pipe: [ ...pipe ],
         data: initState,
         loading: true,
-        variables,
     });
 
     useEffect(() => {
@@ -48,7 +55,10 @@ export const useGraph = (query, options = {}) => {
                     if (mounted) {
                         _dispatch({
                             loading: false,
-                            data,
+                            data: store.pipe.reduce(
+                                (_, prop) => _[prop],
+                                data,
+                            ),
                         });
                     }
                 } catch (err) {
@@ -60,7 +70,7 @@ export const useGraph = (query, options = {}) => {
         return () => {
             mounted = false;
         };
-    }, [query, onError, store.variables]);
+    }, [query, onError, store.variables, store.pipe]);
 
     const refetch = useCallback(
         (initState = store.data, variables = store.variables) => {

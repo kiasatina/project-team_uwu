@@ -1,6 +1,10 @@
 @import '../../utils/variables';
 @import '../../utils/mixins';
 
+* {
+    @include scroll(false);
+}
+
 body {
     background-color: $BODY_COLOR;
     color: $TEXT_COLOR;

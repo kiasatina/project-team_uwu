@@ -3,6 +3,7 @@ const errors = {
     USERNAME_EXISTS_ERROR: 'Username is already in use',
     EMAIL_EXISTS_ERROR: 'Email is already in use',
     AUTHENTICATION_ERROR: 'Session expired. Please login again',
+    LIVESTREAM_EXISTS_ERROR: 'You already have a livestream. Try again later',
 };
 
 /**
