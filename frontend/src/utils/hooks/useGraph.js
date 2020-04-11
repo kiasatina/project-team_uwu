@@ -39,7 +39,7 @@ export const useGraph = (query, options = {}) => {
 
     const [store, _dispatch] = useReducer(reducer, {
         variables: { ...variables },
-        pipe: [ ...pipe ],
+        pipe: [...pipe],
         data: initState,
         loading: true,
     });
@@ -55,10 +55,7 @@ export const useGraph = (query, options = {}) => {
                     if (mounted) {
                         _dispatch({
                             loading: false,
-                            data: store.pipe.reduce(
-                                (_, prop) => _[prop],
-                                data,
-                            ),
+                            data: store.pipe.reduce((_, prop) => _[prop], data),
                         });
                     }
                 } catch (err) {

@@ -5,7 +5,7 @@ import { PageContent, Sidenav, Viewer } from '../../../../components';
 import { socketEvents } from '../../../../utils';
 
 export default ({ socket, data }) => {
-    const [ stream, setStream ] = useState();
+    const [stream, setStream] = useState();
 
     useEffect(() => {
         socket.current.once(socketEvents.START_PEER, () => {
@@ -23,16 +23,19 @@ export default ({ socket, data }) => {
             });
         });
         socket.current.emit(socketEvents.JOIN);
-    }, [ socket ]);
+    }, [socket]);
 
-    const setLayer = useCallback(layer => {
-        socket.current.emit(socketEvents.UPDATE_LAYER, layer);
-    }, [ socket ]);
+    const setLayer = useCallback(
+        layer => {
+            socket.current.emit(socketEvents.UPDATE_LAYER, layer);
+        },
+        [socket],
+    );
 
     return (
         <>
             <PageContent label={data.title} loading={!stream}>
-                <Viewer video={stream}/>
+                <Viewer video={stream} />
             </PageContent>
             <Sidenav></Sidenav>
         </>

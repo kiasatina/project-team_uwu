@@ -1,5 +1,12 @@
 import React from 'react';
-import { Input, Button, Image, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core';
+import {
+    Input,
+    Button,
+    Image,
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+} from '@chakra-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -17,8 +24,11 @@ export default () => {
 
     const submit = async values => {
         try {
-            const { createLivestream } = await fetchGraph(CREATE_LIVESTREAM, values);
-            history.push(`/stream/${ createLivestream._id }`);
+            const { createLivestream } = await fetchGraph(
+                CREATE_LIVESTREAM,
+                values,
+            );
+            history.push(`/stream/${createLivestream._id}`);
             toast.success('Starting stream...');
         } catch (err) {
             toast.error(printError(err.message));
@@ -32,7 +42,7 @@ export default () => {
             text='Get started by giving your stream a title.'
             padded
         >
-            <Image src={placeholder} borderRadius='md' mb='4'/>
+            <Image src={placeholder} borderRadius='md' mb='4' />
             <form onSubmit={handleSubmit(submit)}>
                 <FormControl isInvalid={errors.title} isRequired>
                     <FormLabel htmlFor='title'>Title of Stream</FormLabel>
@@ -43,9 +53,7 @@ export default () => {
                         placeholder='You will not believe your eyes'
                         name='title'
                     />
-                    <FormErrorMessage>
-                        {errors.title?.message}
-                    </FormErrorMessage>
+                    <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
                 </FormControl>
                 <Button
                     mt='4'
@@ -58,5 +66,5 @@ export default () => {
                 </Button>
             </form>
         </Sidenav>
-    )
-}
+    );
+};

@@ -4,7 +4,7 @@ import { PageContent, Sidenav, Viewer } from '../../../../components';
 import { getStream, socketEvents } from '../../../../utils';
 
 export default ({ socket, data, info }) => {
-    const [ stream, setStream ] = useState();
+    const [stream, setStream] = useState();
     useEffect(() => {
         (async () => {
             const stream = await getStream();
@@ -38,14 +38,14 @@ export default ({ socket, data, info }) => {
 
             setStream(stream);
         })();
-    }, [ socket ]);
+    }, [socket]);
 
     console.log(info);
 
     return (
         <>
             <PageContent label={data.title} loading={!stream}>
-                <Viewer video={stream}/>
+                <Viewer video={stream} />
             </PageContent>
             <Sidenav></Sidenav>
         </>

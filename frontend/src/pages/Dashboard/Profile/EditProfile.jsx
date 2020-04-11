@@ -42,7 +42,7 @@ export const EditProfile = ({ isOpen, onClose }) => {
                     return acc;
                 }, {}),
             );
-            
+
             toast.success('Profile updated');
             dispatch({
                 ...user,
@@ -60,14 +60,14 @@ export const EditProfile = ({ isOpen, onClose }) => {
     return (
         <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent as='form' onSubmit={handleSubmit(onSubmit)} borderRadius='md'>
+            <ModalContent
+                as='form'
+                onSubmit={handleSubmit(onSubmit)}
+                borderRadius='md'
+            >
                 <ModalHeader>Edit Profile</ModalHeader>
                 <ModalBody>
-                    <FormControl
-                        mb='2'
-                        isInvalid={errors.username}
-                        isRequired
-                    >
+                    <FormControl mb='2' isInvalid={errors.username} isRequired>
                         <FormLabel htmlFor='username'>Username</FormLabel>
                         <Input
                             ref={register({
@@ -91,9 +91,7 @@ export const EditProfile = ({ isOpen, onClose }) => {
                         />
                     </FormControl>
                     <FormControl mb='2' isInvalid={errors.new_password}>
-                        <FormLabel htmlFor='password'>
-                            New Password
-                        </FormLabel>
+                        <FormLabel htmlFor='password'>New Password</FormLabel>
                         <Input
                             ref={register({
                                 validate() {

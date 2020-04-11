@@ -17,9 +17,8 @@ import { stickers } from '../../../assets';
 import { VideoLayer } from '../../../components';
 import { UPDATE_POST } from '../../../graphql/post';
 import { fetchGraph, printError } from '../../../utils';
-import './index.scss';
 
-export const Editor = ({ draft, onExit }) => {
+export const EditDraft = ({ draft, onExit }) => {
     const [playing, setIsPlaying] = useState(true);
     // eslint-disable-next-line
     const [dragging, setIsDragging] = useState(false);

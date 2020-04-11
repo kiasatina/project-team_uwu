@@ -2,13 +2,7 @@ import React from 'react';
 import { Heading, Text } from '@chakra-ui/core';
 import './index.scss';
 
-export const Sidenav = ({
-    className = '',
-    children,
-    label,
-    text,
-    padded
-}) => {
+export const Sidenav = ({ className = '', children, label, text, padded }) => {
     return (
         <nav
             className={`sidenav${
@@ -20,7 +14,11 @@ export const Sidenav = ({
                     {label}
                 </Heading>
             )}
-            {text && <Text mb='4' color='gray.500'>{text}</Text>}
+            {text && (
+                <Text mb='4' color='gray.500'>
+                    {text}
+                </Text>
+            )}
             {children}
         </nav>
     );

@@ -11,7 +11,7 @@ import { FETCH_STREAM } from '../../../../graphql/stream';
 const map = {
     STREAMER: Streaming,
     VIEWER: Viewing,
-}
+};
 
 const reducer = (state, action) => {
     if (typeof action === 'function') {
@@ -22,7 +22,7 @@ const reducer = (state, action) => {
 
 export default () => {
     const { streamId } = useParams();
-    const [ info, dispatch ] = useReducer(reducer);
+    const [info, dispatch] = useReducer(reducer);
     const { data, loading } = useGraph(FETCH_STREAM, {
         pipe: ['getLivestreams', 0],
         variables: { _id: streamId },
@@ -35,7 +35,7 @@ export default () => {
             query: {
                 token: localStorage.getItem('token'),
                 room: streamId,
-            }
+            },
         });
         socket.current.once('error', () => {
             history.push('/stream');
@@ -77,12 +77,12 @@ export default () => {
         return () => {
             socket.current.disconnect();
         };
-    }, [ history, streamId ]);
+    }, [history, streamId]);
 
     const Component = map[info?.role];
     return (
         <Loading loading={!info || loading}>
-            {Component && <Component socket={socket} data={data} info={info}/>}
+            {Component && <Component socket={socket} data={data} info={info} />}
         </Loading>
     );
 };

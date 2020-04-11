@@ -18,20 +18,14 @@ export default () => {
 
     return (
         <>
-            <PageContent
-                label='Live Streams'
-                loading={loading}
-            >
+            <PageContent label='Live Streams' loading={loading}>
                 <SimpleGrid columns={{ lg: 1, xl: 2 }} spacing='4'>
                     {data.map(item => (
-                        <StreamItem
-                            key={item._id}
-                            {...item}
-                        />
+                        <StreamItem key={item._id} {...item} />
                     ))}
                 </SimpleGrid>
             </PageContent>
-            <Create/>
+            <Create />
         </>
     );
 };
