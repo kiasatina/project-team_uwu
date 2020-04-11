@@ -21,36 +21,38 @@ export const CREATE_POST = `
     }
 `;
 
-export const GET_POSTS = `
-    query getPosts(
-        $user: ID,
-        $draft: Boolean,
-        $limit: Int,
-        $page: Int 
-    ) {
-        getPosts(
-            user: $user,
-            draft: $draft,
-            limit: $limit,
-            page: $page 
-        ) {
+export const GET_DRAFTS = `
+    query getDrafts {
+        getMe {
+            posts(draft: true) {
+                _id
+                asset {
+                    src
+                }
+                title
+                updatedAt
+            }
+        }
+    }
+`;
+
+export const GET_DRAFT = `
+    query getDraft($id: ID!) {
+        getPosts(_id: $id) {
             _id
-            user {
-                username
-            }
-            asset {
-                src
-                type
-            }
             title
             description
-            draft
+            asset {
+                src
+            }
+            audio {
+                src
+            }
             layers {
                 type
                 filter
                 asset {
                     src
-                    type
                 }
                 position {
                     x
@@ -58,7 +60,6 @@ export const GET_POSTS = `
                 }
                 text
             }
-            createdAt
         }
     }
 `;

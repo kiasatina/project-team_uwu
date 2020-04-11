@@ -26,7 +26,7 @@ type User {
     following_count: Int!
     following(limit: Int = 10, page: Int = 0): [User]!
     posts_count: Int!
-    posts(limit: Int = 10, page: Int = 0): [Post]!
+    posts(draft: Boolean, limit: Int = 10, page: Int = 0): [Post]!
     createdAt: DateTime!
 }
 
@@ -49,8 +49,15 @@ type PostLocation {
     location: String!
 }
 
+"The sticker asset of a post"
+type Sticker {
+    href: String
+    asset: File
+}
+
 "The positioning of a layer in a post"
 type PostLayerPosition {
+    rotation: Float!
     x: Float!
     y: Float!
 }
@@ -59,22 +66,29 @@ type PostLayerPosition {
 type PostLayer {
     type: PostLayerEnum!
     filter: String
-    asset: File
+    sticker: Sticker
     position: PostLayerPosition
     text: String
 }
 
 "PostLayerPosition but for inputs"
 input PostLayerPositionInput {
+    rotation: Float!
     x: Float!
     y: Float!
+}
+
+"PostLayer sticker for inputs"
+input PostLayerStickerInput {
+    asset: Upload
+    href: String
 }
 
 "PostLayer but for inputs"
 input PostLayerInput {
     type: PostLayerEnum!
     filter: String
-    asset: Upload
+    sticker: PostLayerStickerInput
     position: PostLayerPositionInput
     text: String
 }
@@ -90,6 +104,7 @@ type Post {
     location: PostLocation
     audio: File
     layers: [PostLayer]!
+    updatedAt: DateTime!
     createdAt: DateTime!
 }
 
@@ -129,7 +144,13 @@ type Mutation {
     "Create a post"
     createPost(asset: Upload!, title: String!, description: String!): Post!
     "Updates a post"
-    updatePost(_id: ID!, draft: Boolean, layers: [PostLayerInput]): Post!
+    updatePost(
+        _id: ID!
+        draft: Boolean
+        title: String
+        description: String
+        layers: [PostLayerInput]
+    ): Post!
     "Follow a user"
     follow(_id: ID!): Boolean!
     "Unfollow a user"

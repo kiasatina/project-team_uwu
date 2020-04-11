@@ -1,5 +1,5 @@
 import React from 'react';
-import { SimpleGrid } from '@chakra-ui/core';
+import { Text, SimpleGrid } from '@chakra-ui/core';
 
 import { FETCH_STREAMS } from '../../../../graphql/stream';
 import { PageContent } from '../../../../components';
@@ -19,11 +19,17 @@ export default () => {
     return (
         <>
             <PageContent label='Live Streams' loading={loading}>
-                <SimpleGrid columns={{ lg: 1, xl: 2 }} spacing='4'>
-                    {data.map(item => (
-                        <StreamItem key={item._id} {...item} />
-                    ))}
-                </SimpleGrid>
+                {data.length ? (
+                    <SimpleGrid columns={{ lg: 1, xl: 2 }} spacing='4'>
+                        {data.map(item => (
+                            <StreamItem key={item._id} {...item} />
+                        ))}
+                    </SimpleGrid>
+                ) : (
+                    <Text fontSize='2xl' opacity='30%'>
+                        No Drafts Found... *sad owo sounds*
+                    </Text>
+                )}
             </PageContent>
             <Create />
         </>

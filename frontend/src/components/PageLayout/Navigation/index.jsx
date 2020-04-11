@@ -21,7 +21,6 @@ const routes = [
     },
     {
         children: 'Create',
-        exact: true,
         to: '/create',
     },
     {
@@ -29,9 +28,9 @@ const routes = [
         to: '/stream',
     },
     {
-        children: 'FAQ',
+        children: 'Stickers',
         exact: true,
-        to: '/faq',
+        to: '/stickers',
     },
 ];
 

@@ -9,7 +9,7 @@ export default [
     {
         component: React.lazy(() => import('./Create')),
         exact: true,
-        path: '/create',
+        path: '/create/:draft?',
     },
     {
         component: React.lazy(() => import('./FAQ')),

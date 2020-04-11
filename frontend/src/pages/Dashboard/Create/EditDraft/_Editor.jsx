@@ -11,17 +11,33 @@ import {
     Input,
 } from '@chakra-ui/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Layer, Stage } from 'react-konva';
 import { toast } from 'react-toastify';
-import { stickers } from '../../../assets';
-import { VideoLayer } from '../../../components';
-import { UPDATE_POST } from '../../../graphql/post';
-import { fetchGraph, printError } from '../../../utils';
+import { stickers } from '../../../../assets';
+import { VideoLayer, PageContent } from '../../../../components';
+import { UPDATE_POST, GET_DRAFT } from '../../../../graphql/post';
+import { fetchGraph, printError, useGraph } from '../../../../utils';
+import './index.scss';
 
-export const EditDraft = ({ draft, onExit }) => {
+// Temp shim
+export const Editor = () => {
+    const { draft } = useParams();
+    const { data, loading } = useGraph(GET_DRAFT, {
+        variables: { id: draft },
+        pipe: ['getPosts', 0],
+    });
+
+    return (
+        <PageContent loading={loading}>
+            <EditDraftT draft={data} onExit={() => {}} />
+        </PageContent>
+    );
+};
+
+const EditDraftT = ({ draft, onExit }) => {
     const [playing, setIsPlaying] = useState(true);
-    // eslint-disable-next-line
-    const [dragging, setIsDragging] = useState(false);
+    const [, setIsDragging] = useState(false);
     const [size, setSize] = useState({ width: 0, height: 0 });
     const [layers, setLayers] = useState(draft.layers);
     const textInput = useRef();

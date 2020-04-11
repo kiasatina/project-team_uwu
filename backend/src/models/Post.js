@@ -1,5 +1,33 @@
 const mongoose = require('mongoose');
 
+const Sticker = new mongoose.Schema({
+    href: {
+        type: String,
+        required() {
+            return !this.asset;
+        }
+    },
+    asset: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image',
+        required() {
+            return !this.href;
+        },
+    },
+});
+
+const Position = new mongoose.Schema({
+    rotation: {
+        type: Number,
+    },
+    x: {
+        type: Number,
+    },
+    y: {
+        type: Number,
+    },
+});
+
 const schema = new mongoose.Schema(
     {
         user: {
@@ -52,19 +80,16 @@ const schema = new mongoose.Schema(
                         return this.type === 'FILTER';
                     },
                 },
-                asset: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'Image',
+                sticker: {
+                    type: Sticker,
                     required() {
                         return this.type === 'STICKER';
                     },
                 },
                 position: {
-                    x: {
-                        type: Number,
-                    },
-                    y: {
-                        type: Number,
+                    type: Position,
+                    required() {
+                        return this.type !== 'FILTER';
                     },
                 },
                 text: {
