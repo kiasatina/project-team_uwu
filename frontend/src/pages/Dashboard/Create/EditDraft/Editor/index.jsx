@@ -10,94 +10,46 @@ import {
     Image,
     Input,
 } from '@chakra-ui/core';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Layer, Stage } from 'react-konva';
+import React, { useCallback, useRef, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { stickers } from '../../../../assets';
-import { VideoLayer, PageContent } from '../../../../components';
-import { UPDATE_POST, GET_DRAFT } from '../../../../graphql/post';
-import { fetchGraph, printError, useGraph } from '../../../../utils';
+import { stickers } from '../../../../../assets';
+import { PageContent, DisplayPost } from '../../../../../components';
+import { UPDATE_POST, GET_DRAFT } from '../../../../../graphql/post';
+import { fetchGraph, printError, useGraph } from '../../../../../utils';
 import './index.scss';
 
-// Temp shim
-export const Editor = () => {
-    const { draft } = useParams();
-    const { data, loading } = useGraph(GET_DRAFT, {
-        variables: { id: draft },
-        pipe: ['getPosts', 0],
-    });
-
-    return (
-        <PageContent loading={loading}>
-            <EditDraftT draft={data} onExit={() => {}} />
-        </PageContent>
-    );
-};
+const filters = [
+    'Grayscale',
+    'Sepia',
+    'Saturate',
+    'Invert',
+    'Brightness',
+    'Blur',
+];
 
 const EditDraftT = ({ draft, onExit }) => {
     const [playing, setIsPlaying] = useState(true);
-    const [, setIsDragging] = useState(false);
     const [size, setSize] = useState({ width: 0, height: 0 });
     const [layers, setLayers] = useState(draft.layers);
-    const textInput = useRef();
+    const [text, setText] = useState('');
+    const history = useHistory();
     const videoRef = useRef();
 
-    const filters = [
-        'Grayscale',
-        'Sepia',
-        'Saturate',
-        'Invert',
-        'Brightness',
-        'Blur',
-    ];
-
-    // Need this to get the size of the video and set Stage dimensions accordingly
-    const videoElement = useMemo(() => {
-        const video = document.createElement('video');
-        video.src = draft.asset.src;
-        return video;
-    }, [draft]);
-
-    useEffect(() => {
-        const onload = () => {
-            setSize({
-                width: 500,
-                height:
-                    (videoElement.videoHeight / videoElement.videoWidth) * 500,
-            });
-        };
-        videoElement.addEventListener('loadedmetadata', onload);
-        return () => {
-            videoElement.removeEventListener('loadedmetadata', onload);
-        };
-    }, [videoElement]);
-
-    // Add filter to video if initial layers had one in them
-    useEffect(() => {
-        draft.layers
-            .filter(l => l.type === 'FILTER')
-            .forEach(layer => {
-                videoRef.current.style.filter =
-                    layer.filter + `(${getFilterNum(layer.filter)})`;
-            });
-        return () => {};
-    }, [draft]);
-
-    async function saveAndPublish(publish) {
+    const saveAndPublish = async publish => {
         try {
             // No sticker layers until uploading is a thing
             await fetchGraph(UPDATE_POST, {
                 ...draft,
-                layers: layers.filter(l => l.type !== 'STICKER'),
-                draft: publish ? false : true,
+                layers,
+                draft: !publish,
             });
-            onExit();
+            history.push('/create');
         } catch (err) {
             toast.error(printError(err.message));
             console.error(err);
         }
-    }
+    };
 
     const onPlay = () => {
         playing ? videoRef.current.pause() : videoRef.current.play();
@@ -105,59 +57,33 @@ const EditDraftT = ({ draft, onExit }) => {
     };
 
     // Uses default CSS filters for the filters (one only)
-    function filterVideo(filter) {
-        videoRef.current.style.filter = filter + `(${getFilterNum(filter)})`;
-        let newLayers = layers.filter(layer => layer.type !== 'FILTER');
-        let layer = {
+    const filterVideo = filter => {
+        const newLayers = layers.filter(layer => layer.type !== 'FILTER');
+        const layer = {
             type: 'FILTER',
             filter: filter,
-            position: {
-                x: 0,
-                y: 0,
-            },
         };
         setLayers([...newLayers, layer]);
-    }
-
-    // Gives back appropriate scale for the specified
-    function getFilterNum(filter) {
-        let num;
-        switch (filter.toLowerCase()) {
-            case 'saturate':
-                num = '5';
-                break;
-            case 'brightness':
-                num = '2';
-                break;
-            case 'blur':
-                num = '5px';
-                break;
-            default:
-                num = '1';
-                break;
-        }
-        return num;
-    }
+    };
 
     const addTextLayer = () => {
-        let text = textInput.current.value;
-        let layer = {
+        const layer = {
             type: 'TEXT',
-            text: text,
+            text,
             position: {
                 x: 0.5,
                 y: 0.5,
             },
         };
-        textInput.current.value = '';
+        setText('');
         setLayers([...layers, layer]);
     };
 
-    function addStickerLayer(index) {
-        let layer = {
+    const addStickerLayer = index => {
+        const layer = {
             type: 'STICKER',
-            asset: {
-                src: stickers[index],
+            sticker: {
+                href: stickers[index],
             },
             position: {
                 x: 0.5,
@@ -165,15 +91,23 @@ const EditDraftT = ({ draft, onExit }) => {
             },
         };
         setLayers([...layers, layer]);
-    }
+    };
 
     // For the onDragEnd event
-    function moveLayer(layerElement, index) {
-        let newLayers = [...layers];
-        newLayers[index].position.x = layerElement.x() / size.width;
-        newLayers[index].position.y = layerElement.y() / size.height;
-        setLayers(newLayers);
-    }
+    const moveLayer = useCallback(
+        (layerElement, index) => {
+            const newLayers = [...layers];
+            newLayers[index] = {
+                ...newLayers[index],
+                position: {
+                    x: layerElement.x() / size.width,
+                    y: layerElement.y() / size.height,
+                },
+            };
+            setLayers(newLayers);
+        },
+        [layers, size],
+    );
 
     return (
         <>
@@ -182,41 +116,17 @@ const EditDraftT = ({ draft, onExit }) => {
                 direction='column'
                 align='center'
                 backgroundColor='white'
-                p='4'
+                p='8'
                 rounded='md'
             >
-                <Box className='editor__video-holder'>
-                    <video
-                        src={draft.asset.src}
-                        loop={true}
-                        autoPlay={true}
-                        ref={videoRef}
-                    ></video>
-
-                    <Stage
-                        width={size.width}
-                        height={size.height}
-                        className='editor__video-holder__layers'
-                    >
-                        <Layer>
-                            {layers.map((layer, index) => (
-                                <VideoLayer
-                                    key={index}
-                                    layer={layer}
-                                    size={size}
-                                    onDragStart={() => {
-                                        setIsDragging(true);
-                                    }}
-                                    onDragEnd={e => {
-                                        setIsDragging(false);
-                                        moveLayer(e.target, index);
-                                    }}
-                                ></VideoLayer>
-                            ))}
-                        </Layer>
-                    </Stage>
-                </Box>
-
+                <DisplayPost
+                    size={size}
+                    setSize={setSize}
+                    videoRef={videoRef}
+                    video={draft.asset.src}
+                    layers={layers}
+                    drag={moveLayer}
+                />
                 <Button onClick={onPlay} mt='3'>
                     {playing ? 'Pause' : 'Play'}
                 </Button>
@@ -233,11 +143,19 @@ const EditDraftT = ({ draft, onExit }) => {
                             <AccordionPanel p={4}>
                                 <Flex direction='row'>
                                     <Input
-                                        ref={textInput}
+                                        onChange={({ target }) =>
+                                            setText(target.value)
+                                        }
                                         placeholder='Enter your text'
+                                        value={text}
                                         mr={2}
                                     />
-                                    <Button onClick={addTextLayer}>Add</Button>
+                                    <Button
+                                        disabled={!text}
+                                        onClick={addTextLayer}
+                                    >
+                                        Add
+                                    </Button>
                                 </Flex>
                             </AccordionPanel>
                         </AccordionItem>
@@ -337,5 +255,27 @@ const EditDraftT = ({ draft, onExit }) => {
                 </Button>
             </Flex>
         </>
+    );
+};
+
+export const Editor = () => {
+    const { draft } = useParams();
+    const history = useHistory();
+
+    const onError = useCallback(() => {
+        toast.error('Unable to fetch draft');
+        history.push('/create');
+    }, [history]);
+
+    const { data, loading } = useGraph(GET_DRAFT, {
+        variables: { id: draft },
+        pipe: ['getPosts', 0],
+        onError,
+    });
+
+    return (
+        <PageContent loading={loading}>
+            <EditDraftT draft={data} onExit={() => {}} />
+        </PageContent>
     );
 };

@@ -29,6 +29,21 @@ export const GET_DRAFTS = `
                 asset {
                     src
                 }
+                layers {
+                    type
+                    filter
+                    sticker {
+                        href
+                        asset {
+                            src
+                        }
+                    }
+                    position {
+                        x
+                        y
+                    }
+                    text
+                }
                 title
                 updatedAt
             }
@@ -38,21 +53,21 @@ export const GET_DRAFTS = `
 
 export const GET_DRAFT = `
     query getDraft($id: ID!) {
-        getPosts(_id: $id) {
+        getPosts(_id: $id, draft: true) {
             _id
             title
             description
             asset {
                 src
             }
-            audio {
-                src
-            }
             layers {
                 type
                 filter
-                asset {
-                    src
+                sticker {
+                    href
+                    asset {
+                        src
+                    }
                 }
                 position {
                     x

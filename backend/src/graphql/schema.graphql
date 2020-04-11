@@ -73,7 +73,6 @@ type PostLayer {
 
 "PostLayerPosition but for inputs"
 input PostLayerPositionInput {
-    rotation: Float!
     x: Float!
     y: Float!
 }

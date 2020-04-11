@@ -17,9 +17,6 @@ const Sticker = new mongoose.Schema({
 });
 
 const Position = new mongoose.Schema({
-    rotation: {
-        type: Number,
-    },
     x: {
         type: Number,
     },

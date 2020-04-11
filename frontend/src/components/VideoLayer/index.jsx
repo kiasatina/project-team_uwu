@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text } from 'react-konva';
 
-export const VideoLayer = ({ layer, size, onDragStart, onDragEnd }) => {
+export const VideoLayer = ({ layer, size, onDragEnd }) => {
     const [sticker, setSticker] = useState();
 
     // Relevant only if the layer is a sticker
     useEffect(() => {
+        let mounted = true;
         if (layer.type === 'STICKER') {
-            const onload = () => {
-                setSticker(newSticker);
-            };
             const newSticker = new window.Image();
-            newSticker.src = layer.asset.src;
-            newSticker.addEventListener('load', onload);
-
-            return () => {
-                newSticker.removeEventListener('load', onload);
+            newSticker.src = layer.sticker.href;
+            newSticker.onload = () => {
+                if (mounted) setSticker(newSticker);
             };
         }
+        return () => {
+            mounted = false;
+        };
     }, [layer]);
 
     if (layer.type === 'STICKER') {
@@ -26,10 +25,9 @@ export const VideoLayer = ({ layer, size, onDragStart, onDragEnd }) => {
                 image={sticker}
                 x={layer.position.x * size.width}
                 y={layer.position.y * size.height}
-                width={100}
-                height={100}
-                draggable
-                onDragStart={onDragStart}
+                width={size.width / 5}
+                height={size.height / 5}
+                draggable={!!onDragEnd}
                 onDragEnd={onDragEnd}
             />
         );
@@ -40,19 +38,18 @@ export const VideoLayer = ({ layer, size, onDragStart, onDragEnd }) => {
                 align='center'
                 verticalAlign='middle'
                 fill='white'
-                fontSize={24}
+                fontSize={size.width / 10}
                 fontStyle='bold'
                 fontFamily='Muli'
                 shadowColor='black'
                 shadowBlur={10}
                 x={layer.position.x * size.width}
                 y={layer.position.y * size.height}
-                draggable
-                onDragStart={onDragStart}
+                draggable={!!onDragEnd}
                 onDragEnd={onDragEnd}
-            ></Text>
+            />
         );
     } else {
-        return <></>;
+        return null;
     }
 };

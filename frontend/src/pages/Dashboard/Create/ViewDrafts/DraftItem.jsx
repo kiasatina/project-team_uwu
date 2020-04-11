@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, Heading, Badge, Stack, Button } from '@chakra-ui/core';
 import { Link } from 'react-router-dom';
 import { displayDate } from '../../../../utils';
+import { DisplayPost } from '../../../../components/DisplayPost';
 
-export const DraftItem = ({ _id, title, updatedAt, asset }) => {
-    const pause = ({ currentTarget }) => {
-        currentTarget.pause();
-        currentTarget.currentTime = 0;
-    };
-    const play = ({ currentTarget }) => currentTarget.play();
+export const DraftItem = ({ _id, title, layers, updatedAt, asset }) => {
+    const [size, setSize] = useState({ width: 0, height: 0 });
+    const videoRef = useRef();
 
     return (
         <Box rounded='md' overflow='hidden' backgroundColor='white'>
-            <video src={asset.src} loop onMouseOver={play} onMouseOut={pause} />
+            <DisplayPost
+                size={size}
+                setSize={setSize}
+                videoRef={videoRef}
+                video={asset.src}
+                layers={layers}
+            />
             <Stack padding='4'>
                 <Heading as='h2' size='md' isTruncated>
                     {title}

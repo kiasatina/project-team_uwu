@@ -115,7 +115,7 @@
 
 // Media queries (We are doing given size or less)
 @mixin media($size) {
-    @media (max-width: #{map-get($MEDIA, $size)}) {
+    @media (max-width: #{$size}) {
         @content;
     }
 }

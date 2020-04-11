@@ -27,11 +27,6 @@ const routes = [
         children: 'Stream',
         to: '/stream',
     },
-    {
-        children: 'Stickers',
-        exact: true,
-        to: '/stickers',
-    },
 ];
 
 const hydrateRoute = (route, params) =>
