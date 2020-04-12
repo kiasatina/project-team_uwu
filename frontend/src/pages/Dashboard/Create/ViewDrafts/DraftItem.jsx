@@ -24,6 +24,7 @@ export const DraftItem = ({ _id, title, layers, updatedAt, asset }) => {
                 videoRef={videoRef}
                 video={asset.src}
                 layers={layers}
+                muted={true}
                 playing
             >
                 {layers.map((layer, i) => (

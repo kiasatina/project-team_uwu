@@ -26,6 +26,7 @@ export const DisplayPost = ({
     children,
     layerRef,
     videoRef,
+    muted = false,
     ...props
 }) => {
     const isFile = typeof video === 'string';
@@ -40,6 +41,7 @@ export const DisplayPost = ({
         element.src = isFile ? video : undefined;
         element.autoplay = true;
         element.loop = true;
+        element.muted = muted;
         return element;
     }, [video, isFile, videoRef]);
 

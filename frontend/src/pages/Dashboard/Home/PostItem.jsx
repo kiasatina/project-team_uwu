@@ -32,6 +32,7 @@ export const PostItem = ({
                 video={asset.src}
                 layers={layers}
                 playing={playing}
+                muted={true}
             >
                 {layers.map((layer, i) => (
                     <DisplayPostItem layer={layer} size={size} key={i} />
