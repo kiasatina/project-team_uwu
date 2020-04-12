@@ -14,7 +14,11 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Peer from 'simple-peer';
 import { stickers } from '../../../../assets';
-import { DisplayPost, PageContent } from '../../../../components';
+import {
+    DisplayPost,
+    PageContent,
+    DisplayPostItem,
+} from '../../../../components';
 import { socketEvents } from '../../../../utils';
 
 const filters = [
@@ -29,15 +33,9 @@ const filters = [
 export default ({ socket, data, info, dispatch }) => {
     const [stream, setStream] = useState();
     const [size, setSize] = useState({ width: 0, height: 0 });
-    const [layers, setLayers] = useState(Object.values(info.layers));
+    const layers = Object.values(info.layers);
     const [text, setText] = useState('');
     const videoRef = useRef();
-
-    console.log(data);
-
-    useEffect(() => {
-        console.log(info);
-    }, [info]);
 
     useEffect(() => {
         socket.current.once(socketEvents.START_PEER, () => {
@@ -57,11 +55,6 @@ export default ({ socket, data, info, dispatch }) => {
             });
         });
         socket.current.emit(socketEvents.JOIN);
-
-        socket.current.on(socketEvents.UPDATE_LAYER, ({ peer, data }) => {
-            console.log(peer);
-            console.log(data);
-        });
     }, [socket]);
 
     const setLayer = useCallback(
@@ -73,28 +66,47 @@ export default ({ socket, data, info, dispatch }) => {
 
     // Uses default CSS filters for the filters (one only)
     const setVideoFilter = filter => {
-        setLayer({
+        socket.current.emit(socketEvents.UPDATE_LAYER, {
             type: 'FILTER',
-            filter: filter,
+            filter,
+            position: {
+                x: 0,
+                y: 0,
+            },
         });
     };
 
     const setTextLayer = () => {
-        setText('');
-        setLayer({
+        socket.current.emit(socketEvents.UPDATE_LAYER, {
             type: 'TEXT',
             text,
+            position: {
+                x: 0,
+                y: 0,
+            },
         });
     };
 
     const setStickerLayer = index => {
-        setLayer({
+        socket.current.emit(socketEvents.UPDATE_LAYER, {
             type: 'STICKER',
             sticker: {
                 href: stickers[index],
             },
+            position: {
+                x: 0,
+                y: 0,
+            },
         });
     };
+
+    // For the onDragEnd event
+    const moveLayer = useCallback(
+        layer => {
+            socket.current.emit(socketEvents.UPDATE_LAYER, layer);
+        },
+        [socket],
+    );
 
     return (
         <>
@@ -105,9 +117,22 @@ export default ({ socket, data, info, dispatch }) => {
                         setSize={setSize}
                         videoRef={videoRef}
                         video={stream}
-                        playing={true}
+                        playing
                         layers={layers}
-                    />
+                    >
+                        {Object.entries(info.layers).map(([id, layer]) => (
+                            <DisplayPostItem
+                                drag={
+                                    id === socket.current.id
+                                        ? moveLayer
+                                        : undefined
+                                }
+                                layer={layer}
+                                size={size}
+                                key={id}
+                            />
+                        ))}
+                    </DisplayPost>
                     <Box w='80%' p={4}>
                         <Accordion allowToggle>
                             <AccordionItem>

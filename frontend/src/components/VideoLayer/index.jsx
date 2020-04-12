@@ -32,6 +32,7 @@ export const VideoLayer = ({ layer, size, onDragEnd }) => {
             />
         );
     } else if (layer.type === 'TEXT') {
+        console.log(size, 'WTF');
         return (
             <Text
                 text={layer.text}

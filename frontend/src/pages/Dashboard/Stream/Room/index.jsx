@@ -49,15 +49,7 @@ export default () => {
             dispatch(_info => ({
                 layers: {
                     ..._info.layers,
-                    [peer]: {
-                        ...data,
-                        position: _info.layers[peer].position
-                            ? _info.layers[peer].position
-                            : {
-                                  x: 0.5,
-                                  y: 0.5,
-                              },
-                    },
+                    [peer]: data,
                 },
             }));
         });

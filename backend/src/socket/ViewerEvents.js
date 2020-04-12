@@ -1,7 +1,7 @@
 const { Livestream } = require('../models');
 const { JOIN, LEAVE, UPDATE_LAYER, PEER_RELAY } = require('./events');
 
-module.exports = (socket, rooms) => {
+module.exports = (socket, rooms, io) => {
     const { room, user } = socket;
 
     // Let people know joining
@@ -22,7 +22,7 @@ module.exports = (socket, rooms) => {
     // Relay layer updates
     socket.on(UPDATE_LAYER, data => {
         rooms[room].layers[socket.io] = data;
-        socket.to(room).emit(UPDATE_LAYER, {
+        io.to(room).emit(UPDATE_LAYER, {
             peer: socket.id,
             data,
         });

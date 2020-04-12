@@ -48,7 +48,7 @@ module.exports = app => {
 
         // Load in handlers
         const handlers = streamer ? streamerEvents : ViewerEvents;
-        handlers(socket, rooms);
+        handlers(socket, rooms, io);
     });
 
     return new Promise((resolve, reject) => {

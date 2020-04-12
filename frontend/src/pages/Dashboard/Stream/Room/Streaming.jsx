@@ -1,18 +1,17 @@
 import { Stack } from '@chakra-ui/core';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Peer from 'simple-peer';
-import { DisplayPost, PageContent } from '../../../../components';
+import {
+    DisplayPost,
+    DisplayPostItem,
+    PageContent,
+} from '../../../../components';
 import { getStream, socketEvents } from '../../../../utils';
 
 export default ({ socket, data, info }) => {
     const [stream, setStream] = useState();
-    const [layers, setLayers] = useState([]);
     const [size, setSize] = useState({ width: 0, height: 0 });
     const videoRef = useRef();
-
-    useEffect(() => {
-        setLayers(Object.values(info.layers));
-    }, [info]);
 
     useEffect(() => {
         (async () => {
@@ -50,30 +49,6 @@ export default ({ socket, data, info }) => {
         })();
     }, [socket]);
 
-    const setLayer = useCallback(
-        layer => {
-            socket.current.emit(socketEvents.UPDATE_LAYER, layer);
-        },
-        [socket],
-    );
-
-    // For the onDragEnd event
-    const moveLayer = useCallback(
-        (layerElement, index) => {
-            const newLayers = [...layers];
-            newLayers[index] = {
-                ...newLayers[index],
-                position: {
-                    x: layerElement.x() / size.width,
-                    y: layerElement.y() / size.height,
-                },
-            };
-            setLayer(newLayers[index]);
-            setLayers(newLayers);
-        },
-        [layers, size],
-    );
-
     return (
         <>
             <PageContent label={data.title} loading={!stream}>
@@ -83,10 +58,17 @@ export default ({ socket, data, info }) => {
                         setSize={setSize}
                         videoRef={videoRef}
                         video={stream}
-                        playing={true}
-                        layers={layers}
-                        drag={moveLayer}
-                    />
+                        playing
+                        layers={Object.values(info.layers)}
+                    >
+                        {Object.entries(info.layers).map(([id, layer]) => (
+                            <DisplayPostItem
+                                layer={layer}
+                                size={size}
+                                key={id}
+                            />
+                        ))}
+                    </DisplayPost>
                 </Stack>
             </PageContent>
         </>
