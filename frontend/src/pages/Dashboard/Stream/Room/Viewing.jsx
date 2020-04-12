@@ -31,11 +31,12 @@ const filters = [
     'Blur',
 ];
 
-export default ({ socket, data, info, dispatch }) => {
+export default ({ socket, data, info }) => {
+    const layers = Object.values(info.layers);
     const [stream, setStream] = useState();
     const [size, setSize] = useState({ width: 0, height: 0 });
-    const layers = Object.values(info.layers);
     const [text, setText] = useState('');
+    const [layer, setLayer] = useState();
     const videoRef = useRef();
 
     useEffect(() => {
@@ -58,55 +59,64 @@ export default ({ socket, data, info, dispatch }) => {
         socket.current.emit(socketEvents.JOIN);
     }, [socket]);
 
-    const setLayer = useCallback(
-        layer => {
-            socket.current.emit(socketEvents.UPDATE_LAYER, layer);
-        },
-        [socket],
-    );
-
     // Uses default CSS filters for the filters (one only)
     const setVideoFilter = filter => {
-        socket.current.emit(socketEvents.UPDATE_LAYER, {
+        const newLayer = {
             type: 'FILTER',
             filter,
             position: {
-                x: 0,
-                y: 0,
+                x: 0.5,
+                y: 0.5,
             },
-        });
+        };
+        socket.current.emit(socketEvents.UPDATE_LAYER, newLayer);
+        setLayer(newLayer);
     };
 
     const setTextLayer = () => {
-        socket.current.emit(socketEvents.UPDATE_LAYER, {
+        const newLayer = {
             type: 'TEXT',
             text,
             position: {
-                x: 0,
-                y: 0,
+                x: 0.5,
+                y: 0.5,
             },
-        });
+        };
+        socket.current.emit(socketEvents.UPDATE_LAYER, newLayer);
+        setLayer(newLayer);
     };
 
     const setStickerLayer = index => {
-        socket.current.emit(socketEvents.UPDATE_LAYER, {
+        let newLayer = {
             type: 'STICKER',
             sticker: {
                 href: stickers[index],
             },
             position: {
-                x: 0,
-                y: 0,
+                x: 0.5,
+                y: 0.5,
             },
-        });
+        };
+        socket.current.emit(socketEvents.UPDATE_LAYER, newLayer);
+        setLayer(newLayer);
     };
 
     // For the onDragEnd event
     const moveLayer = useCallback(
-        layer => {
-            socket.current.emit(socketEvents.UPDATE_LAYER, layer);
+        layerElement => {
+            console.log(layerElement);
+            console.log(layer);
+            const newLayer = {
+                ...layer,
+                position: {
+                    x: layerElement.x() / size.width,
+                    y: layerElement.y() / size.height,
+                },
+            };
+            socket.current.emit(socketEvents.UPDATE_LAYER, newLayer);
+            setLayer(newLayer);
         },
-        [socket],
+        [socket, layer, size],
     );
 
     return (
@@ -125,7 +135,9 @@ export default ({ socket, data, info, dispatch }) => {
                             <DisplayPostItem
                                 drag={
                                     id === socket.current.id
-                                        ? moveLayer
+                                        ? e => {
+                                              moveLayer(e.target);
+                                          }
                                         : undefined
                                 }
                                 layer={layer}

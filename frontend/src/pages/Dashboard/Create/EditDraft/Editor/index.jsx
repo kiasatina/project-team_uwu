@@ -15,7 +15,11 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { stickers } from '../../../../../assets';
-import { PageContent, DisplayPost } from '../../../../../components';
+import {
+    PageContent,
+    DisplayPost,
+    DisplayPostItem,
+} from '../../../../../components';
 import { UPDATE_POST, GET_DRAFT } from '../../../../../graphql/post';
 import { fetchGraph, printError, useGraph } from '../../../../../utils';
 import './index.scss';
@@ -116,7 +120,18 @@ const EditDraftT = ({ draft, onExit }) => {
                     playing={playing}
                     layers={layers}
                     drag={moveLayer}
-                />
+                >
+                    {layers.map((layer, index) => (
+                        <DisplayPostItem
+                            key={index}
+                            layer={layer}
+                            size={size}
+                            drag={e => {
+                                moveLayer(e.target, index);
+                            }}
+                        />
+                    ))}
+                </DisplayPost>
                 <Button
                     onClick={() => {
                         setIsPlaying(!playing);
