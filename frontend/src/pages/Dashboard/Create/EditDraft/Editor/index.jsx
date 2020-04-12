@@ -279,7 +279,12 @@ export const Editor = () => {
 
     return (
         <PageContent className='draft' loading={loading}>
-            <EditDraftT draft={data} onExit={() => {}} />
+            <EditDraftT
+                draft={data}
+                onExit={() => {
+                    history.push('/create');
+                }}
+            />
         </PageContent>
     );
 };
