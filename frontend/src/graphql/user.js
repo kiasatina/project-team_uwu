@@ -37,6 +37,9 @@ export const GET_ME = `
             profile_image {
                 src
             }
+            following {
+                _id
+            }
         }
     }
 `;
@@ -100,6 +103,39 @@ export const GET_USER = `
             profile_image {
                 src
             }
+        }
+    }
+`;
+
+export const GET_USER_POSTS = `
+    query getUserPosts($user: ID!) {
+        getPosts(user: $user) {
+            _id
+            user {
+                _id
+                username
+                profile_image {
+                    src
+                }
+            }
+            asset {
+                src
+            }
+            title
+            description
+            layers {
+                type
+                filter
+                sticker {
+                    href
+                }
+                position {
+                    x
+                    y
+                }
+                text
+            }
+            updatedAt
         }
     }
 `;

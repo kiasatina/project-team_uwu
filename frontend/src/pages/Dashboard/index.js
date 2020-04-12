@@ -19,6 +19,6 @@ export default [
     {
         component: React.lazy(() => import('./Profile')),
         exact: true,
-        path: '/profile/:userId?',
+        path: '/profile/:userId?/:post?',
     },
 ];
