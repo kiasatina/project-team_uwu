@@ -15,8 +15,8 @@ import {
 } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { UserContext, fetchGraph, printError } from '../../../utils';
-import { UPDATE_PROFILE } from '../../../graphql/user';
+import { UserContext, fetchGraph, printError } from '../../../../utils';
+import { UPDATE_PROFILE } from '../../../../graphql/user';
 
 export const EditProfile = ({ isOpen, onClose }) => {
     const { user, dispatch } = useContext(UserContext);

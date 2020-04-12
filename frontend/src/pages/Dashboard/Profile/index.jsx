@@ -1,43 +1,20 @@
 import React, { useContext } from 'react';
-import {
-    Flex,
-    Heading,
-    Stack,
-    Tag,
-    Text,
-    IconButton,
-    Tooltip,
-    useDisclosure,
-} from '@chakra-ui/core';
-import { Loading, PageContent } from '../../../components';
 import { UserContext } from '../../../utils';
-import { EditProfile } from './EditProfile';
-import { UploadImage } from './UploadImage';
-import './index.scss';
+import { Route, Switch, Redirect, useParams } from 'react-router-dom';
+import { MyProfile } from './MyProfile';
+import { UserProfile } from './UserProfile';
 
 export default () => {
-    const { user = {}, loading } = useContext(UserContext);
-    const { onOpen, isOpen, onClose } = useDisclosure();
+    const { userId, post } = useParams();
+    const { user = {} } = useContext(UserContext);
+    if (!post && user._id === userId) {
+        return <Redirect to='/profile' />;
+    }
+
     return (
-        <Loading loading={loading}>
-            <PageContent>
-                <Flex p='6' backgroundColor='white' rounded='md'>
-                    <UploadImage />
-                    <Flex mr='auto' direction='column' justifyContent='center'>
-                        <Heading size='xl'>{user.username}</Heading>
-                        {user.bio && <Text>{user.bio}</Text>}
-                        <Stack mt='2' isInline>
-                            <Tag>{user.following_count} Following</Tag>
-                            <Tag>{user.followers_count} Followers</Tag>
-                            <Tag>{user.posts_count} Posts</Tag>
-                        </Stack>
-                    </Flex>
-                    <Tooltip label='Edit Profile' placement='left'>
-                        <IconButton onClick={onOpen} icon='edit' />
-                    </Tooltip>
-                </Flex>
-            </PageContent>
-            <EditProfile isOpen={isOpen} onClose={onClose} />
-        </Loading>
+        <Switch>
+            <Route path='/profile' exact component={MyProfile} />
+            <Route path='/profile/:userId' component={UserProfile} />
+        </Switch>
     );
 };

@@ -21,10 +21,12 @@ import { Share } from './Share';
 import { Download } from './Download';
 
 export const PostOverlay = () => {
-    const { post } = useParams();
+    const { userId, post } = useParams();
     const history = useHistory();
     const [size, setSize] = useState({ width: 0, height: 0 });
-    const onError = useCallback(() => history.push('/home'), [history]);
+    const onError = useCallback(() => {
+        userId ? history.push('/profile/' + userId) : history.push('/home');
+    }, [history, userId]);
     const { data, loading } = useGraph(GET_POST, {
         pipe: ['getPosts', 0],
         variables: { id: post },

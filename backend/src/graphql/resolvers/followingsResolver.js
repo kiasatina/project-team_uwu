@@ -1,21 +1,24 @@
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 const { Follow } = require('../../models');
 
-module.exports = ({ following, limit, page }) => {
+module.exports = ({ follower, limit, page }) => {
     return new Promise(resolve => {
         Follow.aggregate([
-            { $match: { following } },
+            { $match: { follower: ObjectId(follower) } },
             { $skip: page * limit },
             { $limit: limit },
             {
                 $lookup: {
                     from: 'users',
-                    localField: 'follower',
+                    localField: 'following',
                     foreignField: '_id',
-                    as: 'followers',
+                    as: 'following',
                 },
             },
         ]).exec((err, [result = {}]) => {
-            resolve(result.followers || []);
+            resolve(result.following || []);
         });
     });
 };

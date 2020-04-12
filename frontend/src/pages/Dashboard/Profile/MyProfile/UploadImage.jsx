@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
 import { Avatar, Box, Spinner } from '@chakra-ui/core';
+import React, { useContext, useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
-
-import { UserContext, fetchGraph, printError } from '../../../utils';
-import { UPDATE_PICTURE } from '../../../graphql/user';
 import { toast } from 'react-toastify';
+import { UPDATE_PICTURE } from '../../../../graphql/user';
+import { fetchGraph, printError, UserContext } from '../../../../utils';
 
 export const UploadImage = () => {
     const { user, dispatch } = useContext(UserContext);

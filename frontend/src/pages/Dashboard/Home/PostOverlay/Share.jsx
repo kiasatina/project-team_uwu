@@ -21,9 +21,9 @@ export const Share = ({ ...props }) => {
 
     useEffect(() => {
         if (isOpen) {
-            window.setImmediate(() => {
+            window.setTimeout(() => {
                 setSize(ref.current.clientWidth);
-            });
+            }, 0);
         }
     }, [isOpen]);
 

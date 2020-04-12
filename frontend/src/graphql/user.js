@@ -37,6 +37,9 @@ export const GET_ME = `
             profile_image {
                 src
             }
+            following {
+                _id
+            }
         }
     }
 `;
@@ -83,6 +86,56 @@ export const UPDATE_PICTURE = `
             profile_image {
                 src
             }
+        }
+    }
+`;
+
+export const GET_USER = `
+    query getUser($id: ID!) {
+        getUsers(_id: $id, limit: 1) {
+            _id
+            bio
+            email
+            username
+            followers_count
+            following_count
+            posts_count
+            profile_image {
+                src
+            }
+        }
+    }
+`;
+
+export const GET_USER_POSTS = `
+    query getUserPosts($user: ID!) {
+        getPosts(user: $user) {
+            _id
+            user {
+                _id
+                username
+                profile_image {
+                    src
+                }
+            }
+            asset {
+                src
+            }
+            title
+            description
+            layers {
+                type
+                filter
+                sticker {
+                    href
+                }
+                position {
+                    x
+                    y
+                }
+                text
+            }
+            updatedAt
         }
     }
 `;

@@ -104,8 +104,6 @@ export default ({ socket, data, info }) => {
     // For the onDragEnd event
     const moveLayer = useCallback(
         layerElement => {
-            console.log(layerElement);
-            console.log(layer);
             const newLayer = {
                 ...layer,
                 position: {
