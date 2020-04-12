@@ -19,7 +19,7 @@ import { EditProfile } from './EditProfile';
 import { UploadImage } from './UploadImage';
 
 export const MyProfile = () => {
-    const { user = {}, loading } = useContext(UserContext);
+    const { user, loading } = useContext(UserContext);
     const { onOpen, isOpen, onClose } = useDisclosure();
 
     const posts = useGraph(GET_USER_POSTS, {

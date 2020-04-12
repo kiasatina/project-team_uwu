@@ -11,18 +11,25 @@ import {
 } from '@chakra-ui/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { Route, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Loading, PageContent } from '../../../../components';
+import { FOLLOW, UNFOLLOW } from '../../../../graphql/follow';
 import { GET_USER, GET_USER_POSTS } from '../../../../graphql/user';
-import { useGraph, UserContext } from '../../../../utils';
+import {
+    fetchGraph,
+    printError,
+    useGraph,
+    UserContext,
+} from '../../../../utils';
 import { PostItem } from '../../Home/PostItem';
 import { PostOverlay } from '../../Home/PostOverlay';
 import '../index.scss';
 
 export const UserProfile = () => {
-    const { user = {} } = useContext(UserContext);
+    const { user = {}, loading, refetch } = useContext(UserContext);
     const { userId } = useParams();
     const [following, setFollowing] = useState(false);
-    const { data, loading } = useGraph(GET_USER, {
+    const { data } = useGraph(GET_USER, {
         variables: { id: userId },
         pipe: ['getUsers', 0],
     });
@@ -33,13 +40,27 @@ export const UserProfile = () => {
     });
 
     useEffect(() => {
-        user?.following.find(u => u._id === userId)
+        user.following?.find(u => u._id === userId)
             ? setFollowing(true)
             : setFollowing(false);
     }, [user, userId]);
 
-    const follow = () => {
-        console.log('hi');
+    const follow = async () => {
+        try {
+            if (following) {
+                await fetchGraph(UNFOLLOW, { id: userId });
+                data.followers_count--;
+                toast.success('User unfollowed');
+            } else {
+                await fetchGraph(FOLLOW, { id: userId });
+                data.followers_count++;
+                toast.success('User followed');
+            }
+            refetch();
+        } catch (err) {
+            toast.error(printError(err.message));
+            console.error(err);
+        }
     };
 
     return (
