@@ -3,6 +3,12 @@ import {
     Flex,
     FormControl,
     FormErrorMessage,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalBody,
+    ModalHeader,
+    ModalFooter,
     FormLabel,
     Heading,
     Input,
@@ -12,7 +18,7 @@ import {
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { Sidenav, Viewer } from '../../../../../components';
+import { Viewer } from '../../../../../components';
 import { CREATE_POST } from '../../../../../graphql/post';
 import {
     fetchGraph,
@@ -22,7 +28,7 @@ import {
 } from '../../../../../utils';
 import './index.scss';
 
-export const Create = ({ refetch }) => {
+export const Create = ({ onClose, isOpen, refetch }) => {
     const { reset, handleSubmit, register, errors, formState } = useForm({
         mode: 'onChange',
     });
@@ -46,6 +52,7 @@ export const Create = ({ refetch }) => {
         }
 
         setAsset(undefined);
+        onClose();
         reset();
     };
 
@@ -83,68 +90,88 @@ export const Create = ({ refetch }) => {
     }, []);
 
     return (
-        <Sidenav padded>
-            <Heading as='h2' size='md'>
-                Create a Draft Post
-            </Heading>
-            <Text mb='4'>
-                Get started by uploading a video and giving it some quality
-                content.
-            </Text>
-            <Viewer video={video} />
-            <Flex mt='2' mb='5' direction='column'>
-                <Button
-                    onClick={getRecording}
-                    disabled={recording}
-                    loading={recording}
-                >
-                    {recording ? 'Recording...' : 'Record'}
-                </Button>
-                <Button mt='1' variant='outline' disabled={recording}>
-                    <input
-                        onChange={upload}
-                        className='create__upload'
-                        accept='video/*'
-                        type='file'
-                    />
-                    Upload Video
-                </Button>
-            </Flex>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <FormControl mb='2' isInvalid={errors.title} isRequired>
-                    <FormLabel htmlFor='title'>Title of Post</FormLabel>
-                    <Input
-                        ref={register({
-                            required: 'Please provide a title',
-                        })}
-                        placeholder='e.g. UwU on your OwO'
-                        name='title'
-                    />
-                    <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
-                </FormControl>
-                <FormControl mb='2' isInvalid={errors.description} isRequired>
-                    <FormLabel htmlFor='description'>Description</FormLabel>
-                    <Textarea
-                        ref={register({
-                            required: 'Please provide a description',
-                        })}
-                        placeholder='e.g. Best UwU in the world OwO'
-                        name='description'
-                    />
-                    <FormErrorMessage>
-                        {errors.description?.message}
-                    </FormErrorMessage>
-                </FormControl>
-                <Flex mb='5' direction='column' alignItems='stretch'>
+        <Modal scrollBehavior='inside' isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent as='form' onSubmit={handleSubmit(onSubmit)}>
+                <ModalHeader>
+                    <Heading as='h2' size='md'>
+                        Create a Draft Post
+                    </Heading>
+                    <Text fontSize='sm' color='gray.500'>
+                        Get started by uploading a video and giving it some
+                        quality content.
+                    </Text>
+                </ModalHeader>
+                <ModalBody>
+                    <Viewer video={video} />
+                    <Flex mt='2' mb='5' direction='column'>
+                        <Button
+                            onClick={getRecording}
+                            disabled={recording}
+                            loading={recording}
+                        >
+                            {recording ? 'Recording...' : 'Record'}
+                        </Button>
+                        <Button mt='1' variant='outline' disabled={recording}>
+                            <input
+                                onChange={upload}
+                                className='create__upload'
+                                accept='video/*'
+                                type='file'
+                            />
+                            Upload Video
+                        </Button>
+                    </Flex>
+                    <FormControl mb='2' isInvalid={errors.title} isRequired>
+                        <FormLabel htmlFor='title'>Title of Post</FormLabel>
+                        <Input
+                            ref={register({
+                                required: 'Please provide a title',
+                            })}
+                            placeholder='e.g. UwU on your OwO'
+                            name='title'
+                        />
+                        <FormErrorMessage>
+                            {errors.title?.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                    <FormControl
+                        mb='2'
+                        isInvalid={errors.description}
+                        isRequired
+                    >
+                        <FormLabel htmlFor='description'>Description</FormLabel>
+                        <Textarea
+                            ref={register({
+                                required: 'Please provide a description',
+                            })}
+                            placeholder='e.g. Best UwU in the world OwO'
+                            name='description'
+                        />
+                        <FormErrorMessage>
+                            {errors.description?.message}
+                        </FormErrorMessage>
+                    </FormControl>
+                </ModalBody>
+                <ModalFooter flexDirection='column'>
                     <Button
                         loading={formState.isSubmitting}
                         disabled={!formState.isValid || !asset}
+                        width='100%'
                         type='submit'
                     >
                         Create Post
                     </Button>
-                </Flex>
-            </form>
-        </Sidenav>
+                    <Button
+                        onClick={onClose}
+                        variant='outline'
+                        width='100%'
+                        mt='1'
+                    >
+                        Cancel
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     );
 };

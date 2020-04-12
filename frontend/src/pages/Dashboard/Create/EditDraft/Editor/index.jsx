@@ -55,8 +55,12 @@ const EditDraftT = ({ draft, onExit }) => {
                 layers,
                 draft: !publish,
             });
-            if (publish) refetch();
-            history.push('/create');
+            if (publish) {
+                history.push('/create');
+                toast.success('Post has been created');
+            } else {
+                toast.success('Draft has been saved');
+            }
         } catch (err) {
             toast.error(printError(err.message));
             console.error(err);

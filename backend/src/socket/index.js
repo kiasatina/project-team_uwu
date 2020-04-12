@@ -12,7 +12,7 @@ module.exports = app => {
     const io = socketIo(server);
 
     // Do auth
-    authentication(io);
+    authentication(io, rooms);
 
     // Handle connection
     io.on('connection', socket => {

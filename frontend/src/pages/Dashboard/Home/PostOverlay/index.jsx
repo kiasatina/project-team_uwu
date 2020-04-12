@@ -13,7 +13,7 @@ import {
     Badge,
     Button,
 } from '@chakra-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, Link } from 'react-router-dom';
 import { Loading, DisplayPost, DisplayPostItem } from '../../../../components';
 import { useGraph, displayDate } from '../../../../utils';
 import { GET_POST } from '../../../../graphql/home';
@@ -59,6 +59,9 @@ export const PostOverlay = () => {
                             <Avatar
                                 name={data.user?.username}
                                 src={data.user?.profile_image?.src}
+                                to={`/profile/${data.user?._id}`}
+                                target='_blank'
+                                as={Link}
                             />
                             <Stack>
                                 <Heading as='h1' size='md'>

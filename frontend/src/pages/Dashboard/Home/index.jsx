@@ -1,5 +1,5 @@
 import React from 'react';
-import { SimpleGrid, Text, Button, Flex } from '@chakra-ui/core';
+import { SimpleGrid, Text } from '@chakra-ui/core';
 import { PageContent } from '../../../components';
 import { useGraph } from '../../../utils';
 import { GET_POSTS } from '../../../graphql/home';

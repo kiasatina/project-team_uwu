@@ -49,7 +49,6 @@ export const useGraph = (query, options = {}) => {
 
         (async () => {
             if (mounted) {
-                _dispatch({ loading: true });
                 try {
                     const data = await fetchGraph(query, store.variables);
                     if (mounted) {
@@ -70,10 +69,11 @@ export const useGraph = (query, options = {}) => {
     }, [query, onError, store.variables, store.pipe]);
 
     const refetch = useCallback(
-        config => {
+        (config = {}) => {
             const {
                 initState = store.data,
                 variables = store.variables,
+                setLoading = false,
             } = config;
             const data = Array.isArray(initState)
                 ? [...initState]
@@ -82,7 +82,7 @@ export const useGraph = (query, options = {}) => {
                 : initState;
             _dispatch({
                 variables: { ...variables },
-                loading: true,
+                loading: setLoading,
                 data,
             });
         },

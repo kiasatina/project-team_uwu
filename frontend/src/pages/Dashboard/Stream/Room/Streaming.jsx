@@ -1,12 +1,21 @@
-import { Stack } from '@chakra-ui/core';
+import {
+    Stack,
+    Stat,
+    StatLabel,
+    StatNumber,
+    StatHelpText,
+    Button,
+} from '@chakra-ui/core';
 import React, { useEffect, useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Peer from 'simple-peer';
 import {
     DisplayPost,
     DisplayPostItem,
     PageContent,
 } from '../../../../components';
-import { getStream, socketEvents } from '../../../../utils';
+import { getStream, socketEvents, displayDate } from '../../../../utils';
 
 export default ({ socket, data, info }) => {
     const [stream, setStream] = useState();
@@ -18,7 +27,8 @@ export default ({ socket, data, info }) => {
             const stream = await getStream();
             const peers = new Map();
 
-            socket.current.on(socketEvents.LEAVE, ({ peer }) => {
+            socket.current.on(socketEvents.LEAVE, ({ peer, username }) => {
+                toast(`${username} has left the stream!`);
                 const _peer = peers.get(peer);
                 if (_peer) {
                     peers.delete(peer);
@@ -26,7 +36,8 @@ export default ({ socket, data, info }) => {
                 }
             });
 
-            socket.current.on(socketEvents.JOIN, ({ peer }) => {
+            socket.current.on(socketEvents.JOIN, ({ peer, username }) => {
+                toast(`${username} has joined the stream!`);
                 const _peer = new Peer({ trickle: true, stream });
                 peers.set(peer, _peer);
 
@@ -51,8 +62,18 @@ export default ({ socket, data, info }) => {
 
     return (
         <>
-            <PageContent label={data.title} loading={!stream}>
-                <Stack rounded='md' background='white' p='4' mb='20'>
+            <PageContent loading={!stream}>
+                <Stack maxW='600px' rounded='md' background='white' p='4'>
+                    <Stat mb='4'>
+                        <StatLabel fontWeight='bold'>Total Viewers</StatLabel>
+                        <StatNumber>
+                            {Object.values(info.viewers).length}
+                        </StatNumber>
+                        <StatHelpText>
+                            Updated at{' '}
+                            {displayDate(new Date(), { showDate: false })}
+                        </StatHelpText>
+                    </Stat>
                     <DisplayPost
                         size={size}
                         setSize={setSize}
@@ -69,6 +90,9 @@ export default ({ socket, data, info }) => {
                             />
                         ))}
                     </DisplayPost>
+                    <Button as={Link} width='100%' mt='3' to='/stream'>
+                        End Stream
+                    </Button>
                 </Stack>
             </PageContent>
         </>

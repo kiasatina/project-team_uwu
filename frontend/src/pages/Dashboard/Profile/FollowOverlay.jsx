@@ -7,6 +7,8 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    ModalFooter,
+    Button,
     Stack,
     Text,
 } from '@chakra-ui/core';
@@ -34,7 +36,7 @@ export const FollowOverlay = ({ isOpen, onClose, seeFollowing }) => {
         seeFollowing
             ? setFollows(data.getFollowing)
             : setFollows(data.getFollowers);
-    }, [data]);
+    }, [data, seeFollowing]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -73,6 +75,15 @@ export const FollowOverlay = ({ isOpen, onClose, seeFollowing }) => {
                             )}
                         </Stack>
                     </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            width='100%'
+                            onClick={onClose}
+                            variant='outline'
+                        >
+                            Close
+                        </Button>
+                    </ModalFooter>
                 </Loading>
             </ModalContent>
         </Modal>

@@ -5,10 +5,11 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
+    IconButton,
     Box,
     Avatar,
 } from '@chakra-ui/core';
-import { FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaBars } from 'react-icons/fa';
 import { logo } from '../../../assets';
 import { UserContext } from '../../../utils';
 import './index.scss';
@@ -60,6 +61,25 @@ export default () => {
                     </li>
                 ))}
             </ul>
+            <Menu>
+                <MenuButton
+                    my='1.08rem'
+                    className='nav__button'
+                    mr='4'
+                    as={IconButton}
+                    icon={FaBars}
+                />
+                <MenuList placement='bottom-end'>
+                    {routes.map(({ to, text, icon, ...route }) => (
+                        <MenuItem
+                            to={hydrateRoute(to, params)}
+                            as={NavLink}
+                            key={to}
+                            {...route}
+                        />
+                    ))}
+                </MenuList>
+            </Menu>
             <Menu>
                 <MenuButton>
                     <Avatar

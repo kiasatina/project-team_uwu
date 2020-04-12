@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useMemo } from 'react';
 import { Box } from '@chakra-ui/core';
 import { Layer, Stage, Image } from 'react-konva';
 import Konva from 'konva';
-import { useHistory } from 'react-router-dom';
 
 // Gives back appropriate scale for the specified
 const getFilterNum = filter => {
@@ -31,7 +30,6 @@ export const DisplayPost = ({
     ...props
 }) => {
     const isFile = typeof video === 'string';
-    const history = useHistory();
     const imageRef = useRef();
     const ref = useRef();
 

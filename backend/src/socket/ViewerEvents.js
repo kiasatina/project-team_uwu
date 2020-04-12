@@ -31,8 +31,9 @@ module.exports = (socket, rooms, io) => {
     // On leave, broadcast and update count
     socket.on('disconnect', async () => {
         socket.to(room).emit(LEAVE, {
+            username: user.username,
             peer: socket.id,
-            ...user,
+            _id: user._id,
         });
 
         // Close enough to nextTick, hence is good as is
