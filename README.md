@@ -84,3 +84,5 @@ Click the 'Join Stream' button.
 The viewer will now be able to add a new layer/item to the livestream as shown below <br/>
 ![Viewer Add](https://cdn.discordapp.com/attachments/688407732973469799/698977628773941338/unknown.png) <br/>
 
+## Demo
+A demo of our project can be found on this link: https://youtu.be/3VLyEIfDc7Q
