@@ -12,7 +12,7 @@ module.exports = app => {
     const io = socketIo(server);
 
     // Do auth
-    authentication(io);
+    authentication(io, rooms);
 
     // Handle connection
     io.on('connection', socket => {
@@ -48,7 +48,7 @@ module.exports = app => {
 
         // Load in handlers
         const handlers = streamer ? streamerEvents : ViewerEvents;
-        handlers(socket, rooms);
+        handlers(socket, rooms, io);
     });
 
     return new Promise((resolve, reject) => {

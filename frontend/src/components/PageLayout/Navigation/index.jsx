@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams, useHistory } from 'react-router-dom';
 import {
     Menu,
     MenuButton,
     MenuList,
     MenuItem,
+    IconButton,
     Box,
     Avatar,
 } from '@chakra-ui/core';
-import { FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaBars, FaLaughSquint } from 'react-icons/fa';
 import { logo } from '../../../assets';
 import { UserContext } from '../../../utils';
 import './index.scss';
@@ -16,22 +17,15 @@ import './index.scss';
 const routes = [
     {
         children: 'Home',
-        exact: true,
         to: '/home',
     },
     {
         children: 'Create',
-        exact: true,
         to: '/create',
     },
     {
         children: 'Stream',
         to: '/stream',
-    },
-    {
-        children: 'FAQ',
-        exact: true,
-        to: '/faq',
     },
 ];
 
@@ -46,15 +40,16 @@ const dropdownRoutes = [
         icon: FaUser,
     },
     {
-        text: 'Logout',
-        to: '/logout',
+        text: 'Credits',
+        to: '/credits',
         exact: true,
-        icon: FaSignOutAlt,
+        icon: FaLaughSquint,
     },
 ];
 
 export default () => {
     const { user } = useContext(UserContext);
+    const history = useHistory();
     const params = useParams();
 
     return (
@@ -72,6 +67,25 @@ export default () => {
                     </li>
                 ))}
             </ul>
+            <Menu>
+                <MenuButton
+                    my='1.08rem'
+                    className='nav__button'
+                    mr='4'
+                    as={IconButton}
+                    icon={FaBars}
+                />
+                <MenuList placement='bottom-end'>
+                    {routes.map(({ to, text, icon, ...route }) => (
+                        <MenuItem
+                            to={hydrateRoute(to, params)}
+                            as={NavLink}
+                            key={to}
+                            {...route}
+                        />
+                    ))}
+                </MenuList>
+            </Menu>
             <Menu>
                 <MenuButton>
                     <Avatar
@@ -91,6 +105,15 @@ export default () => {
                             {text}
                         </MenuItem>
                     ))}
+                    <MenuItem
+                        onClick={() => {
+                            localStorage.clear();
+                            history.push('/');
+                        }}
+                    >
+                        <Box as={FaSignOutAlt} mr='2' size='12px' />
+                        Logout
+                    </MenuItem>
                 </MenuList>
             </Menu>
         </nav>

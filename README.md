@@ -1,71 +1,86 @@
 # UwU
 
-## Team Members
+## Setup
 
-### Khansa Kiasatina
+In our repository we have two .env.example files in the frontend and backend folders. We will be using them as the template for our .env files.
 
-I am a fourth year student at the University of Toronto Scarborough with a specialist in computer science, software engineering stream. I am currently a teaching assistant for one of the introductory computer science courses at the university and am enjoying it greatly.
+### Backend
+This is what .env.example looks like in the backend folder:
+```
+DATABASE=<SOMETHING TO STORE STUFF>
+BASENAME=<SOMETHING TO GET ASSETS STUFF>
+EXPIRES_IN=<SOMETHING FOR JWT EXPIRATION STUFF>
+SECRET=<SOMETHING FOR JWT STUFF>
+STATIC=<SOMETHING TO STORE STUFF>
+SOCKET=<SOMETHING PORT TO RUN SOCKET STUFF>
+PORT=<SOMETHING TO RUN STUFF>
+```
+This is what the .env file should look like:
+```
+DATABASE=mongodb://127.0.0.1:27017/c09
+BASENAME=http://localhost:3001/
+EXPIRES_IN=6400
+SECRET=lolcakes
+STATIC=uploads
+SOCKET=3002
+PORT=3001
+```
+#### MongoDB
+Make sure you have mongodb installed and run the following command
+`sudo systemctl start mongod`
 
-Through my previous co-op jobs, I have worked with technology from microservices architecture and Netflix's OSS to web development and single-page applications. After dabbling a bit in both the back-end and front-end sides of software, I realised I prefer developing the front-end of an application due to personal interests in visuals and aesthetics.
+Then run `npm install` and `npm start`
+### Frontend
 
+This is what .env.example looks like in the frontend folder
+```
+REACT_APP_GRAPHQL=http://localhost:3001/graphql
+REACT_APP_SOCKET=http://localhost:3002/
+```
+Create a .env and copy the contents of .env.example
+Then run `npm install` and `npm start`
 
-### Mason Tang
+## Socket.io
 
-I am a 4th year Computer Science student, specializing in Software Engineering. I am also in the co-op program and have had two work terms. One of my work terms was at the Ontario Teachers’ Pension Plan in which I maintained and created new tables for their database and created new features to pre-existing projects such as a token manager. I also worked on the authentication process that verifies users' access to our department's applications.
+One of the many technologies we used in is socket.io for the livestreaming service.
+We have created the following events to implement it:
+- PEER_RELAY: is to share the peer info for the handshake
+- UPDATE_LAYER: is for when the viewer adds a new 
+- START_PEER: is to start the peer handshake
+- END_STREAM: ends the stream
+- GET_INFO: gets the stream information
+- LEAVE: is to for when a user is leaving the stream and then update the stream info
+- JOIN: is for when a new user decides to join the livestream
 
+## User Guide
 
-### Frederic Pun
+### Register or Login
+![Create Account](https://cdn.discordapp.com/attachments/688407732973469799/698973640309604403/unknown.png)<br/>
+![Login](https://cdn.discordapp.com/attachments/688407732973469799/698974148075978803/unknown.png)
 
-I am a 4th year Co-op Computer Science student, specializing in Software Engineering, who has for the past few years have taken on teaching assistant roles in courses such as Introduction to Software Engineering (CSCC01), and Software Design (CSCB07).
+### Creating a post
+![Post](https://cdn.discordapp.com/attachments/688407732973469799/698974772922548224/unknown.png) <br/>
+You can then edit the post by clicking on the edit draft button <br/>
+![Edit](https://cdn.discordapp.com/attachments/688407732973469799/698975041689223318/unknown.png) <br/>
+You can add text, stickers, or filters to the post <br/>
+![Stickers](https://cdn.discordapp.com/attachments/688407732973469799/698975933721477140/unknown.png)<br/>
+You may then save the post or publish it to be viewed on the homepage like the image below <br/>
+![Home](https://cdn.discordapp.com/attachments/688407732973469799/698976146783731823/unknown.png)<br/>
+The post will now be able to be shared or downloaded <br/>
+![Share](https://cdn.discordapp.com/attachments/688407732973469799/698978892001837076/unknown.png)<br/>
 
-In my free time, my hobbies are rock climbing and contributing to the hacker community such as mentoring and development for hackathons such as Ellehacks, Hack the 6ix, and Hack the Valley.
+### Livestreaming
+#### Streamer
+Click the streaming tab, title you stream and start the stream <br/>
+![Stream Start](https://cdn.discordapp.com/attachments/688407732973469799/698976472769232987/unknown.png) <br/>
+This is what it'll look like to the streamer: <br/>
+![Streamer](https://cdn.discordapp.com/attachments/688407732973469799/698976812763447477/unknown.png) <br/>
+When the viewer adds a new layer/item it will be reflected on the streamer's window as shown below: <br/>
+![Streamer View](https://cdn.discordapp.com/attachments/688407732973469799/698978339720921178/unknown.png) <br/>
+#### Viewer
+A viewer will see this in the Stream Tab: <br/>
+![Viewer](https://cdn.discordapp.com/attachments/688407732973469799/698977258315972628/unknown.png) <br/>
+Click the 'Join Stream' button.
+The viewer will now be able to add a new layer/item to the livestream as shown below <br/>
+![Viewer Add](https://cdn.discordapp.com/attachments/688407732973469799/698977628773941338/unknown.png) <br/>
 
-## Descriptions of web app
-
-UwU (temporary name) is an online video-editing app where you can upload videos, decorate them with filters, stickers, drawings, and share them with your friends! Along with your own videos, you will be able to see other users' creations with their unique edits and share your thoughts by liking and commenting on them.
-
-## Key features for Beta Version
-
- - **User account creation:** Using OAuth
- - **Take video/picture from app:** Users can capture videos and pictures through their camera straight to the app
- - **Ability to create filters, add stickers/text, drawings**
- - **Save drafts of edits:** Users should be able to save their drafts or current progress for later completion
- - **Adding music:** Each video will be allowed to have background audio added to it
-
-## Key features for Final Version
-
- - Follow users, like/comment videos
- - **Geolocation:** Each video will have the geolocation of where it was uploaded at
- - **QR codes:** Users can login to their accounts, share their profiles, invite other users to the website, and link to their videos by scanning a QR code
- - **Web notifications:** Users will receive a notification every time someone they follow posts a new video
- - **2 Factor Authentication:** Users have to use the Google Authenticator app 
- - **Livestream edit video (Biggest feature yet):** Users can collaborate on a video by editing it together in real-time
- - **Video Downloading/Sharing:** Users can save and share their creations to others on other platforms
-
-## Technologies to be used
-
- - GraphQL
- - NodeJS
- - Express
- - DigitalOcean (Docker)
- - Mongoose
- - Socket.io
- - Native web APIs
-    - Push notifications
-    - Audio
-    - Video
-    - Camera
- - React
- - Google Maps / Radar.io
-
-## Top 5 technical challenges
-
- - **Making a video editor:** The hardest technical challenge will be the video editor itself as it will require lots of components, like uploading a file, adding effect/picture, etc. We also have to consider how we might save these edits as we implement drafts into the system. We also have to be extremely smart with how we implement the editor itself, as it’s a fairly heavy feature.
-
- - **Having a pseudo video editor in real time:** Implementing a feature that is similar to live streaming will be one of the biggest features and challenges we plan to implement as it would require complex web interaction to allow multiple users in real time to make simple edits to the video.
-
- - **2 factor authentication:** This is difficult as we would have to include and consider a “external” flow in the authentication process. This process is also not synchronized with the rest of the flow, hence we would have to have some way of storing the authentication state, and revoking it after a period of time
-
- - **QR code:** This would be difficult as we have to dynamically create and store these QR codes. When users access the QR codes, how would we deal with the response?
-
- - **Adding music:** The challenge of this is figuring out how to combine the audio snippets with the video into one file so that the end result will be a single video file for the user.

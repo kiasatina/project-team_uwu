@@ -4,17 +4,12 @@ export default [
     {
         component: React.lazy(() => import('./Home')),
         exact: true,
-        path: '/home',
+        path: '/home/:post?',
     },
     {
         component: React.lazy(() => import('./Create')),
         exact: true,
-        path: '/create',
-    },
-    {
-        component: React.lazy(() => import('./FAQ')),
-        exact: true,
-        path: '/faq',
+        path: '/create/:draft?',
     },
     {
         component: React.lazy(() => import('./Stream')),
@@ -24,6 +19,11 @@ export default [
     {
         component: React.lazy(() => import('./Profile')),
         exact: true,
-        path: '/profile',
+        path: '/profile/:userId?/:post?',
+    },
+    {
+        component: React.lazy(() => import('./Credits')),
+        exact: true,
+        path: '/credits',
     },
 ];

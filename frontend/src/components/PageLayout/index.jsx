@@ -9,7 +9,7 @@ import './index.scss';
 
 export const PageLayout = ({ children }) => {
     const history = useHistory();
-    const { data, loading, dispatch } = useGraph(GET_ME, {
+    const { data, loading, dispatch, refetch } = useGraph(GET_ME, {
         pipe: ['getMe'],
         onError: useCallback(
             err => {
@@ -22,7 +22,9 @@ export const PageLayout = ({ children }) => {
     });
 
     return (
-        <UserContext.Provider value={{ user: data, loading, dispatch }}>
+        <UserContext.Provider
+            value={{ user: data, loading, dispatch, refetch }}
+        >
             <Navigation />
             <div className='pagelayout'>{children}</div>
         </UserContext.Provider>

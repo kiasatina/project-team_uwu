@@ -39,7 +39,7 @@ export const useGraph = (query, options = {}) => {
 
     const [store, _dispatch] = useReducer(reducer, {
         variables: { ...variables },
-        pipe: [ ...pipe ],
+        pipe: [...pipe],
         data: initState,
         loading: true,
     });
@@ -49,16 +49,12 @@ export const useGraph = (query, options = {}) => {
 
         (async () => {
             if (mounted) {
-                _dispatch({ loading: true });
                 try {
                     const data = await fetchGraph(query, store.variables);
                     if (mounted) {
                         _dispatch({
                             loading: false,
-                            data: store.pipe.reduce(
-                                (_, prop) => _[prop],
-                                data,
-                            ),
+                            data: store.pipe.reduce((_, prop) => _[prop], data),
                         });
                     }
                 } catch (err) {
@@ -73,7 +69,12 @@ export const useGraph = (query, options = {}) => {
     }, [query, onError, store.variables, store.pipe]);
 
     const refetch = useCallback(
-        (initState = store.data, variables = store.variables) => {
+        (config = {}) => {
+            const {
+                initState = store.data,
+                variables = store.variables,
+                setLoading = false,
+            } = config;
             const data = Array.isArray(initState)
                 ? [...initState]
                 : typeof initState === 'object'
@@ -81,6 +82,7 @@ export const useGraph = (query, options = {}) => {
                 : initState;
             _dispatch({
                 variables: { ...variables },
+                loading: setLoading,
                 data,
             });
         },

@@ -10,12 +10,12 @@ const processVar = (...args) => {
         map.push([root]);
         files.push(value);
         return null;
-    
-    // Blacklist null or dates
+
+        // Blacklist null or dates
     } else if (value === null || value instanceof Date) {
         return value;
 
-    // Recursive step
+        // Recursive step
     } else if (typeof value === 'object') {
         return processVariables(...args)[0];
     }

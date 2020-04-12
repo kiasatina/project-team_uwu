@@ -28,8 +28,13 @@ module.exports = {
     posts_count: async root => {
         return await Post.countDocuments({ user: root._id, draft: false });
     },
-    posts: async (root, { limit, page }, ctx) => {
-        return await Post.find({ user: ctx.user })
+    posts: async (root, { draft, limit, page }, ctx) => {
+        return await Post.find(
+            Object.assign(draft === undefined ? {} : { draft }, {
+                user: ctx.user,
+            }),
+        )
+            .sort({ createdAt: -1 })
             .limit(limit)
             .skip(page * limit);
     },

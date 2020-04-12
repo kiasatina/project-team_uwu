@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Spinner } from '@chakra-ui/core';
 import './index.scss';
 
-export const Viewer = ({ video }) => {
+export const Viewer = ({ video, className }) => {
     const [loading, setLoading] = useState(true);
     const isFile = typeof video === 'string';
     const ref = useRef();
@@ -17,7 +17,10 @@ export const Viewer = ({ video }) => {
     }, [isFile, video]);
 
     return (
-        <div className='viewer' onClick={() => ref.current.play()}>
+        <div
+            className={`viewer ${className || ''}`}
+            onClick={() => ref.current.play()}
+        >
             <div
                 className={`viewer__dimmer ${
                     loading ? ' viewer__dimmer--show' : ''

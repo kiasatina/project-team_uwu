@@ -23,6 +23,18 @@
         margin: 0;
         margin-right: auto;
         padding: 0;
+
+        @include media($MEDIA-PHONE) {
+            display: none;
+        }
+    }
+
+    & &__button {
+        display: none;
+        margin-left: auto;
+        @include media($MEDIA-PHONE) {
+            display: flex;
+        }
     }
 
     &__item {

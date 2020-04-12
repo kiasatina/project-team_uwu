@@ -22,7 +22,7 @@
     "graphql-fields": "^2.0.3",
     "graphql-import": "^1.0.2",
     "graphql-iso-date": "^3.6.1",
-    "graphql-playground-middleware-express": "^1.7.12",
+    "graphql-playground-middleware-express": "^1.7.13",
     "graphql-tools": "^4.0.7",
     "graphql-upload": "^10.0.0",
     "jsonwebtoken": "^8.5.1",
@@ -39,7 +39,7 @@
     }
   },
   "devDependencies": {
-    "husky": "^4.2.3",
+    "husky": "^4.2.5",
     "nodemon": "^2.0.3",
     "prettier": "^1.19.1"
   }

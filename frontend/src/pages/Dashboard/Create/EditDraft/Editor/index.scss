@@ -1,17 +1,12 @@
-@import '../../../utils/variables';
-@import '../../../utils/mixins';
-
-.create {
-    &__upload {
-        @include position(absolute, auto, 0);
-        cursor: pointer;
-        opacity: 0;
-        width: 100%;
-    }
-}
+@import '../../../../../utils/variables';
+@import '../../../../../utils/mixins';
 
 .draft {
     $self: &;
+    & .pagecontent__content {
+        max-width: 600px;
+    }
+
     &__thumbnail-wrapper {
         position: relative;
         overflow: hidden;

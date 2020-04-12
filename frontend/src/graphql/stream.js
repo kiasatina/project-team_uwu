@@ -12,8 +12,8 @@ export const FETCH_STREAM = `
 `;
 
 export const FETCH_STREAMS = `
-    query checkStream($updatedAt: DateTime!) {
-        getLivestreams(updatedAt: $updatedAt, live: true) {
+    {
+        getLivestreams(live: true) {
             _id
             title
             user {

@@ -98,7 +98,7 @@
 
 // Add custom scrollbar
 @mixin scroll($overflow: true) {
-    @if($overflow) {
+    @if ($overflow) {
         overflow: auto;
     }
     &::-webkit-scrollbar {
@@ -115,7 +115,7 @@
 
 // Media queries (We are doing given size or less)
 @mixin media($size) {
-    @media (max-width: #{map-get($MEDIA, $size)}) {
+    @media (max-width: #{$size}) {
         @content;
     }
 }

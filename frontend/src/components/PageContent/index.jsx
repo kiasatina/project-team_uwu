@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { Heading } from '@chakra-ui/core';
 
-import { Loading } from '../'
+import { Loading } from '../';
 import './index.scss';
 
 export const PageContent = forwardRef(

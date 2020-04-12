@@ -6,8 +6,8 @@ import Room from './Room';
 export default () => {
     return (
         <Switch>
-            <Route path='/stream/:streamId' exact component={ Room }/>
-            <Route path='/stream' component={ Streams }/>
+            <Route path='/stream/:streamId' exact component={Room} />
+            <Route path='/stream' component={Streams} />
         </Switch>
     );
 };

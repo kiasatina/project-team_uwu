@@ -21,36 +21,53 @@ export const CREATE_POST = `
     }
 `;
 
-export const GET_POSTS = `
-    query getPosts(
-        $user: ID,
-        $draft: Boolean,
-        $limit: Int,
-        $page: Int 
-    ) {
-        getPosts(
-            user: $user,
-            draft: $draft,
-            limit: $limit,
-            page: $page 
-        ) {
+export const GET_DRAFTS = `
+    query getDrafts {
+        getMe {
+            posts(draft: true) {
+                _id
+                asset {
+                    src
+                }
+                layers {
+                    type
+                    filter
+                    sticker {
+                        href
+                        asset {
+                            src
+                        }
+                    }
+                    position {
+                        x
+                        y
+                    }
+                    text
+                }
+                title
+                updatedAt
+            }
+        }
+    }
+`;
+
+export const GET_DRAFT = `
+    query getDraft($id: ID!) {
+        getPosts(_id: $id, draft: true) {
             _id
-            user {
-                username
-            }
-            asset {
-                src
-                type
-            }
             title
             description
-            draft
+            asset {
+                src
+            }
             layers {
                 type
                 filter
-                asset {
-                    src
-                    type
+                sticker {
+                    href
+                    asset {
+                        src
+                    }
                 }
                 position {
                     x
@@ -58,7 +75,6 @@ export const GET_POSTS = `
                 }
                 text
             }
-            createdAt
         }
     }
 `;
