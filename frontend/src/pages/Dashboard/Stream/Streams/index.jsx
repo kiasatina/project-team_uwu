@@ -27,7 +27,7 @@ export default () => {
                     </SimpleGrid>
                 ) : (
                     <Text fontSize='2xl' opacity='30%'>
-                        No Drafts Found... *sad owo sounds*
+                        No Streams Found... *sad owo sounds*
                     </Text>
                 )}
             </PageContent>
