@@ -18,12 +18,20 @@ const getFilterNum = filter => {
     }
 };
 
-export const DisplayPost = ({ size, setSize, video, layers, drag }) => {
+export const DisplayPost = ({
+    size,
+    setSize,
+    video,
+    layers,
+    drag,
+    videoRef,
+}) => {
     const imageRef = useRef();
     const ref = useRef();
 
     const videoElement = useMemo(() => {
         const element = document.createElement('video');
+        if (videoRef) videoRef.current = element;
         element.loop = true;
         element.src = video;
         return element;

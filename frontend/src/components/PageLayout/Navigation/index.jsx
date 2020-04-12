@@ -16,7 +16,6 @@ import './index.scss';
 const routes = [
     {
         children: 'Home',
-        exact: true,
         to: '/home',
     },
     {
