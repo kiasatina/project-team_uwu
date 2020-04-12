@@ -1,11 +1,8 @@
 import {
-    Avatar,
-    Box,
     Button,
     Flex,
     Heading,
     SimpleGrid,
-    Stack,
     Tag,
     Text,
     useDisclosure,
@@ -25,6 +22,7 @@ import {
 import { PostItem } from '../../Home/PostItem';
 import { PostOverlay } from '../../Home/PostOverlay';
 import { FollowOverlay } from '../FollowOverlay';
+import { UploadImage } from '../MyProfile/UploadImage';
 import '../index.scss';
 
 export const UserProfile = () => {
@@ -75,38 +73,50 @@ export const UserProfile = () => {
     return (
         <Loading loading={loading}>
             <PageContent>
-                <Flex p='6' backgroundColor='white' rounded='md' mb='4'>
-                    <Box className='profile__upload-wrapper' mr='6'>
-                        <Avatar
-                            name={data.username}
-                            src={data.profile_image?.src}
-                            size='2xl'
-                        />
-                    </Box>
-                    <Flex mr='auto' direction='column' justifyContent='center'>
-                        <Heading size='xl'>{data.username}</Heading>
-                        {data.bio && <Text>{data.bio}</Text>}
-                        <Stack mt='2' isInline>
-                            <Tag
-                                className='clickable'
-                                onClick={() => {
-                                    seeFollows(true);
-                                }}
-                            >
-                                {data.following_count} Following
-                            </Tag>
-                            <Tag
-                                className='clickable'
-                                onClick={() => {
-                                    seeFollows(false);
-                                }}
-                            >
-                                {data.followers_count} Followers
-                            </Tag>
-                            <Tag>{data.posts_count} Posts</Tag>
-                        </Stack>
+                <Flex
+                    p='6'
+                    flexDirection={{ xs: 'column', sm: 'column', md: 'row' }}
+                    backgroundColor='white'
+                    rounded='md'
+                    mb='4'
+                >
+                    <Flex
+                        direction={{ xs: 'column', sm: 'column', md: 'row' }}
+                        flexGrow='1'
+                    >
+                        <UploadImage user={data} />
+                        <Flex
+                            mr='auto'
+                            direction='column'
+                            justifyContent='center'
+                            mb='4'
+                        >
+                            <Heading size='xl'>{data.username}</Heading>
+                            {data.bio && <Text>{data.bio}</Text>}
+                            <Flex flexWrap='wrap' m='0 -0.25em'>
+                                <Tag
+                                    className='clickable'
+                                    m='1'
+                                    onClick={() => {
+                                        seeFollows(true);
+                                    }}
+                                >
+                                    {data.following_count} Following
+                                </Tag>
+                                <Tag
+                                    className='clickable'
+                                    m='1'
+                                    onClick={() => {
+                                        seeFollows(false);
+                                    }}
+                                >
+                                    {data.followers_count} Followers
+                                </Tag>
+                                <Tag m='1'>{data.posts_count} Posts</Tag>
+                            </Flex>
+                        </Flex>
                     </Flex>
-                    <Button variantColor='blue' size='sm' onClick={follow}>
+                    <Button onClick={follow}>
                         {following ? 'Unfollow' : 'Follow'}
                     </Button>
                 </Flex>

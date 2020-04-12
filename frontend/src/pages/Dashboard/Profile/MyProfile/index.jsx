@@ -1,12 +1,10 @@
 import {
     Flex,
     Heading,
-    IconButton,
+    Button,
     SimpleGrid,
-    Stack,
     Tag,
     Text,
-    Tooltip,
     useDisclosure,
 } from '@chakra-ui/core';
 import React, { useContext, useState } from 'react';
@@ -20,7 +18,7 @@ import { EditProfile } from './EditProfile';
 import { UploadImage } from './UploadImage';
 
 export const MyProfile = () => {
-    const { user, loading } = useContext(UserContext);
+    const { user, dispatch, loading } = useContext(UserContext);
     const { onOpen, isOpen, onClose } = useDisclosure();
     const followDisclosure = useDisclosure();
     const [seeFollowing, setSeeFollowing] = useState(false);
@@ -38,39 +36,52 @@ export const MyProfile = () => {
     return (
         <Loading loading={loading}>
             <PageContent>
-                <Flex p='6' backgroundColor='white' rounded='md' mb='4'>
-                    <UploadImage />
+                <Flex
+                    p='6'
+                    flexDirection={{ xs: 'column', sm: 'column', md: 'row' }}
+                    backgroundColor='white'
+                    rounded='md'
+                    mb='4'
+                >
                     <Flex
-                        mr='auto'
-                        direction='column'
-                        justifyContent='center'
-                        mb='4'
+                        direction={{ xs: 'column', sm: 'column', md: 'row' }}
+                        flexGrow='1'
                     >
-                        <Heading size='xl'>{user.username}</Heading>
-                        {user.bio && <Text>{user.bio}</Text>}
-                        <Stack mt='2' isInline>
-                            <Tag
-                                className='clickable'
-                                onClick={() => {
-                                    seeFollows(true);
-                                }}
-                            >
-                                {user.following_count} Following
-                            </Tag>
-                            <Tag
-                                className='clickable'
-                                onClick={() => {
-                                    seeFollows(false);
-                                }}
-                            >
-                                {user.followers_count} Followers
-                            </Tag>
-                            <Tag>{user.posts_count} Posts</Tag>
-                        </Stack>
+                        <UploadImage user={user} dispatch={dispatch} />
+                        <Flex
+                            mr='auto'
+                            direction='column'
+                            justifyContent='center'
+                            mb='4'
+                        >
+                            <Heading size='xl'>{user.username}</Heading>
+                            {user.bio && <Text>{user.bio}</Text>}
+                            <Flex flexWrap='wrap' m='0 -0.25em'>
+                                <Tag
+                                    className='clickable'
+                                    m='1'
+                                    onClick={() => {
+                                        seeFollows(true);
+                                    }}
+                                >
+                                    {user.following_count} Following
+                                </Tag>
+                                <Tag
+                                    className='clickable'
+                                    m='1'
+                                    onClick={() => {
+                                        seeFollows(false);
+                                    }}
+                                >
+                                    {user.followers_count} Followers
+                                </Tag>
+                                <Tag m='1'>{user.posts_count} Posts</Tag>
+                            </Flex>
+                        </Flex>
                     </Flex>
-                    <Tooltip label='Edit Profile' placement='left'>
-                        <IconButton onClick={onOpen} icon='edit' />
-                    </Tooltip>
+                    <Button onClick={onOpen} leftIcon='edit'>
+                        Edit Profile
+                    </Button>
                 </Flex>
 
                 {posts.data.length ? (
