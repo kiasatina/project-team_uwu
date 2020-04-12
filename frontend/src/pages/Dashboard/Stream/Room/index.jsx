@@ -30,6 +30,8 @@ export default () => {
     const history = useHistory();
     const socket = useRef();
 
+    console.log(info);
+
     useEffect(() => {
         socket.current = io(process.env.REACT_APP_SOCKET, {
             query: {
@@ -43,11 +45,19 @@ export default () => {
         socket.current.once(socketEvents.END_STREAM, () => {
             history.push('/stream');
         });
-        socket.current.on(socketEvents.UPDATE_LAYER, ({ peer, layer }) => {
+        socket.current.on(socketEvents.UPDATE_LAYER, ({ peer, data }) => {
             dispatch(_info => ({
                 layers: {
                     ..._info.layers,
-                    [peer]: layer,
+                    [peer]: {
+                        ...data,
+                        position: _info.layers[peer].position
+                            ? _info.layers[peer].position
+                            : {
+                                  x: 0.5,
+                                  y: 0.5,
+                              },
+                    },
                 },
             }));
         });
@@ -82,7 +92,14 @@ export default () => {
     const Component = map[info?.role];
     return (
         <Loading loading={!info || loading}>
-            {Component && <Component socket={socket} data={data} info={info} />}
+            {Component && (
+                <Component
+                    socket={socket}
+                    data={data}
+                    info={info}
+                    dispatch={dispatch}
+                />
+            )}
         </Loading>
     );
 };

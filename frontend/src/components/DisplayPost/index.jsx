@@ -18,14 +18,23 @@ const getFilterNum = filter => {
     }
 };
 
-export const DisplayPost = ({ size, setSize, video, layers, drag }) => {
+export const DisplayPost = ({
+    size,
+    setSize,
+    video,
+    playing,
+    layers,
+    drag,
+}) => {
+    const isFile = typeof video === 'string';
     const imageRef = useRef();
     const ref = useRef();
 
     const videoElement = useMemo(() => {
         const element = document.createElement('video');
         element.loop = true;
-        element.src = video;
+        element.srcObject = isFile ? undefined : video;
+        element.src = isFile ? video : undefined;
         return element;
     }, [video]);
 
@@ -54,13 +63,16 @@ export const DisplayPost = ({ size, setSize, video, layers, drag }) => {
     }, [videoElement, setSize]);
 
     useEffect(() => {
-        videoElement.play();
+        playing ? videoElement.play() : videoElement.pause();
         const layer = imageRef.current.getLayer();
         const anim = new Konva.Animation(() => {}, layer);
         anim.start();
 
-        return () => anim.stop();
-    }, [videoElement]);
+        return () => {
+            videoElement.pause();
+            anim.stop();
+        };
+    }, [videoElement, playing]);
 
     return (
         <Box rounded='md' overflow='hidden' ref={ref}>
