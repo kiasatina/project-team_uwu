@@ -6,6 +6,7 @@ module.exports = withSession(async (root, { limit, page, ...filter }, ctx) => {
             filter,
             filter.draft && { user: ctx.user },
         ))
+        .sort({ createdAt: -1 })
         .limit(limit)
         .skip(limit * page);
 });

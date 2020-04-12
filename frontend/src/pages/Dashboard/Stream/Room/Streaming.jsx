@@ -22,6 +22,7 @@ export default ({ socket, data, info }) => {
                 const _peer = new Peer({ trickle: true, stream });
                 peers.set(peer, _peer);
 
+                // Handshake info sharing
                 _peer.on('signal', data => {
                     socket.current.emit(socketEvents.PEER_RELAY(), {
                         peer,

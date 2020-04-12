@@ -4,6 +4,7 @@ import {
     AccordionIcon,
     AccordionItem,
     AccordionPanel,
+    Stack,
     Box,
     Button,
     Flex,
@@ -111,14 +112,7 @@ const EditDraftT = ({ draft, onExit }) => {
 
     return (
         <>
-            <Flex
-                className='editor'
-                direction='column'
-                align='center'
-                backgroundColor='white'
-                p='8'
-                rounded='md'
-            >
+            <Stack rounded='md' background='white' p='4' mb='20'>
                 <DisplayPost
                     size={size}
                     setSize={setSize}
@@ -130,96 +124,90 @@ const EditDraftT = ({ draft, onExit }) => {
                 <Button onClick={onPlay} mt='3'>
                     {playing ? 'Pause' : 'Play'}
                 </Button>
+                <Accordion my='4' allowToggle>
+                    <AccordionItem>
+                        <AccordionHeader>
+                            <Box flex='1' textAlign='left'>
+                                Text
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionHeader>
+                        <AccordionPanel p={4}>
+                            <Flex direction='row'>
+                                <Input
+                                    onChange={({ target }) =>
+                                        setText(target.value)
+                                    }
+                                    placeholder='Enter your text'
+                                    value={text}
+                                    mr={2}
+                                />
+                                <Button disabled={!text} onClick={addTextLayer}>
+                                    Add
+                                </Button>
+                            </Flex>
+                        </AccordionPanel>
+                    </AccordionItem>
 
-                <Box w='80%' p={4}>
-                    <Accordion allowToggle>
-                        <AccordionItem>
-                            <AccordionHeader>
-                                <Box flex='1' textAlign='left'>
-                                    Text
-                                </Box>
-                                <AccordionIcon />
-                            </AccordionHeader>
-                            <AccordionPanel p={4}>
-                                <Flex direction='row'>
-                                    <Input
-                                        onChange={({ target }) =>
-                                            setText(target.value)
-                                        }
-                                        placeholder='Enter your text'
-                                        value={text}
-                                        mr={2}
-                                    />
-                                    <Button
-                                        disabled={!text}
-                                        onClick={addTextLayer}
-                                    >
-                                        Add
-                                    </Button>
-                                </Flex>
-                            </AccordionPanel>
-                        </AccordionItem>
-
-                        <AccordionItem>
-                            <AccordionHeader>
-                                <Box flex='1' textAlign='left'>
-                                    Stickers
-                                </Box>
-                                <AccordionIcon />
-                            </AccordionHeader>
-                            <AccordionPanel p={4}>
-                                <Flex
-                                    direction='row'
-                                    wrap='wrap'
-                                    justify='space-around'
-                                >
-                                    {stickers.map((sticker, index) => {
-                                        return (
-                                            <Image
-                                                m='2'
-                                                size='50px'
-                                                key={index}
-                                                src={sticker}
-                                                className='sticker'
-                                                onClick={() => {
-                                                    addStickerLayer(index);
-                                                }}
-                                            />
-                                        );
-                                    })}
-                                </Flex>
-                            </AccordionPanel>
-                        </AccordionItem>
-
-                        <AccordionItem>
-                            <AccordionHeader>
-                                <Box flex='1' textAlign='left'>
-                                    Filters
-                                </Box>
-                                <AccordionIcon />
-                            </AccordionHeader>
-                            <AccordionPanel p={4}>
-                                <Flex
-                                    direction='row'
-                                    wrap='wrap'
-                                    justify='space-around'
-                                >
-                                    {filters.map((filter, index) => (
-                                        <Button
+                    <AccordionItem>
+                        <AccordionHeader>
+                            <Box flex='1' textAlign='left'>
+                                Stickers
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionHeader>
+                        <AccordionPanel p={4}>
+                            <Flex
+                                direction='row'
+                                wrap='wrap'
+                                justify='space-around'
+                            >
+                                {stickers.map((sticker, index) => {
+                                    return (
+                                        <Image
+                                            m='2'
+                                            size='50px'
                                             key={index}
+                                            src={sticker}
+                                            className='sticker'
                                             onClick={() => {
-                                                filterVideo(filter);
+                                                addStickerLayer(index);
                                             }}
-                                        >
-                                            {filter}
-                                        </Button>
-                                    ))}
-                                </Flex>
-                            </AccordionPanel>
-                        </AccordionItem>
-                    </Accordion>
-                </Box>
-            </Flex>
+                                        />
+                                    );
+                                })}
+                            </Flex>
+                        </AccordionPanel>
+                    </AccordionItem>
+
+                    <AccordionItem>
+                        <AccordionHeader>
+                            <Box flex='1' textAlign='left'>
+                                Filters
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionHeader>
+                        <AccordionPanel p={4}>
+                            <Flex
+                                direction='row'
+                                wrap='wrap'
+                                justify='space-around'
+                            >
+                                {filters.map((filter, index) => (
+                                    <Button
+                                        key={index}
+                                        onClick={() => {
+                                            filterVideo(filter);
+                                        }}
+                                    >
+                                        {filter}
+                                    </Button>
+                                ))}
+                            </Flex>
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
+            </Stack>
 
             <Flex
                 px='4'
@@ -274,7 +262,7 @@ export const Editor = () => {
     });
 
     return (
-        <PageContent loading={loading}>
+        <PageContent className='draft' loading={loading}>
             <EditDraftT draft={data} onExit={() => {}} />
         </PageContent>
     );

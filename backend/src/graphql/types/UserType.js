@@ -33,6 +33,7 @@ module.exports = {
                 draft === undefined ? {} : { draft },
                 { user: ctx.user },
             ))
+            .sort({ createdAt: -1 })
             .limit(limit)
             .skip(page * limit);
     },

@@ -22,7 +22,7 @@ import {
 } from '../../../../../utils';
 import './index.scss';
 
-export const Create = () => {
+export const Create = ({ refetch }) => {
     const { reset, handleSubmit, register, errors, formState } = useForm({
         mode: 'onChange',
     });
@@ -38,6 +38,7 @@ export const Create = () => {
                 ...values,
                 asset,
             });
+            refetch();
             toast.success('Post created');
         } catch (err) {
             toast.error(printError(err.message));

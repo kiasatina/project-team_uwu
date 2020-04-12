@@ -7,7 +7,7 @@ import { DraftItem } from './DraftItem';
 import { Create } from './Create';
 
 export const ViewDrafts = () => {
-    const { data, loading } = useGraph(GET_DRAFTS, {
+    const { data, loading, refetch } = useGraph(GET_DRAFTS, {
         pipe: ['getMe', 'posts'],
         initState: [],
     });
@@ -27,7 +27,7 @@ export const ViewDrafts = () => {
                     </Text>
                 )}
             </PageContent>
-            <Create />
+            <Create refetch={refetch} />
         </>
     );
 };

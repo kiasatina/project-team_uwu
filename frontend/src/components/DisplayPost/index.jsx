@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { Box } from '@chakra-ui/core';
-import { Layer, Stage } from 'react-konva';
+import { Layer, Stage, Image } from 'react-konva';
 import { VideoLayer } from '../VideoLayer';
+import Konva from 'konva';
 
 // Gives back appropriate scale for the specified
 const getFilterNum = filter => {
@@ -17,62 +18,62 @@ const getFilterNum = filter => {
     }
 };
 
-export const DisplayPost = ({
-    size,
-    setSize,
-    videoRef,
-    video,
-    layers,
-    drag,
-    ...props
-}) => {
-    const onload = ({ currentTarget }) =>
-        setSize({
-            width: currentTarget.offsetWidth,
-            height: currentTarget.offsetHeight,
-        });
+export const DisplayPost = ({ size, setSize, video, layers, drag }) => {
+    const imageRef = useRef();
+    const ref = useRef();
+
+    const videoElement = useMemo(() => {
+        const element = document.createElement('video');
+        element.loop = true;
+        element.src = video;
+        return element;
+    }, [video]);
 
     // Add filter to video if initial layers had one in them
     useEffect(() => {
         layers
             .filter(l => l.type === 'FILTER')
             .forEach(layer => {
-                videoRef.current.style.filter =
+                imageRef.current.style.filter =
                     layer.filter + `(${getFilterNum(layer.filter)})`;
             });
-    }, [videoRef, layers]);
+    }, [layers]);
 
     useEffect(() => {
-        const handler = () => {
+        const handler = () =>
             setSize({
-                width: videoRef.current.offsetWidth,
-                height: videoRef.current.offsetHeight,
+                width: ref.current.offsetWidth,
+                height: ref.current.offsetWidth,
             });
-        };
-
         window.addEventListener('resize', handler, true);
+        handler();
+
         return () => {
             window.removeEventListener('resize', handler, true);
         };
-    }, [setSize, videoRef]);
+    }, [videoElement, setSize]);
+
+    useEffect(() => {
+        videoElement.play();
+        const layer = imageRef.current.getLayer();
+        const anim = new Konva.Animation(() => {}, layer);
+        anim.start();
+
+        return () => anim.stop();
+    }, [videoElement]);
 
     return (
-        <Box className='editor__video-holder'>
-            <video
-                onLoadedMetadata={onload}
-                src={video}
-                loop={true}
-                autoPlay={true}
-                ref={videoRef}
-                {...props}
-            />
-
-            <Stage
-                width={size.width}
-                height={size.height}
-                className='editor__video-holder__layers'
-            >
+        <Box rounded='md' overflow='hidden' ref={ref}>
+            <Stage width={size.width} height={size.height}>
                 <Layer>
+                    <Image
+                        ref={imageRef}
+                        image={videoElement}
+                        width={size.width}
+                        height={size.height}
+                        x={0}
+                        y={0}
+                    />
                     {layers.map((layer, index) => (
                         <VideoLayer
                             key={index}

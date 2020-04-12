@@ -3,6 +3,10 @@
 
 .draft {
     $self: &;
+    & .pagecontent__content {
+        max-width: 600px;
+    }
+
     &__thumbnail-wrapper {
         position: relative;
         overflow: hidden;

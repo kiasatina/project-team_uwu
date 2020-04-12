@@ -1,7 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import Peer from 'simple-peer';
 
-import { PageContent, Sidenav, Viewer } from '../../../../components';
+import {
+    PageContent,
+    Sidenav,
+    Viewer,
+    DisplayPost,
+} from '../../../../components';
 import { socketEvents } from '../../../../utils';
 
 export default ({ socket, data }) => {
@@ -10,16 +15,18 @@ export default ({ socket, data }) => {
     useEffect(() => {
         socket.current.once(socketEvents.START_PEER, () => {
             const peer = new Peer({ trickle: true, initiator: true });
+
+            // Handshake info sharing
             socket.current.on(socketEvents.PEER_RELAY(), data => {
                 peer.signal(data);
             });
 
-            peer.on('stream', stream => {
-                setStream(stream);
-            });
-
             peer.on('signal', data => {
                 socket.current.emit(socketEvents.PEER_RELAY(), data);
+            });
+
+            peer.on('stream', stream => {
+                setStream(stream);
             });
         });
         socket.current.emit(socketEvents.JOIN);
@@ -35,6 +42,7 @@ export default ({ socket, data }) => {
     return (
         <>
             <PageContent label={data.title} loading={!stream}>
+                <DisplayPost />
                 <Viewer video={stream} />
             </PageContent>
             <Sidenav></Sidenav>
