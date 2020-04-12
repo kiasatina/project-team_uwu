@@ -43,17 +43,20 @@ export const DisplayPost = ({
         element.loop = true;
         element.muted = muted;
         return element;
-    }, [video, isFile, videoRef]);
+    }, [video, isFile, videoRef, muted]);
 
     // Add filter to video if initial layers had one in them
     useEffect(() => {
         layers
             .filter(l => l.type === 'FILTER')
             .forEach(layer => {
-                videoElement.style.filter =
-                    layer.filter + `(${getFilterNum(layer.filter)})`;
+                const canvas = imageRef.current.getCanvas()._canvas;
+                if (canvas) {
+                    canvas.style.filter =
+                        layer.filter + `(${getFilterNum(layer.filter)})`;
+                }
             });
-    }, [layers, videoElement]);
+    }, [layers, imageRef]);
 
     useEffect(() => {
         const handler = () =>
