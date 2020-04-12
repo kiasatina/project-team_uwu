@@ -39,7 +39,12 @@ export const PostItem = ({
                 ))}
             </DisplayPost>
             <Stack align='center' width='100%' isInline padding='4' spacing='4'>
-                <Avatar name={user.username} src={user.profile_image?.src} />
+                <Avatar
+                    as={Link}
+                    to={`/profile/${user._id}`}
+                    name={user.username}
+                    src={user.profile_image?.src}
+                />
                 <Stack>
                     <Heading as='h2' size='sm' isTruncated>
                         {user.username} | {title}

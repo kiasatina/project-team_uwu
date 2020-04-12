@@ -73,17 +73,20 @@ export default () => {
                     />
                 </MenuButton>
                 <MenuList placement='bottom-end'>
-                    {dropdownRoutes.map(({ to, text, icon, ...route }) => (
-                        <MenuItem
-                            to={hydrateRoute(to, params)}
-                            as={NavLink}
-                            key={to}
-                            {...route}
-                        >
-                            <Box as={icon} mr='2' size='12px' />
-                            {text}
-                        </MenuItem>
-                    ))}
+                    {dropdownRoutes.map(({ to, text, icon, ...route }) => {
+                        const id = to === '/profile' ? user._id : '';
+                        return (
+                            <MenuItem
+                                to={hydrateRoute(to + '/' + id, params)}
+                                as={NavLink}
+                                key={to}
+                                {...route}
+                            >
+                                <Box as={icon} mr='2' size='12px' />
+                                {text}
+                            </MenuItem>
+                        );
+                    })}
                 </MenuList>
             </Menu>
         </nav>

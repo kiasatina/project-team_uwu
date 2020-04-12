@@ -86,3 +86,20 @@ export const UPDATE_PICTURE = `
         }
     }
 `;
+
+export const GET_USER = `
+    query getUser($id: ID!) {
+        getUsers(_id: $id, limit: 1) {
+            _id
+            bio
+            email
+            username
+            followers_count
+            following_count
+            posts_count
+            profile_image {
+                src
+            }
+        }
+    }
+`;

@@ -30,8 +30,6 @@ export default () => {
     const history = useHistory();
     const socket = useRef();
 
-    console.log(info);
-
     useEffect(() => {
         socket.current = io(process.env.REACT_APP_SOCKET, {
             query: {

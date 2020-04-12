@@ -1,12 +1,11 @@
-import React, { useContext, useState } from 'react';
 import { Avatar, Box, Spinner } from '@chakra-ui/core';
+import React, { useContext, useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
-
-import { UserContext, fetchGraph, printError } from '../../../utils';
-import { UPDATE_PICTURE } from '../../../graphql/user';
 import { toast } from 'react-toastify';
+import { UPDATE_PICTURE } from '../../../graphql/user';
+import { fetchGraph, printError, UserContext } from '../../../utils';
 
-export const UploadImage = () => {
+export const UploadImage = ({ data, isMe }) => {
     const { user, dispatch } = useContext(UserContext);
     const [loading, setLoading] = useState();
     const upload = async ({ currentTarget }) => {
@@ -31,31 +30,37 @@ export const UploadImage = () => {
     return (
         <Box className='profile__upload-wrapper' mr='6'>
             <Avatar
-                name={user.username}
-                src={user.profile_image?.src}
+                name={data.username}
+                src={data.profile_image?.src}
                 size='2xl'
             />
-            <Box
-                className={`profile__upload-cover ${
-                    loading ? ' profile__upload-cover--loading' : ''
-                }`}
-            >
-                <Box as={FaUpload} size='20px' mb='1' />
-                Upload
-            </Box>
-            <input
-                className='profile__upload'
-                type='file'
-                accept='image/*'
-                onChange={upload}
-            />
-            {loading && (
-                <Spinner
-                    size=''
-                    thickness='3px'
-                    color='teal.300'
-                    className='profile__upload-spinner'
-                />
+            {isMe ? (
+                <>
+                    <Box
+                        className={`profile__upload-cover ${
+                            loading ? ' profile__upload-cover--loading' : ''
+                        }`}
+                    >
+                        <Box as={FaUpload} size='20px' mb='1' />
+                        Upload
+                    </Box>
+                    <input
+                        className='profile__upload'
+                        type='file'
+                        accept='image/*'
+                        onChange={upload}
+                    />
+                    {loading && (
+                        <Spinner
+                            size=''
+                            thickness='3px'
+                            color='teal.300'
+                            className='profile__upload-spinner'
+                        />
+                    )}
+                </>
+            ) : (
+                <></>
             )}
         </Box>
     );
