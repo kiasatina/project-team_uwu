@@ -70,7 +70,11 @@ export const useGraph = (query, options = {}) => {
     }, [query, onError, store.variables, store.pipe]);
 
     const refetch = useCallback(
-        (initState = store.data, variables = store.variables) => {
+        config => {
+            const {
+                initState = store.data,
+                variables = store.variables,
+            } = config;
             const data = Array.isArray(initState)
                 ? [...initState]
                 : typeof initState === 'object'
@@ -78,6 +82,7 @@ export const useGraph = (query, options = {}) => {
                 : initState;
             _dispatch({
                 variables: { ...variables },
+                loading: true,
                 data,
             });
         },

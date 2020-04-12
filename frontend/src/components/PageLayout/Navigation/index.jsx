@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams, useHistory } from 'react-router-dom';
 import {
     Menu,
     MenuButton,
@@ -38,16 +38,11 @@ const dropdownRoutes = [
         exact: true,
         icon: FaUser,
     },
-    {
-        text: 'Logout',
-        to: '/logout',
-        exact: true,
-        icon: FaSignOutAlt,
-    },
 ];
 
 export default () => {
     const { user } = useContext(UserContext);
+    const history = useHistory();
     const params = useParams();
 
     return (
@@ -84,6 +79,15 @@ export default () => {
                             {text}
                         </MenuItem>
                     ))}
+                    <MenuItem
+                        onClick={() => {
+                            localStorage.clear();
+                            history.push('/');
+                        }}
+                    >
+                        <Box as={FaSignOutAlt} mr='2' size='12px' />
+                        Logout
+                    </MenuItem>
                 </MenuList>
             </Menu>
         </nav>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SimpleGrid, Text } from '@chakra-ui/core';
+import { SimpleGrid, Text, Button, Flex } from '@chakra-ui/core';
 import { PageContent } from '../../../components';
 import { useGraph } from '../../../utils';
 import { GET_POSTS } from '../../../graphql/home';
@@ -10,14 +10,14 @@ import { Route, useParams } from 'react-router-dom';
 export default () => {
     const { post } = useParams();
     const { data, loading } = useGraph(GET_POSTS, {
-        initState: [],
         pipe: ['getPosts'],
+        initState: [],
     });
 
     return (
         <>
             <PageContent loading={loading} label='Your Post Feed'>
-                {data.length ? (
+                {data ? (
                     <SimpleGrid
                         columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}
                         spacing='4'

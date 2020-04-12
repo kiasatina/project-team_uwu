@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useMemo } from 'react';
 import { Box } from '@chakra-ui/core';
 import { Layer, Stage, Image } from 'react-konva';
 import Konva from 'konva';
+import { useHistory } from 'react-router-dom';
 
 // Gives back appropriate scale for the specified
 const getFilterNum = filter => {
@@ -26,10 +27,11 @@ export const DisplayPost = ({
     children,
     layerRef,
     videoRef,
-    muted = false,
+    muted,
     ...props
 }) => {
     const isFile = typeof video === 'string';
+    const history = useHistory();
     const imageRef = useRef();
     const ref = useRef();
 
@@ -73,13 +75,18 @@ export const DisplayPost = ({
     }, [videoElement, setSize]);
 
     useEffect(() => {
-        playing ? videoElement.play() : videoElement.pause();
+        (async () => {
+            const action = playing ? 'play' : 'pause';
+            await videoElement[action]();
+        })();
         const layer = imageRef.current.getLayer();
         const anim = new Konva.Animation(() => {}, layer);
         anim.start();
 
         return () => {
-            videoElement.pause();
+            if (videoElement.playing) {
+                videoElement.pause();
+            }
             anim.stop();
         };
     }, [videoElement, playing]);

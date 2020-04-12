@@ -1,6 +1,6 @@
 export const GET_POSTS = `
-    query getPosts($page: Int) {
-        getPosts(page: $page) {
+    query getPosts {
+        getPosts(limit: 100) {
             _id
             user {
                 _id
