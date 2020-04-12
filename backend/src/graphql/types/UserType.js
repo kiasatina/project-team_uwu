@@ -29,10 +29,11 @@ module.exports = {
         return await Post.countDocuments({ user: root._id, draft: false });
     },
     posts: async (root, { draft, limit, page }, ctx) => {
-        return await Post.find(Object.assign(
-                draft === undefined ? {} : { draft },
-                { user: ctx.user },
-            ))
+        return await Post.find(
+            Object.assign(draft === undefined ? {} : { draft }, {
+                user: ctx.user,
+            }),
+        )
             .sort({ createdAt: -1 })
             .limit(limit)
             .skip(page * limit);

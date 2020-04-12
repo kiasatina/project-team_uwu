@@ -52,11 +52,6 @@ const EditDraftT = ({ draft, onExit }) => {
         }
     };
 
-    const onPlay = () => {
-        playing ? videoRef.current.pause() : videoRef.current.play();
-        setIsPlaying(!playing);
-    };
-
     // Uses default CSS filters for the filters (one only)
     const filterVideo = filter => {
         const newLayers = layers.filter(layer => layer.type !== 'FILTER');
@@ -118,10 +113,16 @@ const EditDraftT = ({ draft, onExit }) => {
                     setSize={setSize}
                     videoRef={videoRef}
                     video={draft.asset.src}
+                    playing={playing}
                     layers={layers}
                     drag={moveLayer}
                 />
-                <Button onClick={onPlay} mt='3'>
+                <Button
+                    onClick={() => {
+                        setIsPlaying(!playing);
+                    }}
+                    mt='3'
+                >
                     {playing ? 'Pause' : 'Play'}
                 </Button>
                 <Accordion my='4' allowToggle>

@@ -5,7 +5,7 @@ const Sticker = new mongoose.Schema({
         type: String,
         required() {
             return !this.asset;
-        }
+        },
     },
     asset: {
         type: mongoose.Schema.Types.ObjectId,
