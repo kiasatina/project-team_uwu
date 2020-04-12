@@ -9,11 +9,12 @@ import {
     Tooltip,
     useDisclosure,
 } from '@chakra-ui/core';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Loading, PageContent } from '../../../../components';
 import { GET_USER_POSTS } from '../../../../graphql/user';
 import { useGraph, UserContext } from '../../../../utils';
 import { PostItem } from '../../Home/PostItem';
+import { FollowOverlay } from '../FollowOverlay';
 import '../index.scss';
 import { EditProfile } from './EditProfile';
 import { UploadImage } from './UploadImage';
@@ -21,11 +22,18 @@ import { UploadImage } from './UploadImage';
 export const MyProfile = () => {
     const { user, loading } = useContext(UserContext);
     const { onOpen, isOpen, onClose } = useDisclosure();
+    const followDisclosure = useDisclosure();
+    const [seeFollowing, setSeeFollowing] = useState(false);
 
     const posts = useGraph(GET_USER_POSTS, {
         variables: { user: user._id },
         pipe: ['getPosts'],
     });
+
+    const seeFollows = seeFollowing => {
+        followDisclosure.onOpen();
+        setSeeFollowing(seeFollowing);
+    };
 
     return (
         <Loading loading={loading}>
@@ -41,8 +49,22 @@ export const MyProfile = () => {
                         <Heading size='xl'>{user.username}</Heading>
                         {user.bio && <Text>{user.bio}</Text>}
                         <Stack mt='2' isInline>
-                            <Tag>{user.following_count} Following</Tag>
-                            <Tag>{user.followers_count} Followers</Tag>
+                            <Tag
+                                className='clickable'
+                                onClick={() => {
+                                    seeFollows(true);
+                                }}
+                            >
+                                {user.following_count} Following
+                            </Tag>
+                            <Tag
+                                className='clickable'
+                                onClick={() => {
+                                    seeFollows(false);
+                                }}
+                            >
+                                {user.followers_count} Followers
+                            </Tag>
                             <Tag>{user.posts_count} Posts</Tag>
                         </Stack>
                     </Flex>
@@ -72,6 +94,11 @@ export const MyProfile = () => {
                 )}
             </PageContent>
             <EditProfile isOpen={isOpen} onClose={onClose} />
+            <FollowOverlay
+                isOpen={followDisclosure.isOpen}
+                onClose={followDisclosure.onClose}
+                seeFollowing={seeFollowing}
+            />
         </Loading>
     );
 };

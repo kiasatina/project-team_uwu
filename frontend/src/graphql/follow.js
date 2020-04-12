@@ -17,3 +17,37 @@ export const UNFOLLOW = `
         )
     }
 `;
+
+export const GET_FOLLOWERS = `
+    query getFollowers(
+        $id: ID
+    ) {
+        getFollowers(
+            following: $id
+            limit: 200
+            ) {
+                _id
+                username
+                profile_image {
+                    src
+                }
+            }
+    }
+`;
+
+export const GET_FOLLOWING = `
+    query getFollowing(
+        $id: ID
+    ) {
+        getFollowing(
+            follower: $id
+            limit: 200
+            ) {
+                _id
+                username
+                profile_image {
+                    src
+                }
+            }
+    }
+`;
