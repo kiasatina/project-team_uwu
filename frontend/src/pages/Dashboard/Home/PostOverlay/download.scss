@@ -1,0 +1,9 @@
+@import '../../../../utils/variables';
+@import '../../../../utils/mixins';
+
+.download {
+    @include position(fixed, auto, 9999px, 9999px, 0, 0);
+    width: 600px;
+    height: 600px;
+    z-index: -1;
+}

@@ -127,7 +127,7 @@ type Query {
     getPosts(
         _id: ID
         user: ID
-        draft: Boolean
+        draft: Boolean = false
         limit: Int = 10
         page: Int = 0
     ): [Post]!

@@ -24,6 +24,9 @@ export const DisplayPost = ({
     playing,
     layers,
     children,
+    layerRef,
+    videoRef,
+    ...props
 }) => {
     const isFile = typeof video === 'string';
     const imageRef = useRef();
@@ -31,21 +34,24 @@ export const DisplayPost = ({
 
     const videoElement = useMemo(() => {
         const element = document.createElement('video');
+        if (videoRef) videoRef.current = element;
+        element.crossOrigin = 'anonymous';
         element.srcObject = isFile ? undefined : video;
         element.src = isFile ? video : undefined;
+        element.autoplay = true;
         element.loop = true;
         return element;
-    }, [video, isFile]);
+    }, [video, isFile, videoRef]);
 
     // Add filter to video if initial layers had one in them
     useEffect(() => {
         layers
             .filter(l => l.type === 'FILTER')
             .forEach(layer => {
-                imageRef.current.style.filter =
+                videoElement.style.filter =
                     layer.filter + `(${getFilterNum(layer.filter)})`;
             });
-    }, [layers]);
+    }, [layers, videoElement]);
 
     useEffect(() => {
         const handler = () =>
@@ -74,9 +80,9 @@ export const DisplayPost = ({
     }, [videoElement, playing]);
 
     return (
-        <Box rounded='md' overflow='hidden' ref={ref}>
+        <Box {...props} rounded='md' overflow='hidden' ref={ref}>
             <Stage width={size.width} height={size.height}>
-                <Layer>
+                <Layer ref={layerRef}>
                     <Image
                         ref={imageRef}
                         image={videoElement}

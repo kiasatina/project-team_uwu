@@ -1,19 +1,42 @@
-import React, { useContext } from 'react';
-import { PageContent, Loading, Sidenav } from '../../../components';
-import { UserContext } from '../../../utils';
+import React from 'react';
+import { SimpleGrid, Text } from '@chakra-ui/core';
+import { PageContent } from '../../../components';
+import { useGraph } from '../../../utils';
+import { GET_POSTS } from '../../../graphql/home';
+import { PostOverlay } from './PostOverlay';
+import { PostItem } from './PostItem';
+import { Route, useParams } from 'react-router-dom';
 
 export default () => {
-    const { user, loading } = useContext(UserContext);
+    const { post } = useParams();
+    const { data, loading } = useGraph(GET_POSTS, {
+        initState: [],
+        pipe: ['getPosts'],
+    });
+
     return (
-        <Loading loading={loading}>
-            <PageContent label='Posts'>
-                <div style={{ height: '200vh' }}></div>
-                Welcome {user?.username}
+        <>
+            <PageContent loading={loading} label='Your Post Feed'>
+                {data.length ? (
+                    <SimpleGrid
+                        columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}
+                        spacing='4'
+                    >
+                        {data.map(item => (
+                            <PostItem
+                                playing={!post}
+                                key={item._id}
+                                {...item}
+                            />
+                        ))}
+                    </SimpleGrid>
+                ) : (
+                    <Text fontSize='2xl' opacity='30%'>
+                        No Posts Found... *sad owo sounds*
+                    </Text>
+                )}
             </PageContent>
-            <Sidenav>
-                Sidenav
-                <div style={{ height: '200vh' }}></div>
-            </Sidenav>
-        </Loading>
+            <Route exact path='/home/:post' component={PostOverlay} />
+        </>
     );
 };
