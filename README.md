@@ -25,6 +25,10 @@ STATIC=uploads
 SOCKET=3002
 PORT=3001
 ```
+#### MongoDB
+Make sure you have mongodb installed and run the following command
+`sudo systemctl start mongod`
+
 Then run `npm install` and `npm start`
 ### Frontend
 
@@ -50,4 +54,33 @@ We have created the following events to implement it:
 
 ## User Guide
 
+### Register or Login
+![Create Account](https://cdn.discordapp.com/attachments/688407732973469799/698973640309604403/unknown.png)
+![Login](https://cdn.discordapp.com/attachments/688407732973469799/698974148075978803/unknown.png)
+
+### Creating a post
+![Post](https://cdn.discordapp.com/attachments/688407732973469799/698974772922548224/unknown.png)
+You can then edit the post by clicking on the edit draft button
+![Edit](https://cdn.discordapp.com/attachments/688407732973469799/698975041689223318/unknown.png)
+You can add text, stickers, or filters to the post
+![Stickers](https://cdn.discordapp.com/attachments/688407732973469799/698975933721477140/unknown.png)
+You may then save the post or publish it to be viewed on the homepage like the image below
+![Home](https://cdn.discordapp.com/attachments/688407732973469799/698976146783731823/unknown.png)
+The post will now be able to be shared or downloaded
+![Share](https://cdn.discordapp.com/attachments/688407732973469799/698978892001837076/unknown.png)
+
+### Livestreaming
+#### Streamer
+Click the streaming tab, title you stream and start the stream
+![Stream Start](https://cdn.discordapp.com/attachments/688407732973469799/698976472769232987/unknown.png)
+This is what it'll look like to the streamer:
+![Streamer](https://cdn.discordapp.com/attachments/688407732973469799/698976812763447477/unknown.png)
+When the viewer adds a new layer/item it will be reflected on the streamer's window as shown below:
+![Streamer View](https://cdn.discordapp.com/attachments/688407732973469799/698978339720921178/unknown.png)
+#### Viewer
+A viewer will see this in the Stream Tab:
+![Viewer](https://cdn.discordapp.com/attachments/688407732973469799/698977258315972628/unknown.png)
+Click the 'Join Stream' button
+The viewer will no be able to add a new layer/item to the livestream as shown below
+![Viewer Add](https://cdn.discordapp.com/attachments/688407732973469799/698977628773941338/unknown.png)
 
