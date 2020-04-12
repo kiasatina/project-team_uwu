@@ -84,14 +84,7 @@ export default () => {
     const Component = map[info?.role];
     return (
         <Loading loading={!info || loading}>
-            {Component && (
-                <Component
-                    socket={socket}
-                    data={data}
-                    info={info}
-                    dispatch={dispatch}
-                />
-            )}
+            {Component && <Component socket={socket} data={data} info={info} />}
         </Loading>
     );
 };
