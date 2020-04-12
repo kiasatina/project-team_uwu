@@ -21,4 +21,9 @@ export default [
         exact: true,
         path: '/profile/:userId?/:post?',
     },
+    {
+        component: React.lazy(() => import('./Credits')),
+        exact: true,
+        path: '/credits',
+    },
 ];

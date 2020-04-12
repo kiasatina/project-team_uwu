@@ -9,7 +9,7 @@ import {
     Box,
     Avatar,
 } from '@chakra-ui/core';
-import { FaUser, FaSignOutAlt, FaBars } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaBars, FaLaughSquint } from 'react-icons/fa';
 import { logo } from '../../../assets';
 import { UserContext } from '../../../utils';
 import './index.scss';
@@ -38,6 +38,12 @@ const dropdownRoutes = [
         to: '/profile',
         exact: true,
         icon: FaUser,
+    },
+    {
+        text: 'Credits',
+        to: '/credits',
+        exact: true,
+        icon: FaLaughSquint,
     },
 ];
 
