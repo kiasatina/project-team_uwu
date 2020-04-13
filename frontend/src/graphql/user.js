@@ -121,6 +121,9 @@ export const GET_USER_POSTS = `
             asset {
                 src
             }
+            location {
+                place
+            }
             title
             description
             layers {
