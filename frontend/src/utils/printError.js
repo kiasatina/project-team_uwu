@@ -4,6 +4,8 @@ const errors = {
     EMAIL_EXISTS_ERROR: 'Email is already in use',
     AUTHENTICATION_ERROR: 'Session expired. Please login again',
     LIVESTREAM_EXISTS_ERROR: 'You already have a livestream. Try again later',
+    INVALID_USERNAME_ERROR:
+        'Username is invalid. Only alphanumeric characters are accepted',
 };
 
 /**
