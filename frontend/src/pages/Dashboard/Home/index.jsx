@@ -18,7 +18,7 @@ export default () => {
     return (
         <>
             <PageContent loading={loading} label='Your Post Feed'>
-                {data ? (
+                {data.length ? (
                     <SimpleGrid
                         columns={{ xs: 1, sm: 2, md: 2, lg: 3 }}
                         spacing='4'
