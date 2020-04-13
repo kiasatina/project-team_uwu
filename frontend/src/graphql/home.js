@@ -12,6 +12,9 @@ export const GET_POSTS = `
             asset {
                 src
             }
+            location {
+                place
+            }
             title
             description
             layers {
@@ -44,6 +47,9 @@ export const GET_POST = `
             }
             asset {
                 src
+            }
+            location {
+                place
             }
             title
             description

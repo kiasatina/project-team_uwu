@@ -5,6 +5,8 @@ import {
     ModalContent,
     ModalFooter,
     ModalBody,
+    Box,
+    Tag,
     Flex,
     Stack,
     Avatar,
@@ -15,6 +17,7 @@ import {
 } from '@chakra-ui/core';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { Loading, DisplayPost, DisplayPostItem } from '../../../../components';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 import { useGraph, displayDate } from '../../../../utils';
 import { GET_POST } from '../../../../graphql/home';
 import { Share } from './Share';
@@ -40,21 +43,27 @@ export const PostOverlay = () => {
             <ModalContent rounded='md'>
                 <Loading loading={loading}>
                     <ModalBody mt='5'>
-                        <DisplayPost
-                            size={size}
-                            setSize={setSize}
-                            video={data.asset?.src}
-                            layers={data.layers}
-                            playing
-                        >
-                            {data.layers?.map((layer, index) => (
-                                <DisplayPostItem
-                                    size={size}
-                                    layer={layer}
-                                    key={index}
-                                />
-                            ))}
-                        </DisplayPost>
+                        <Box position='relative'>
+                            <DisplayPost
+                                size={size}
+                                setSize={setSize}
+                                video={data.asset?.src}
+                                layers={data.layers}
+                                playing
+                            >
+                                {data.layers?.map((layer, index) => (
+                                    <DisplayPostItem
+                                        size={size}
+                                        layer={layer}
+                                        key={index}
+                                    />
+                                ))}
+                            </DisplayPost>
+                            <Tag size='sm' className='post__overlay'>
+                                <Box as={FaMapMarkerAlt} size='10px' mr='2' />
+                                {data.location?.place || 'From Nowhere...'}
+                            </Tag>
+                        </Box>
                         <Stack mt='4' mb='2' isInline align='center'>
                             <Avatar
                                 name={data.user?.username}

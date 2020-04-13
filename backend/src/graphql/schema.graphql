@@ -44,9 +44,9 @@ type Livestream {
 
 "The geolocation information of a post"
 type PostLocation {
-    lat: Float!
-    long: Float!
-    location: String!
+    lat: Float
+    long: Float
+    place: String
 }
 
 "The sticker asset of a post"
@@ -57,7 +57,6 @@ type Sticker {
 
 "The positioning of a layer in a post"
 type PostLayerPosition {
-    rotation: Float!
     x: Float!
     y: Float!
 }
@@ -90,6 +89,13 @@ input PostLayerInput {
     sticker: PostLayerStickerInput
     position: PostLayerPositionInput
     text: String
+}
+
+"Post location for inputs"
+input PostLocationInput {
+    lat: Float!
+    long: Float!
+    place: String!
 }
 
 "A post from some user"
@@ -148,6 +154,7 @@ type Mutation {
         draft: Boolean
         title: String
         description: String
+        location: PostLocationInput
         layers: [PostLayerInput]
     ): Post!
     "Follow a user"

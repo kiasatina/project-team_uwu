@@ -83,12 +83,14 @@ export const UPDATE_POST = `
     mutation updatePost(
         $_id: ID!,
         $draft: Boolean,
-        $layers: [PostLayerInput]
+        $layers: [PostLayerInput],
+        $location: PostLocationInput
     ) {
         updatePost(
             _id: $_id,
             draft: $draft,
             layers: $layers
+            location: $location
         ) {
             _id
             title

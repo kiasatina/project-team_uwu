@@ -33,6 +33,21 @@ const filters = [
     'Blur',
 ];
 
+const getLocation = res =>
+    new Promise(resolve => {
+        navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+            const req = await fetch(
+                `https://api.radar.io/v1/geocode/reverse?coordinates=${coords.latitude},${coords.longitude}`,
+                { headers: { Authorization: process.env.REACT_APP_RADAR } },
+            );
+            const { addresses } = await req.json();
+            res.lat = addresses[0].latitude;
+            res.long = addresses[0].longitude;
+            res.place = addresses[0].addressLabel;
+            resolve();
+        });
+    });
+
 const EditDraftT = ({ draft, onExit }) => {
     const [playing, setIsPlaying] = useState(true);
     const [size, setSize] = useState({ width: 0, height: 0 });
@@ -43,11 +58,17 @@ const EditDraftT = ({ draft, onExit }) => {
 
     const saveAndPublish = async publish => {
         try {
+            const location = {};
+            if (publish && navigator.geolocation) {
+                await getLocation(location);
+            }
+
             // No sticker layers until uploading is a thing
             await fetchGraph(UPDATE_POST, {
                 ...draft,
-                layers,
                 draft: !publish,
+                location,
+                layers,
             });
             if (publish) {
                 history.push('/create');
