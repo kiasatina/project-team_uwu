@@ -74,7 +74,7 @@ const EditDraftT = ({ draft, onExit }) => {
                         draft: !publish,
                         layers,
                     },
-                    location,
+                    location && { location },
                 ),
             );
             if (publish) {
