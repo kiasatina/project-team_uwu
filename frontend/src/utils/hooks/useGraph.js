@@ -1,5 +1,8 @@
 import { useReducer, useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { fetchGraph } from '../fetchGraph';
+import { printError } from '../printError';
 
 const reducer = (state, action) => {
     return { ...state, ...action };
@@ -30,6 +33,7 @@ const reducer = (state, action) => {
  * @returns {useGraphStuff} - Hook stuff
  */
 export const useGraph = (query, options = {}) => {
+    const history = useHistory();
     const {
         onError = console.error,
         initState = {},
@@ -58,6 +62,11 @@ export const useGraph = (query, options = {}) => {
                         });
                     }
                 } catch (err) {
+                    if (err.message === 'AUTHENTICATION_ERROR') {
+                        toast.error(printError(err.message));
+                        localStorage.clear();
+                        history.push('/');
+                    }
                     onError(err.message);
                 }
             }
@@ -66,7 +75,7 @@ export const useGraph = (query, options = {}) => {
         return () => {
             mounted = false;
         };
-    }, [query, onError, store.variables, store.pipe]);
+    }, [query, onError, store.variables, store.pipe, history]);
 
     const refetch = useCallback(
         (config = {}) => {

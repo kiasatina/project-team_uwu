@@ -6,6 +6,7 @@ import { GET_POSTS } from '../../../graphql/home';
 import { PostOverlay } from './PostOverlay';
 import { PostItem } from './PostItem';
 import { Route, useParams } from 'react-router-dom';
+import './index.scss';
 
 export default () => {
     const { post } = useParams();

@@ -21,6 +21,7 @@ module.exports = withSession(async (root, args, ctx) => {
             }
         }
     }
+
     return await Post.findByIdAndUpdate({ _id: args._id }, args, {
         new: true,
     });

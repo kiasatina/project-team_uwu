@@ -11,7 +11,7 @@ import {
     Image,
     Input,
 } from '@chakra-ui/core';
-import React, { useCallback, useRef, useState, useContext } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { stickers } from '../../../../../assets';
@@ -21,12 +21,7 @@ import {
     DisplayPostItem,
 } from '../../../../../components';
 import { UPDATE_POST, GET_DRAFT } from '../../../../../graphql/post';
-import {
-    fetchGraph,
-    printError,
-    useGraph,
-    UserContext,
-} from '../../../../../utils';
+import { fetchGraph, printError, useGraph } from '../../../../../utils';
 import './index.scss';
 
 const filters = [
@@ -38,8 +33,22 @@ const filters = [
     'Blur',
 ];
 
+const getLocation = res =>
+    new Promise(resolve => {
+        navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+            const req = await fetch(
+                `https://api.radar.io/v1/geocode/reverse?coordinates=${coords.latitude},${coords.longitude}`,
+                { headers: { Authorization: process.env.REACT_APP_RADAR } },
+            );
+            const { addresses } = await req.json();
+            res.lat = addresses[0].latitude;
+            res.long = addresses[0].longitude;
+            res.place = addresses[0].addressLabel;
+            resolve();
+        });
+    });
+
 const EditDraftT = ({ draft, onExit }) => {
-    const { refetch } = useContext(UserContext);
     const [playing, setIsPlaying] = useState(true);
     const [size, setSize] = useState({ width: 0, height: 0 });
     const [layers, setLayers] = useState(draft.layers);
@@ -49,11 +58,17 @@ const EditDraftT = ({ draft, onExit }) => {
 
     const saveAndPublish = async publish => {
         try {
+            const location = {};
+            if (publish && navigator.geolocation) {
+                await getLocation(location);
+            }
+
             // No sticker layers until uploading is a thing
             await fetchGraph(UPDATE_POST, {
                 ...draft,
-                layers,
                 draft: !publish,
+                location,
+                layers,
             });
             if (publish) {
                 history.push('/create');

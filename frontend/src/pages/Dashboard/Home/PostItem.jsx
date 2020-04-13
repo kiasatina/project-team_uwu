@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Box, Heading, Badge, Stack, Avatar } from '@chakra-ui/core';
+import { Box, Heading, Badge, Stack, Avatar, Tag } from '@chakra-ui/core';
 import { displayDate } from '../../../utils';
 import { DisplayPost, DisplayPostItem } from '../../../components';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 export const PostItem = ({
@@ -10,6 +11,7 @@ export const PostItem = ({
     title,
     layers,
     updatedAt,
+    location,
     asset,
     playing,
     from,
@@ -34,7 +36,13 @@ export const PostItem = ({
             overflow='hidden'
             backgroundColor='white'
         >
-            <Box width='100%' as={Link} to={`${redirect}${_id}`}>
+            <Box
+                width='100%'
+                position='relative'
+                as={Link}
+                display='block'
+                to={`${redirect}${_id}`}
+            >
                 <DisplayPost
                     size={size}
                     setSize={setSize}
@@ -48,6 +56,10 @@ export const PostItem = ({
                         <DisplayPostItem layer={layer} size={size} key={i} />
                     ))}
                 </DisplayPost>
+                <Tag size='sm' className='post__overlay'>
+                    <Box as={FaMapMarkerAlt} size='10px' mr='2' />
+                    {location.place || 'From Nowhere...'}
+                </Tag>
             </Box>
             <Stack align='center' width='100%' isInline padding='4' spacing='4'>
                 <Avatar

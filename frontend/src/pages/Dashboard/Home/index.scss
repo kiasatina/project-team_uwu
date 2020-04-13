@@ -1,0 +1,8 @@
+@import '../../../utils/variables';
+@import '../../../utils/mixins';
+
+.post {
+    &__overlay {
+        @include position(absolute, auto, auto, auto, 0.5rem, 0.5rem);
+    }
+}
