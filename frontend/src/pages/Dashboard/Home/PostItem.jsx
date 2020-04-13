@@ -70,7 +70,7 @@ export const PostItem = ({
                 />
                 <Stack>
                     <Heading as='h2' size='sm' isTruncated>
-                        {user.username} | {title}
+                        {title}
                     </Heading>
                     <Badge mr='auto'>{displayDate(updatedAt)}</Badge>
                 </Stack>
