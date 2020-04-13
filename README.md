@@ -1,5 +1,10 @@
 # UwU
 
+## Production URLS
+ - *Frontend:* [https://theuwu.tech](https://theuwu.tech)
+ - *GraphQL API:* [https://api.theuwu.tech](https://api.theuwu.tech)
+ - *Socket Server:* [https://live.theuwu.tech](https://live.theuwu.tech)
+
 ## Setup
 
 In our repository we have two .env.example files in the frontend and backend folders. We will be using them as the template for our .env files.
@@ -30,12 +35,14 @@ Make sure you have mongodb installed and run the following command
 `sudo systemctl start mongod`
 
 Then run `npm install` and `npm start`
+
 ### Frontend
 
 This is what .env.example looks like in the frontend folder
 ```
 REACT_APP_GRAPHQL=http://localhost:3001/graphql
 REACT_APP_SOCKET=http://localhost:3002/
+REACT_APP_RADAR=prj_test_pk_b67873cfbe5e751f367fddccb937feb02b635a8a
 ```
 Create a .env and copy the contents of .env.example
 Then run `npm install` and `npm start`
@@ -44,13 +51,15 @@ Then run `npm install` and `npm start`
 
 One of the many technologies we used in is socket.io for the livestreaming service.
 We have created the following events to implement it:
-- PEER_RELAY: is to share the peer info for the handshake
-- UPDATE_LAYER: is for when the viewer adds a new 
-- START_PEER: is to start the peer handshake
-- END_STREAM: ends the stream
-- GET_INFO: gets the stream information
-- LEAVE: is to for when a user is leaving the stream and then update the stream info
-- JOIN: is for when a new user decides to join the livestream
+| Socket Event | Payload | Description |
+| --- | --- | --- |
+| PEER_RELAY | data | This is used by simple-peer to exchange p2p information. This also comes with a suffix (PEER_RELAY_[PEER_ID]), which is used to help keep this information exchange private |
+| UPDATE_LAYER | { type: String, asset: String, text: String, position: { x: float, y: float } } | This (similar to our PostLayer) is used to share layer information to the server for broadcasting |
+| START_PEER | undefined | This event is sent from the streamer to the new viewer to let them know that they are ready to initalize a peer connection |
+| END_STREAM | undefined | This is sent by the streamer only, which is used to broadcast to everyone to inform them that the stream is over |
+| GET_INFO | undefined | This is used to get information about the stream such as your type (STREAMER/VIEWER), the viewers, and your the layers |
+| LEAVE | { peer: String, username: String, _id: String } | Used to inform everyone that someone has left the stream |
+| JOIN | { peer: String, username: String, _id: String } | Used to inform everyone that someone has joined the stream. This also informs the streamer to prepare for receiving info for a peer connection. When they are ready, they would send them a START_PEER event |
 
 ## User Guide
 
