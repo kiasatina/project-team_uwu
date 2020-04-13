@@ -45,7 +45,7 @@ const getLocation = () =>
             resolve({
                 lat: addresses[0].latitude,
                 long: addresses[0].longitude,
-                place: Vaddresses[0].addressLabel,
+                place: addresses[0].addressLabel,
             });
         });
     });

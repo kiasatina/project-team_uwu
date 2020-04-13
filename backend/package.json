@@ -28,7 +28,6 @@
     "jsonwebtoken": "^8.5.1",
     "mime-types": "^2.1.26",
     "mongoose": "^5.9.7",
-    "sharp": "^0.25.2",
     "socket.io": "^2.3.0",
     "uuid": "^7.0.3",
     "validator": "^12.2.0"
