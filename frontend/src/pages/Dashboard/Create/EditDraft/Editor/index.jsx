@@ -33,7 +33,7 @@ const filters = [
     'Blur',
 ];
 
-const getLocation = res =>
+const getLocation = () =>
     new Promise(resolve => {
         navigator.geolocation.getCurrentPosition(async ({ coords }) => {
             const req = await fetch(
@@ -41,10 +41,12 @@ const getLocation = res =>
                 { headers: { Authorization: process.env.REACT_APP_RADAR } },
             );
             const { addresses } = await req.json();
-            res.lat = addresses[0].latitude;
-            res.long = addresses[0].longitude;
-            res.place = addresses[0].addressLabel;
-            resolve();
+
+            resolve({
+                lat: addresses[0].latitude,
+                long: addresses[0].longitude,
+                place: Vaddresses[0].addressLabel,
+            });
         });
     });
 
@@ -58,18 +60,23 @@ const EditDraftT = ({ draft, onExit }) => {
 
     const saveAndPublish = async publish => {
         try {
-            const location = {};
+            let location;
             if (publish && navigator.geolocation) {
-                await getLocation(location);
+                location = await getLocation();
             }
 
             // No sticker layers until uploading is a thing
-            await fetchGraph(UPDATE_POST, {
-                ...draft,
-                draft: !publish,
-                location,
-                layers,
-            });
+            await fetchGraph(
+                UPDATE_POST,
+                Object.assign(
+                    {
+                        ...draft,
+                        draft: !publish,
+                        layers,
+                    },
+                    location,
+                ),
+            );
             if (publish) {
                 history.push('/create');
                 toast.success('Post has been created');
