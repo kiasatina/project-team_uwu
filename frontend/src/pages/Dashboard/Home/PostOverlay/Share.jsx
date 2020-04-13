@@ -13,7 +13,9 @@ import {
 import QRCode from 'qrcode-react';
 import { logo } from '../../../../assets';
 
-export const Share = ({ ...props }) => {
+const url = post => `${window.origin}/home/${post}`;
+
+export const Share = ({ post, ...props }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { onCopy, hasCopied } = useClipboard(window.location.href);
     const [size, setSize] = useState(0);
@@ -39,14 +41,14 @@ export const Share = ({ ...props }) => {
                             {size && (
                                 <QRCode
                                     size={size}
-                                    value={window.location.href}
+                                    value={url(post)}
                                     logoWidth={size / 3}
                                     logo={logo}
                                 />
                             )}
                         </Box>
                         <Stack mt='4' isInline>
-                            <Input isReadOnly value={window.location.href} />
+                            <Input isReadOnly value={url(post)} />
                             <Button
                                 leftIcon='copy'
                                 flexShrink='0'

@@ -91,7 +91,7 @@ export const PostOverlay = () => {
                             justify='flex-end'
                             mx='-0.25rem'
                         >
-                            <Share m='1' />
+                            <Share m='1' post={post} />
                             <Download m='1' data={data} />
                             <Button m='1' variant='outline' onClick={onError}>
                                 Close
